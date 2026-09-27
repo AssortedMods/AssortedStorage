@@ -85,13 +85,11 @@ final class AssetTests {
     }
 
     /**
-     * A locked barrel item shows its padlock, for every material. The closed barrel model is the
-     * {@code assortedbarrels:locked} loader, which an item bakes to its unlocked child, so the item
-     * json has to choose between the two models itself, on the stack's lock.
+     * Every material barrel's item shows its padlock when locked. An item bakes the locked loader model to its
+     * unlocked child, so the item json has to choose between the two models on the stack's lock.
      */
     private static void barrelItemsShowTheirPadlock(GameTestHelper helper) {
         List<Block> barrels = new ArrayList<>();
-        barrels.add(BarrelsBlocks.LOCKED_BARREL.get());
         BarrelsBlocks.BARRELS.values().forEach(barrel -> barrels.add(barrel.get()));
         helper.assertTrue(barrels.size() > 1, "only " + barrels.size() + " barrels are registered");
 

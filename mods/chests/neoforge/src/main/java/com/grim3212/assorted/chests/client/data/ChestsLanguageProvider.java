@@ -22,9 +22,6 @@ public class ChestsLanguageProvider extends LibLanguageProvider {
     protected void addNames() {
         this.add("itemGroup.assortedstorage", "Assorted Storage");
 
-        this.add("assortedchests.container.locked_chest", "Locked Chest");
-        this.add("assortedchests.container.locked_ender_chest", "Ender Chest");
-
         // The material comes first in each name, where the id puts it last.
         for (StorageMaterial material : StorageMaterial.values()) {
             String id = material.toString();
@@ -63,11 +60,5 @@ public class ChestsLanguageProvider extends LibLanguageProvider {
         this.add("manual.assortedstorage.chapter.chests.chests",
                 "A material chest works exactly like a vanilla one and holds a great deal more. They do not "
                         + "pair into doubles.");
-
-        this.add("manual.assortedstorage.chapter.chests.locked.title", "Locked Chests");
-        this.add("manual.assortedstorage.chapter.chests.locked",
-                "Use a padlock on a chest or an ender chest and it becomes the locked version of itself, keeping "
-                        + "whatever was inside. After that only a key with the matching combination opens it." + BREAK
-                        + "A locked ender chest opens the ender storage tied to its combination.");
     }
 }

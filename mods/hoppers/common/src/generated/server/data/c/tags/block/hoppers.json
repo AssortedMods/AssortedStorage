@@ -22,7 +22,6 @@
     "assortedhoppers:hopper_electrum",
     "assortedhoppers:hopper_steel",
     "assortedhoppers:hopper_platinum",
-    "minecraft:hopper",
-    "assortedhoppers:locked_hopper"
+    "minecraft:hopper"
   ]
 }

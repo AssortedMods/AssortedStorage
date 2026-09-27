@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedlocks:locked_container_items_show_their_padlock",
+  "structure": "assortedlocks:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.MenuType;
 public class ShulkersContainerTypes {
     public static final RegistryProvider<MenuType<?>> CONTAINERS = RegistryProvider.create(Registries.MENU, Constants.MOD_ID);
 
-    public static final IRegistryObject<MenuType<LockedMaterialContainer>> LOCKED_SHULKER_BOX = CONTAINERS.register("locked_shulker_box", () -> Services.PLATFORM.createMenuType(ShulkersMenus::createShulkerContainer, StorageMaterial.OPTIONAL_STREAM_CODEC));
+    public static final IRegistryObject<MenuType<LockedMaterialContainer>> LOCKED_SHULKER_BOX = CONTAINERS.register("locked_shulker_box", () -> Services.PLATFORM.createMenuType((windowId, playerInventory, material) -> LockedMaterialContainer.createClient(ShulkersContainerTypes.LOCKED_SHULKER_BOX.get(), windowId, playerInventory, material, true), StorageMaterial.OPTIONAL_STREAM_CODEC));
 
     public static void init() {
 

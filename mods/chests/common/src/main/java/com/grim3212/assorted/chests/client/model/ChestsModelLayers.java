@@ -5,6 +5,5 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.Identifier;
 
 public class ChestsModelLayers {
-    // Used by both locked chests and locked ender chests
     public static final ModelLayerLocation LOCKED_CHEST = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_chest"), "main");
 }

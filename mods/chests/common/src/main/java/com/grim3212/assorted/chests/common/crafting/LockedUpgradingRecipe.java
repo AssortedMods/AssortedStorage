@@ -2,7 +2,7 @@ package com.grim3212.assorted.chests.common.crafting;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.grim3212.assorted.chests.common.block.LockedChestBlock;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;

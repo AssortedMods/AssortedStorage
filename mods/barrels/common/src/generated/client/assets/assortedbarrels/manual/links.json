@@ -26,12 +26,6 @@
         "assortedbarrels:barrel_platinum"
       ],
       "page": "assortedstorage:barrels/barrels"
-    },
-    {
-      "blocks": [
-        "assortedbarrels:locked_barrel"
-      ],
-      "page": "assortedstorage:barrels/locked"
     }
   ]
 }

@@ -26,12 +26,6 @@
         "assortedhoppers:hopper_platinum"
       ],
       "page": "assortedstorage:hoppers/hoppers"
-    },
-    {
-      "blocks": [
-        "assortedhoppers:locked_hopper"
-      ],
-      "page": "assortedstorage:hoppers/locked"
     }
   ]
 }

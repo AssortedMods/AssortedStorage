@@ -21,7 +21,6 @@
     "assortedchests:chest_silver",
     "assortedchests:chest_electrum",
     "assortedchests:chest_steel",
-    "assortedchests:chest_platinum",
-    "assortedchests:locked_ender_chest"
+    "assortedchests:chest_platinum"
   ]
 }

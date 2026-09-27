@@ -5,7 +5,6 @@ import com.grim3212.assorted.hoppers.HoppersCommonMod;
 import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
 import com.grim3212.assorted.lib.core.creative.CreativeTabItems;
 import com.grim3212.assorted.lib.core.creative.SharedCreativeTabs;
-import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -21,13 +20,7 @@ public class HoppersCreativeItems {
     public static final ResourceKey<CreativeModeTab> TAB = SharedCreativeTabs.tab(Identifier.fromNamespaceAndPath(Family.ID, "tab"), Family.ICONS);
 
     public static void init() {
-        // The locked hopper sits with the other locked containers and the materials with the other materials, as when this was all one mod.
-        SharedCreativeTabs.add(TAB, 640, HoppersCreativeItems::lockedItems);
         SharedCreativeTabs.add(TAB, 730, HoppersCreativeItems::materialItems);
-    }
-
-    private static List<ItemStack> lockedItems() {
-        return List.of(StorageUtil.setCodeOnStack("default", new ItemStack(HoppersBlocks.LOCKED_HOPPER.get())));
     }
 
     private static List<ItemStack> materialItems() {

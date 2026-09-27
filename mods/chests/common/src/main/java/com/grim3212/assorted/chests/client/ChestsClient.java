@@ -1,34 +1,26 @@
 package com.grim3212.assorted.chests.client;
 
-import com.grim3212.assorted.lib.client.screen.storage.LockedMaterialScreen;
-import com.grim3212.assorted.lib.platform.ClientServices;
-import com.grim3212.assorted.chests.client.blockentity.LockedChestBlockEntityRenderer;
-import com.grim3212.assorted.chests.client.blockentity.LockedEnderChestBlockEntityRenderer;
-import com.grim3212.assorted.chests.client.blockentity.item.ChestsSpecialRenderer;
-import com.grim3212.assorted.chests.client.blockentity.item.LockedChestSpecialRenderer;
-import com.grim3212.assorted.chests.client.model.ChestModel;
 import com.grim3212.assorted.chests.client.model.ChestsModelLayers;
-import com.grim3212.assorted.chests.client.screen.LockedEnderChestScreen;
+import com.grim3212.assorted.chests.client.model.ChestsModels;
 import com.grim3212.assorted.chests.common.block.blockentity.ChestsBlockEntityTypes;
 import com.grim3212.assorted.chests.common.inventory.ChestsContainerTypes;
+import com.grim3212.assorted.lib.client.screen.storage.LockedMaterialScreen;
+import com.grim3212.assorted.lib.client.storage.ChestModel;
+import com.grim3212.assorted.lib.client.storage.LockedChestRenderer;
+import com.grim3212.assorted.lib.client.storage.LockedChestSpecialRenderer;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
+import com.grim3212.assorted.lib.platform.ClientServices;
 
 public class ChestsClient {
 
     public static void init() {
         ClientServices.CLIENT.registerEntityLayer(ChestsModelLayers.LOCKED_CHEST, ChestModel::createBaseMeshDefinition);
 
-        ClientServices.CLIENT.registerScreen(ChestsContainerTypes.LOCKED_ENDER_CHEST::get, LockedEnderChestScreen::new);
         ClientServices.CLIENT.registerScreen(ChestsContainerTypes.LOCKED_CHEST::get, LockedMaterialScreen::new);
 
-        ClientServices.CLIENT.registerBlockEntityRenderer(ChestsBlockEntityTypes.LOCKED_ENDER_CHEST, LockedEnderChestBlockEntityRenderer::new);
-        ClientServices.CLIENT.registerBlockEntityRenderer(ChestsBlockEntityTypes.LOCKED_CHEST, LockedChestBlockEntityRenderer::new);
+        ClientServices.CLIENT.registerBlockEntityRenderer(ChestsBlockEntityTypes.LOCKED_CHEST, context -> new LockedChestRenderer<>(context, ChestsModelLayers.LOCKED_CHEST, block -> ChestsModels.CHEST_LOCATIONS.get(((LockedChestBlock) block).getStorageMaterial()), false));
 
-        // BlockEntityWithoutLevelRenderer is gone: a special item renderer is selected by the item's
-        // own model json ("minecraft:special" naming one of these ids), so code only registers the id
-        // to codec pairs. The generated item models for the ender chest and the chests point at them.
-        ClientServices.CLIENT.registerSpecialModelRenderers((register) -> {
-            register.registerSpecialModelRenderer(ChestsSpecialRenderer.ID, ChestsSpecialRenderer.Unbaked.MAP_CODEC);
-            register.registerSpecialModelRenderer(LockedChestSpecialRenderer.ID, LockedChestSpecialRenderer.Unbaked.MAP_CODEC);
-        });
+        // The chests' item model jsons name this renderer, so code only registers the id to codec pair.
+        ClientServices.CLIENT.registerSpecialModelRenderers((register) -> register.registerSpecialModelRenderer(ChestsModels.ITEM_RENDERER, LockedChestSpecialRenderer.Unbaked.codec(ChestsModelLayers.LOCKED_CHEST)));
     }
 }

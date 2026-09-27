@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.grim3212.assorted.lib.util.DyeHelper;
 import com.grim3212.assorted.lib.util.LibCommonTags;
 import com.grim3212.assorted.lib.util.NBTHelper;
-import com.grim3212.assorted.shulkers.common.block.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +30,7 @@ public class LockedShulkerBoxColoring extends CustomRecipe {
         for (int k = 0; k < container.size(); ++k) {
             ItemStack itemstack = container.getItem(k);
             if (!itemstack.isEmpty()) {
-                if (Block.byItem(itemstack.getItem()) instanceof LockedShulkerBoxBlock) {
+                if (isMaterialShulkerBox(itemstack)) {
                     ++i;
                 } else {
                     if (!itemstack.is(LibCommonTags.Items.DYES)) {
@@ -58,7 +58,7 @@ public class LockedShulkerBoxColoring extends CustomRecipe {
             ItemStack itemstack1 = container.getItem(i);
             if (!itemstack1.isEmpty()) {
                 Item item = itemstack1.getItem();
-                if (Block.byItem(item) instanceof LockedShulkerBoxBlock) {
+                if (isMaterialShulkerBox(itemstack1)) {
                     itemstack = itemstack1;
                 } else {
                     DyeColor tmp = DyeHelper.getColor(itemstack1);
@@ -73,6 +73,11 @@ public class LockedShulkerBoxColoring extends CustomRecipe {
         return copy;
     }
 
+
+    /** Assorted Locks colors its own locked shulker box. */
+    private static boolean isMaterialShulkerBox(ItemStack stack) {
+        return Block.byItem(stack.getItem()) instanceof LockedShulkerBoxBlock shulker && shulker.getStorageMaterial() != null;
+    }
 
     public RecipeSerializer<LockedShulkerBoxColoring> getSerializer() {
         return SERIALIZER;

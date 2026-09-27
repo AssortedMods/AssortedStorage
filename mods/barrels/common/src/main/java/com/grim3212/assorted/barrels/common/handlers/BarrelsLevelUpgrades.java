@@ -3,9 +3,9 @@ package com.grim3212.assorted.barrels.common.handlers;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.lib.core.storage.LevelUpgrades;
-import com.grim3212.assorted.barrels.common.block.LockedBarrelBlock;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlock;
 import com.grim3212.assorted.barrels.common.block.BarrelsBlocks;
-import com.grim3212.assorted.barrels.common.block.blockentity.LockedBarrelBlockEntity;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlockEntity;
 import com.grim3212.assorted.barrels.mixin.block.BarrelBlockEntityAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** How a material barrel, or a vanilla barrel, takes a level upgrade. */
+/** How a material barrel, a vanilla barrel or Assorted Locks' locked barrel takes a level upgrade. */
 public class BarrelsLevelUpgrades {
 
     public static void init() {

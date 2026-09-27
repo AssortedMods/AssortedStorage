@@ -3,11 +3,10 @@ package com.grim3212.assorted.chests.client.data;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.chests.Constants;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
-import com.grim3212.assorted.chests.client.blockentity.item.ChestsSpecialRenderer;
-import com.grim3212.assorted.chests.client.blockentity.item.LockedChestSpecialRenderer;
-import com.grim3212.assorted.chests.client.model.ChestsModelType;
+import com.grim3212.assorted.lib.client.storage.LockedChestSpecialRenderer;
+import com.grim3212.assorted.chests.client.model.ChestsModelLayers;
 import com.grim3212.assorted.chests.client.model.ChestsModels;
-import com.grim3212.assorted.chests.common.block.LockedChestBlock;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
 import com.grim3212.assorted.chests.common.block.ChestsBlocks;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -48,23 +47,13 @@ public class ChestsBlockstateProvider extends ModelProvider {
     public ChestsBlockstateProvider(PackOutput output) {
         super(output, Constants.MOD_ID);
 
-        particle(ChestsBlocks.LOCKED_ENDER_CHEST.get(), Identifier.parse("block/obsidian"));
-        particle(ChestsBlocks.LOCKED_CHEST.get(), Identifier.parse("block/oak_planks"));
-
         for (IRegistryObject<LockedChestBlock> b : ChestsBlocks.CHESTS.values()) {
             particle(b.get(), b.get().getStorageMaterial().getParticle(Constants.MOD_ID));
         }
 
-        // Which renderer each of those items uses. The textures are the ones the matching block
-        // entity renderer resolves, so the item and the placed block look the same.
-        this.specialItems.put(ChestsBlocks.LOCKED_ENDER_CHEST.get(), new ChestsSpecialRenderer.Unbaked(ChestsModelType.CHEST, modelTexture("locked_ender_chest")));
-
-        // The locked chests are textured from the chest atlas, so the renderer is handed a sprite
-        // path rather than a standalone png.
-        this.specialItems.put(ChestsBlocks.LOCKED_CHEST.get(), new LockedChestSpecialRenderer.Unbaked(ChestsModels.CHEST_LOCATIONS.get(null)));
-
+        // Textured from the chest atlas with the sprite the block entity renderer uses, so the item and the placed block match.
         for (Map.Entry<StorageMaterial, IRegistryObject<LockedChestBlock>> e : ChestsBlocks.CHESTS.entrySet()) {
-            this.specialItems.put(e.getValue().get(), new LockedChestSpecialRenderer.Unbaked(ChestsModels.CHEST_LOCATIONS.get(e.getKey())));
+            this.specialItems.put(e.getValue().get(), new LockedChestSpecialRenderer.Unbaked(ChestsModels.CHEST_LOCATIONS.get(e.getKey()), ChestsModelLayers.LOCKED_CHEST));
         }
     }
 
@@ -92,9 +81,5 @@ public class ChestsBlockstateProvider extends ModelProvider {
         Item item = block.asItem();
         Identifier base = ModelTemplates.CHEST_INVENTORY.create(item, TextureMapping.particle(new Material(this.particleOnly.get(block))), blockModels.modelOutput);
         blockModels.itemModelOutput.accept(item, ItemModelUtils.specialModel(base, Optional.empty(), renderer));
-    }
-
-    private static Identifier modelTexture(String name) {
-        return Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/model/" + name + ".png");
     }
 }

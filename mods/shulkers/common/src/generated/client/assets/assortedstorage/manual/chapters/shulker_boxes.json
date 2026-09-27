@@ -35,15 +35,6 @@
       ],
       "text": "manual.assortedstorage.chapter.shulker_boxes.shulker_boxes",
       "title": "manual.assortedstorage.chapter.shulker_boxes.shulker_boxes.title"
-    },
-    {
-      "type": "assortedlib:item",
-      "id": "locked",
-      "items": [
-        "assortedshulkers:locked_shulker_box"
-      ],
-      "text": "manual.assortedstorage.chapter.shulker_boxes.locked",
-      "title": "manual.assortedstorage.chapter.shulker_boxes.locked.title"
     }
   ],
   "sort_order": 2

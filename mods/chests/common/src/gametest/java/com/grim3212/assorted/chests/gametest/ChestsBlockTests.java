@@ -2,7 +2,6 @@ package com.grim3212.assorted.chests.gametest;
 
 import com.grim3212.assorted.lib.core.inventory.IItemStorageHandler;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
-import com.grim3212.assorted.chests.common.block.blockentity.LockedEnderChestBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -19,7 +18,7 @@ import java.util.function.Consumer;
 import static com.grim3212.assorted.chests.gametest.ChestsTestSupport.*;
 
 /**
- * Chests: holding, dropping and saving their contents, and locked ender chests sharing by code.
+ * Chests: holding, dropping and saving their contents.
  */
 final class ChestsBlockTests {
 
@@ -30,7 +29,6 @@ final class ChestsBlockTests {
         out.accept("every_storage_block_holds_items", ChestsBlockTests::everyStorageBlockHoldsItems);
         out.accept("every_storage_block_drops_its_contents", ChestsBlockTests::everyStorageBlockDropsItsContents);
         out.accept("every_storage_block_survives_save_load", ChestsBlockTests::everyStorageBlockSurvivesSaveLoad);
-        out.accept("locked_ender_chests_share_by_code", ChestsBlockTests::lockedEnderChestsShareByCode);
     }
 
     /**
@@ -111,24 +109,6 @@ final class ChestsBlockTests {
             helper.assertTrue(loaded.getItemStackStorageHandler().getStackInSlot(last).is(Items.EMERALD), name(block) + " lost its last slot across a save/load");
         }
 
-        helper.succeed();
-    }
-
-    /**
-     * Locked ender chests are one inventory per lock code, held in level saved data, so two chests
-     * sharing a code share their contents and a chest on another code sees none of it.
-     */
-    private static void lockedEnderChestsShareByCode(GameTestHelper helper) {
-        LockedEnderChestBlockEntity first = enderChest(helper, new BlockPos(2, 1, 2), "shared-a");
-        LockedEnderChestBlockEntity second = enderChest(helper, new BlockPos(6, 1, 2), "shared-a");
-        LockedEnderChestBlockEntity other = enderChest(helper, new BlockPos(2, 1, 6), "shared-b");
-
-        first.getItemStackStorageHandler().setStackInSlot(0, new ItemStack(Items.DIAMOND, 3));
-
-        ItemStack shared = second.getItemStackStorageHandler().getStackInSlot(0);
-        helper.assertTrue(shared.is(Items.DIAMOND), "a second chest on the same code did not see the contents");
-        helper.assertValueEqual(shared.getCount(), 3, "the shared stack size");
-        helper.assertTrue(other.getItemStackStorageHandler().getStackInSlot(0).isEmpty(), "a chest on a different code saw another code's contents");
         helper.succeed();
     }
 }

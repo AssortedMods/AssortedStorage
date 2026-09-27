@@ -7,8 +7,7 @@ import com.grim3212.assorted.barrels.Constants;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.barrels.api.BarrelsTags;
 import com.grim3212.assorted.barrels.common.block.BarrelsBlocks;
-import com.grim3212.assorted.barrels.common.block.LockedBarrelBlock;
-import com.grim3212.assorted.barrels.common.crafting.LockedBarrelRecipe;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlock;
 import com.grim3212.assorted.barrels.common.crafting.LockedUpgradingRecipeBuilder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -41,8 +40,6 @@ public class BarrelsRecipes extends ConditionalRecipeProvider {
     @Override
     public void buildRecipes() {
         super.buildRecipes();
-
-        SpecialRecipeBuilder.special(() -> LockedBarrelRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_barrel").toString());
 
         for (Map.Entry<StorageMaterial, IRegistryObject<LockedBarrelBlock>> barrel : BarrelsBlocks.BARRELS.entrySet()) {
             TagKey<Item> mat = barrel.getKey().getMaterial();

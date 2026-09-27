@@ -2,7 +2,7 @@ package com.grim3212.assorted.hoppers.data;
 
 import com.grim3212.assorted.hoppers.api.HoppersTags;
 import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
-import com.grim3212.assorted.hoppers.common.block.LockedHopperBlock;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlock;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.data.LibItemTagProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;

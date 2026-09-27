@@ -4,7 +4,7 @@ import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.data.LibBlockTagProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.shulkers.api.ShulkersTags;
-import com.grim3212.assorted.shulkers.common.block.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
 import com.grim3212.assorted.shulkers.common.block.ShulkersBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -33,7 +33,6 @@ public class ShulkersBlockTagProvider extends LibBlockTagProvider {
         Function<TagKey<Block>, BlockTagAppender> tagger = (tag) -> new BlockTagAppender(rawTagger.apply(tag));
 
         BlockTagAppender piglinBuilder = tagger.apply(BlockTags.GUARDED_BY_PIGLINS);
-        piglinBuilder.add(ShulkersBlocks.LOCKED_SHULKER_BOX.get());
 
         for (Entry<StorageMaterial, IRegistryObject<LockedShulkerBoxBlock>> shulker : ShulkersBlocks.SHULKERS.entrySet()) {
             Block block = shulker.getValue().get();
@@ -63,7 +62,6 @@ public class ShulkersBlockTagProvider extends LibBlockTagProvider {
             }
         }
 
-        tagger.apply(BlockTags.SHULKER_BOXES).add(ShulkersBlocks.LOCKED_SHULKER_BOX.get());
         // The per colour shulker boxes are a ColorCollection now rather than 16 separate fields.
         tagger.apply(ShulkersTags.Blocks.SHULKERS_LEVEL_0).add(Blocks.SHULKER_BOX).addAll(Blocks.DYED_SHULKER_BOX.asList());
         tagger.apply(ShulkersTags.Blocks.SHULKERS_NORMAL).add(Blocks.SHULKER_BOX).addAll(Blocks.DYED_SHULKER_BOX.asList());

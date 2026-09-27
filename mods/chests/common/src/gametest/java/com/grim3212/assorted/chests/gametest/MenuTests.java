@@ -43,7 +43,7 @@ final class MenuTests {
     @SuppressWarnings("deprecation")
     private static void dataMenusRebuildOnTheClient(GameTestHelper helper) {
         ServerPlayer player = survivalPlayer(helper, ItemStack.EMPTY);
-        List<Block> blocks = List.of(ChestsBlocks.LOCKED_CHEST.get(), ChestsBlocks.CHESTS.get(StorageMaterial.GOLD).get());
+        List<Block> blocks = List.of(ChestsBlocks.CHESTS.get(StorageMaterial.STONE).get(), ChestsBlocks.CHESTS.get(StorageMaterial.GOLD).get());
 
         for (int i = 0; i < blocks.size(); i++) {
             Block block = blocks.get(i);

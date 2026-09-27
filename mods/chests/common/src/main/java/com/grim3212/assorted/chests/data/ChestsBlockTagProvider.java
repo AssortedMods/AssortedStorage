@@ -6,6 +6,7 @@ import com.grim3212.assorted.lib.util.LibCommonTags;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.chests.api.ChestsTags;
 import com.grim3212.assorted.chests.common.block.*;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -32,8 +33,6 @@ public class ChestsBlockTagProvider extends LibBlockTagProvider {
         Function<TagKey<Block>, BlockTagAppender> tagger = (tag) -> new BlockTagAppender(rawTagger.apply(tag));
 
         BlockTagAppender piglinBuilder = tagger.apply(BlockTags.GUARDED_BY_PIGLINS);
-        piglinBuilder.add(ChestsBlocks.LOCKED_ENDER_CHEST.get());
-        piglinBuilder.add(ChestsBlocks.LOCKED_CHEST.get());
 
         for (Entry<StorageMaterial, IRegistryObject<LockedChestBlock>> chest : ChestsBlocks.CHESTS.entrySet()) {
             Block block = chest.getValue().get();
@@ -63,12 +62,7 @@ public class ChestsBlockTagProvider extends LibBlockTagProvider {
             }
         }
 
-        tagger.apply(LibCommonTags.Blocks.CHESTS_WOODEN).add(ChestsBlocks.LOCKED_CHEST.get());
         tagger.apply(ChestsTags.Blocks.CHESTS_LEVEL_0).addTag(LibCommonTags.Blocks.CHESTS_WOODEN);
-
-        tagger.apply(BlockTags.MINEABLE_WITH_PICKAXE).add(ChestsBlocks.LOCKED_ENDER_CHEST.get());
-        tagger.apply(LibCommonTags.Blocks.CHESTS_ENDER).add(ChestsBlocks.LOCKED_ENDER_CHEST.get());
-        tagger.apply(BlockTags.MINEABLE_WITH_AXE).add(ChestsBlocks.LOCKED_CHEST.get());
     }
 
     /**

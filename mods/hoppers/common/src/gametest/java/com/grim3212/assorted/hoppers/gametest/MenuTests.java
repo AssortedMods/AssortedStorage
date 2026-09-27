@@ -42,7 +42,7 @@ final class MenuTests {
     @SuppressWarnings("deprecation")
     private static void dataMenusRebuildOnTheClient(GameTestHelper helper) {
         ServerPlayer player = survivalPlayer(helper, ItemStack.EMPTY);
-        List<Block> blocks = List.of(HoppersBlocks.LOCKED_HOPPER.get(), HoppersBlocks.HOPPERS.get(StorageMaterial.GOLD).get());
+        List<Block> blocks = List.of(HoppersBlocks.HOPPERS.get(StorageMaterial.STONE).get(), HoppersBlocks.HOPPERS.get(StorageMaterial.GOLD).get());
 
         for (int i = 0; i < blocks.size(); i++) {
             Block block = blocks.get(i);

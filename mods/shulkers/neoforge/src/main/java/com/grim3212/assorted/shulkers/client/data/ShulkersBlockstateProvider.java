@@ -3,9 +3,10 @@ package com.grim3212.assorted.shulkers.client.data;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.shulkers.Constants;
-import com.grim3212.assorted.shulkers.client.blockentity.item.LockedShulkerBoxSpecialRenderer;
+import com.grim3212.assorted.lib.client.storage.LockedShulkerBoxSpecialRenderer;
+import com.grim3212.assorted.shulkers.client.model.ShulkersModelLayers;
 import com.grim3212.assorted.shulkers.client.model.ShulkersModels;
-import com.grim3212.assorted.shulkers.common.block.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
 import com.grim3212.assorted.shulkers.common.block.ShulkersBlocks;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -44,15 +45,13 @@ public class ShulkersBlockstateProvider extends ModelProvider {
     public ShulkersBlockstateProvider(PackOutput output) {
         super(output, Constants.MOD_ID);
 
-        this.particles.put(ShulkersBlocks.LOCKED_SHULKER_BOX.get(), Identifier.parse("block/shulker_box"));
         for (IRegistryObject<LockedShulkerBoxBlock> b : ShulkersBlocks.SHULKERS.values()) {
             this.particles.put(b.get(), b.get().getStorageMaterial().getParticle(Constants.MOD_ID));
         }
 
         // Textured from the shulker box atlas, so the renderer is handed a sprite path, not a png.
-        this.specialItems.put(ShulkersBlocks.LOCKED_SHULKER_BOX.get(), new LockedShulkerBoxSpecialRenderer.Unbaked(ShulkersModels.SHULKER_LOCATIONS.get(null)));
         for (Map.Entry<StorageMaterial, IRegistryObject<LockedShulkerBoxBlock>> e : ShulkersBlocks.SHULKERS.entrySet()) {
-            this.specialItems.put(e.getValue().get(), new LockedShulkerBoxSpecialRenderer.Unbaked(ShulkersModels.SHULKER_LOCATIONS.get(e.getKey())));
+            this.specialItems.put(e.getValue().get(), new LockedShulkerBoxSpecialRenderer.Unbaked(ShulkersModels.SHULKER_LOCATIONS.get(e.getKey()), ShulkersModelLayers.LOCKED_SHULKER_BOX));
         }
     }
 

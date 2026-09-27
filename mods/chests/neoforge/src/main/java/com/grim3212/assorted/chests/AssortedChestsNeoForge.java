@@ -78,7 +78,6 @@ public class AssortedChestsNeoForge {
      */
     private void registerCapabilities(final RegisterCapabilitiesEvent event) {
         registerBlockEntity(event, ChestsBlockEntityTypes.LOCKED_CHEST);
-        registerBlockEntity(event, ChestsBlockEntityTypes.LOCKED_ENDER_CHEST);
     }
 
     private static <BE extends BlockEntity> void registerBlockEntity(RegisterCapabilitiesEvent event, IRegistryObject<BlockEntityType<BE>> type) {

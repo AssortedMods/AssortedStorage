@@ -1,5 +1,9 @@
 package com.grim3212.assorted.locks;
 
+import com.grim3212.assorted.lib.core.inventory.IInventoryBlockEntity;
+import com.grim3212.assorted.lib.inventory.FabricPlatformInventoryStorageHandlerUnsided;
+import com.grim3212.assorted.locks.common.block.blockentity.LocksBlockEntityTypes;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
@@ -13,6 +17,13 @@ public class AssortedLocksFabric implements ModInitializer {
         LocksCommonMod.init();
 
         registerLockedCopperDoorOxidation();
+
+        ItemStorage.SIDED.registerForBlockEntities((be, direction) -> be instanceof IInventoryBlockEntity inv ? ((FabricPlatformInventoryStorageHandlerUnsided) inv.getStorageHandler()).getFabricInventory() : null,
+                LocksBlockEntityTypes.LOCKED_CHEST.get(),
+                LocksBlockEntityTypes.LOCKED_ENDER_CHEST.get(),
+                LocksBlockEntityTypes.LOCKED_BARREL.get(),
+                LocksBlockEntityTypes.LOCKED_HOPPER.get(),
+                LocksBlockEntityTypes.LOCKED_SHULKER_BOX.get());
     }
 
     /**

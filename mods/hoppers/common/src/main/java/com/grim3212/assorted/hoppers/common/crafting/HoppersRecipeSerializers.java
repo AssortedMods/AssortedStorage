@@ -12,7 +12,6 @@ public class HoppersRecipeSerializers {
 
     public static final RegistryProvider<RecipeSerializer<?>> RECIPES = RegistryProvider.create(Registries.RECIPE_SERIALIZER, Constants.MOD_ID);
 
-    public static final IRegistryObject<RecipeSerializer<LockedHopperRecipe>> LOCKED_HOPPER = register("locked_hopper", () -> LockedHopperRecipe.SERIALIZER);
     public static final IRegistryObject<RecipeSerializer<LockedUpgradingRecipe>> LOCKED_UPGRADING = register("locked_upgrading", () -> LockedUpgradingRecipe.SERIALIZER);
 
     private static <T extends RecipeSerializer<?>> IRegistryObject<T> register(final String name, final Supplier<T> sup) {

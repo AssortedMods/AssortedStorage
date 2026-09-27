@@ -5,10 +5,9 @@ import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.shulkers.Constants;
 import com.grim3212.assorted.shulkers.api.ShulkersTags;
-import com.grim3212.assorted.shulkers.common.block.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
 import com.grim3212.assorted.shulkers.common.block.ShulkersBlocks;
 import com.grim3212.assorted.shulkers.common.crafting.LockedShulkerBoxColoring;
-import com.grim3212.assorted.shulkers.common.crafting.LockedShulkerBoxRecipe;
 import com.grim3212.assorted.shulkers.common.crafting.LockedUpgradingRecipeBuilder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -46,7 +45,6 @@ public class ShulkersRecipes extends ConditionalRecipeProvider {
     public void buildRecipes() {
         super.buildRecipes();
 
-        SpecialRecipeBuilder.special(() -> LockedShulkerBoxRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_shulker_box").toString());
         SpecialRecipeBuilder.special(() -> LockedShulkerBoxColoring.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "shulker_box_coloring").toString());
 
         for (Map.Entry<StorageMaterial, IRegistryObject<LockedShulkerBoxBlock>> shulker : ShulkersBlocks.SHULKERS.entrySet()) {

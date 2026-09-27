@@ -4,9 +4,9 @@ import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.lib.core.storage.LevelUpgrades;
-import com.grim3212.assorted.chests.common.block.LockedChestBlock;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
 import com.grim3212.assorted.chests.common.block.ChestsBlocks;
-import com.grim3212.assorted.chests.common.block.blockentity.LockedChestBlockEntity;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** How a material chest, or a vanilla chest, takes a level upgrade. */
+/** How a material chest, a vanilla chest or Assorted Locks' locked chest takes a level upgrade. */
 public class ChestsLevelUpgrades {
 
     public static void init() {

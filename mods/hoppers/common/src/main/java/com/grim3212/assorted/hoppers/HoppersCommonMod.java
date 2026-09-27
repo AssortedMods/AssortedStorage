@@ -6,7 +6,6 @@ import com.grim3212.assorted.hoppers.common.crafting.HoppersRecipeSerializers;
 import com.grim3212.assorted.hoppers.common.crafting.LockedUpgradingRecipe;
 import com.grim3212.assorted.hoppers.common.handlers.HoppersCreativeItems;
 import com.grim3212.assorted.hoppers.common.handlers.HoppersLevelUpgrades;
-import com.grim3212.assorted.hoppers.common.handlers.HoppersLocks;
 import com.grim3212.assorted.hoppers.common.inventory.HoppersContainerTypes;
 import com.grim3212.assorted.hoppers.common.item.HoppersDataComponents;
 import com.grim3212.assorted.hoppers.config.HoppersCommonConfig;
@@ -28,7 +27,6 @@ public class HoppersCommonMod {
         HoppersRecipeSerializers.init();
         // The manual reads whole recipes, and Fabric only sends clients the serializers named here.
         SyncedRecipes.require(() -> RecipeType.CRAFTING, LockedUpgradingRecipe.SERIALIZER);
-        HoppersLocks.init();
         HoppersLevelUpgrades.init();
         HoppersCreativeItems.init();
 

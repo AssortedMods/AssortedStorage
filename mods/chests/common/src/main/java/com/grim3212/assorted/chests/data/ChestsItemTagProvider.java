@@ -6,6 +6,7 @@ import com.grim3212.assorted.lib.util.LibCommonTags;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.chests.api.ChestsTags;
 import com.grim3212.assorted.chests.common.block.*;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -36,9 +37,6 @@ public class ChestsItemTagProvider extends LibItemTagProvider {
         Function<TagKey<Item>, ItemTagAppender> tagger = (tag) -> new ItemTagAppender(rawTagger.apply(tag));
 
         tagger.apply(ItemTags.PIGLIN_LOVED).add(ChestsBlocks.CHESTS.get(StorageMaterial.GOLD).get().asItem());
-
-        tagger.apply(LibCommonTags.Items.CHESTS_ENDER).add(ChestsBlocks.LOCKED_ENDER_CHEST.get().asItem());
-        tagger.apply(LibCommonTags.Items.CHESTS_WOODEN).add(ChestsBlocks.LOCKED_CHEST.get().asItem());
 
         tagger.apply(ChestsTags.Items.CAN_UPGRADE_LEVEL_0).addTag(LibCommonTags.Items.CHESTS_WOODEN);
         for (Entry<StorageMaterial, IRegistryObject<LockedChestBlock>> chest : ChestsBlocks.CHESTS.entrySet()) {

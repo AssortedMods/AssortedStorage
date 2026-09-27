@@ -21,6 +21,16 @@
     },
     {
       "blocks": [
+        "assortedlocks:locked_ender_chest",
+        "assortedlocks:locked_chest",
+        "assortedlocks:locked_shulker_box",
+        "assortedlocks:locked_barrel",
+        "assortedlocks:locked_hopper"
+      ],
+      "page": "assortedstorage:locking/containers"
+    },
+    {
+      "blocks": [
         "assortedlocks:locked_iron_door",
         "assortedlocks:locked_oak_door",
         "assortedlocks:locked_spruce_door",

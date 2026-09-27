@@ -18,8 +18,7 @@ public class AssortedChestsFabric implements ModInitializer {
                         return ((FabricPlatformInventoryStorageHandlerUnsided) inv.getStorageHandler()).getFabricInventory();
                     return null;
                 },
-                ChestsBlockEntityTypes.LOCKED_CHEST.get(),
-                ChestsBlockEntityTypes.LOCKED_ENDER_CHEST.get()
+                ChestsBlockEntityTypes.LOCKED_CHEST.get()
         );
     }
 }

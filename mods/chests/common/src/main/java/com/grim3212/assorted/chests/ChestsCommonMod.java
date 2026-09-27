@@ -6,7 +6,6 @@ import com.grim3212.assorted.chests.common.crafting.ChestsRecipeSerializers;
 import com.grim3212.assorted.chests.common.crafting.LockedUpgradingRecipe;
 import com.grim3212.assorted.chests.common.handlers.ChestsCreativeItems;
 import com.grim3212.assorted.chests.common.handlers.ChestsLevelUpgrades;
-import com.grim3212.assorted.chests.common.handlers.ChestsLocks;
 import com.grim3212.assorted.chests.common.inventory.ChestsContainerTypes;
 import com.grim3212.assorted.chests.common.item.ChestsDataComponents;
 import com.grim3212.assorted.chests.config.ChestsCommonConfig;
@@ -29,7 +28,6 @@ public class ChestsCommonMod {
         // The manual and JEI read whole recipes. NeoForge sends every crafting recipe;
         // Fabric sends only serializers that were named.
         SyncedRecipes.require(() -> RecipeType.CRAFTING, LockedUpgradingRecipe.SERIALIZER);
-        ChestsLocks.init();
         ChestsLevelUpgrades.init();
         ChestsCreativeItems.init();
 

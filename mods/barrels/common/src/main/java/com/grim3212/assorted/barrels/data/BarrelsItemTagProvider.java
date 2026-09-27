@@ -6,6 +6,7 @@ import com.grim3212.assorted.lib.util.LibCommonTags;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.barrels.api.BarrelsTags;
 import com.grim3212.assorted.barrels.common.block.*;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlock;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -37,7 +38,6 @@ public class BarrelsItemTagProvider extends LibItemTagProvider {
 
         tagger.apply(ItemTags.PIGLIN_LOVED).add(BarrelsBlocks.BARRELS.get(StorageMaterial.GOLD).get().asItem());
 
-        tagger.apply(LibCommonTags.Items.BARRELS_WOODEN).add(BarrelsBlocks.LOCKED_BARREL.get().asItem());
 
         tagger.apply(BarrelsTags.Items.CAN_UPGRADE_LEVEL_0).addTag(LibCommonTags.Items.BARRELS_WOODEN);
         for (Entry<StorageMaterial, IRegistryObject<LockedBarrelBlock>> barrel : BarrelsBlocks.BARRELS.entrySet()) {

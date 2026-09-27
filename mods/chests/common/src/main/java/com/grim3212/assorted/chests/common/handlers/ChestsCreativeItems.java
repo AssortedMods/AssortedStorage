@@ -2,7 +2,6 @@ package com.grim3212.assorted.chests.common.handlers;
 
 import com.grim3212.assorted.lib.core.creative.CreativeTabItems;
 import com.grim3212.assorted.lib.core.creative.SharedCreativeTabs;
-import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.chests.ChestsCommonMod;
 import com.grim3212.assorted.chests.Family;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
@@ -12,7 +11,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
 
 import java.util.List;
 
@@ -22,16 +20,7 @@ public class ChestsCreativeItems {
     public static final ResourceKey<CreativeModeTab> TAB = SharedCreativeTabs.tab(Identifier.fromNamespaceAndPath(Family.ID, "tab"), Family.ICONS);
 
     public static void init() {
-        // The locked chests sit with the other locked containers, the material chests with the other materials.
-        SharedCreativeTabs.add(TAB, 600, ChestsCreativeItems::lockedChests);
         SharedCreativeTabs.add(TAB, 700, ChestsCreativeItems::materialChests);
-    }
-
-    private static List<ItemStack> lockedChests() {
-        CreativeTabItems items = new CreativeTabItems();
-        items.add(defaultLock(ChestsBlocks.LOCKED_ENDER_CHEST.get()));
-        items.add(defaultLock(ChestsBlocks.LOCKED_CHEST.get()));
-        return items.getItems();
     }
 
     private static List<ItemStack> materialChests() {
@@ -44,10 +33,6 @@ public class ChestsCreativeItems {
             items.add(chest.get());
         });
         return items.getItems();
-    }
-
-    private static ItemStack defaultLock(ItemLike item) {
-        return StorageUtil.setCodeOnStack("default", new ItemStack(item));
     }
 
     private static boolean canNotCraft(StorageMaterial type) {

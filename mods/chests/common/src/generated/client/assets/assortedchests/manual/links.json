@@ -26,13 +26,6 @@
         "assortedchests:chest_platinum"
       ],
       "page": "assortedstorage:chests/chests"
-    },
-    {
-      "blocks": [
-        "assortedchests:locked_chest",
-        "assortedchests:locked_ender_chest"
-      ],
-      "page": "assortedstorage:chests/locked"
     }
   ]
 }

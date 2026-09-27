@@ -22,8 +22,6 @@ public class HoppersLanguageProvider extends LibLanguageProvider {
     protected void addNames() {
         this.add("itemGroup.assortedstorage", "Assorted Storage");
 
-        this.add("assortedhoppers.container.locked_hopper", "Locked Hopper");
-
         // The material comes first in each name, where the id puts it last.
         for (StorageMaterial material : StorageMaterial.values()) {
             String id = material.toString();
@@ -62,10 +60,5 @@ public class HoppersLanguageProvider extends LibLanguageProvider {
         this.add("manual.assortedstorage.chapter.hoppers.hoppers.title", "Hoppers");
         this.add("manual.assortedstorage.chapter.hoppers.hoppers",
                 "A material hopper moves items the way a vanilla one does but has far more room, and can vary in speed depending on the material.");
-
-        this.add("manual.assortedstorage.chapter.hoppers.locked.title", "Locked Hopper");
-        this.add("manual.assortedstorage.chapter.hoppers.locked",
-                "A padlock turns a vanilla hopper into a locked one and keeps whatever was inside." + BREAK
-                        + "After that only a key with the matching combination opens it. Padlocks and keys come from Assorted Locks.");
     }
 }

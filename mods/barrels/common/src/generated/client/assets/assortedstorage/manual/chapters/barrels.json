@@ -35,15 +35,6 @@
       ],
       "text": "manual.assortedstorage.chapter.barrels.barrels",
       "title": "manual.assortedstorage.chapter.barrels.barrels.title"
-    },
-    {
-      "type": "assortedlib:item",
-      "id": "locked",
-      "items": [
-        "assortedbarrels:locked_barrel"
-      ],
-      "text": "manual.assortedstorage.chapter.barrels.locked",
-      "title": "manual.assortedstorage.chapter.barrels.locked.title"
     }
   ],
   "sort_order": 1

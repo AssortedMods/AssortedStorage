@@ -2,7 +2,9 @@ package com.grim3212.assorted.hoppers.client.data;
 
 import com.grim3212.assorted.hoppers.Constants;
 import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
-import com.grim3212.assorted.hoppers.common.block.LockedHopperBlock;
+import com.grim3212.assorted.hoppers.client.HoppersClient;
+import com.grim3212.assorted.lib.client.data.LockedModelBuilder;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlock;
 import com.grim3212.assorted.lib.client.data.SpecificationBlockStateModelBuilder;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -53,18 +55,9 @@ public class HoppersBlockstateProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-        normalHopper(blockModels, HoppersBlocks.LOCKED_HOPPER.get());
         for (IRegistryObject<LockedHopperBlock> b : HoppersBlocks.HOPPERS.values()) {
             materialHopper(blockModels, b.get());
         }
-    }
-
-    private void normalHopper(BlockModelGenerators blockModels, LockedHopperBlock b) {
-        // The unlocked halves are vanilla's own hopper models, referenced rather than regenerated.
-        Identifier locked = parented(blockModels.modelOutput, ModelLocationUtils.getModelLocation(b, "_locked"), TEMPLATE_HOPPER);
-        Identifier lockedSide = parented(blockModels.modelOutput, ModelLocationUtils.getModelLocation(b, "_locked_side"), TEMPLATE_HOPPER_SIDE);
-
-        hopperState(blockModels, b, VANILLA_HOPPER, locked, VANILLA_HOPPER_SIDE, lockedSide, new Material(Identifier.parse("block/hopper_outside")));
     }
 
     private void materialHopper(BlockModelGenerators blockModels, LockedHopperBlock b) {
@@ -132,7 +125,7 @@ public class HoppersBlockstateProvider extends ModelProvider {
                 // (ResolvedModel#getTopTransforms); parenting to nothing yields ItemTransforms.NO_TRANSFORMS.
                 // block/block supplies the standard display block and gui_light, and no geometry.
                 .parent(Identifier.withDefaultNamespace("block/block"))
-                .customLoader(LockedModelBuilder::begin, b -> b.unlockedModel(unlocked).lockedModel(locked))
+                .customLoader(() -> LockedModelBuilder.begin(HoppersClient.LOCKED_MODEL_LOADER), b -> b.unlockedModel(unlocked).lockedModel(locked))
                 .requiredTextureSlot(TextureSlot.PARTICLE)
                 .build()
                 .create(target, new TextureMapping().put(TextureSlot.PARTICLE, particle), output);

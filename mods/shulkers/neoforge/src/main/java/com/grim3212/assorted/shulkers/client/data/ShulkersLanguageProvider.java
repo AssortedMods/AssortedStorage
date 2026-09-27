@@ -23,22 +23,18 @@ public class ShulkersLanguageProvider extends LibLanguageProvider {
     protected void addNames() {
         this.add("itemGroup.assortedstorage", "Assorted Storage");
 
-        this.add("assortedshulkers.container.locked_shulker_box", "Locked Shulker Box");
-
         // The material comes first in each name, where the id puts it last.
         for (StorageMaterial material : StorageMaterial.values()) {
             String id = material.toString();
             String name = titleCase(id);
 
-            this.add("assortedshulkers.container.shulker_" + id, name + " Shulker Box");
+            this.add("assortedshulkers.container.shulker_box_" + id, name + " Shulker Box");
             this.add("block.assortedshulkers.shulker_box_" + id, name + " Shulker Box");
         }
 
         for (DyeColor color : DyeColor.values()) {
             String id = color.getName();
             String name = titleCase(id);
-
-            this.add("block.assortedshulkers.locked_shulker_box_" + id, name + " Locked Shulker Box");
 
             for (StorageMaterial material : StorageMaterial.values()) {
                 String materialId = material.toString();
@@ -75,10 +71,5 @@ public class ShulkersLanguageProvider extends LibLanguageProvider {
         this.add("manual.assortedstorage.chapter.shulker_boxes.shulker_boxes.title", "Shulker Boxes");
         this.add("manual.assortedstorage.chapter.shulker_boxes.shulker_boxes",
                 "Material shulker boxes keep their contents when broken, the same as the vanilla, and can end up being much larger.");
-
-        this.add("manual.assortedstorage.chapter.shulker_boxes.locked.title", "Locked Shulker Box");
-        this.add("manual.assortedstorage.chapter.shulker_boxes.locked",
-                "A padlock turns a vanilla shulker box into a locked one and keeps whatever was inside." + BREAK
-                        + "After that only a key with the matching combination opens it. Padlocks and keys come from Assorted Locks.");
     }
 }

@@ -37,7 +37,6 @@ final class TooltipTests {
 
         ItemStack lockedShulker = StorageUtil.setCodeOnStack("1234", new ItemStack(ShulkersBlocks.SHULKERS.values().iterator().next().get()));
         helper.assertValueEqual(tooltipKeys(helper, lockedShulker, info), List.of(combo, level), "a locked shulker box item's tooltip");
-        helper.assertValueEqual(tooltipKeys(helper, new ItemStack(ShulkersBlocks.LOCKED_SHULKER_BOX.get()), info), List.of(level), "an unlocked vanilla stand-in's tooltip");
 
         if (onNeoForge()) {
             helper.assertTrue(fullTooltipKeys(helper, lockedShulker).contains(combo), "the shulker box's lock line is missing from its tooltip");

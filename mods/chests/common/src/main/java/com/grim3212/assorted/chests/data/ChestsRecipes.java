@@ -7,9 +7,7 @@ import com.grim3212.assorted.chests.Constants;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.chests.api.ChestsTags;
 import com.grim3212.assorted.chests.common.block.ChestsBlocks;
-import com.grim3212.assorted.chests.common.block.LockedChestBlock;
-import com.grim3212.assorted.chests.common.crafting.LockedChestRecipe;
-import com.grim3212.assorted.chests.common.crafting.LockedEnderChestRecipe;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
 import com.grim3212.assorted.chests.common.crafting.LockedUpgradingRecipeBuilder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -42,9 +40,6 @@ public class ChestsRecipes extends ConditionalRecipeProvider {
     @Override
     public void buildRecipes() {
         super.buildRecipes();
-
-        SpecialRecipeBuilder.special(() -> LockedEnderChestRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_ender_chest").toString());
-        SpecialRecipeBuilder.special(() -> LockedChestRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_chest").toString());
 
         for (Map.Entry<StorageMaterial, IRegistryObject<LockedChestBlock>> chest : ChestsBlocks.CHESTS.entrySet()) {
             TagKey<Item> mat = chest.getKey().getMaterial();

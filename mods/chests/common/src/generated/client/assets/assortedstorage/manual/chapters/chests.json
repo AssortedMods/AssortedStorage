@@ -35,16 +35,6 @@
       ],
       "text": "manual.assortedstorage.chapter.chests.chests",
       "title": "manual.assortedstorage.chapter.chests.chests.title"
-    },
-    {
-      "type": "assortedlib:item",
-      "id": "locked",
-      "items": [
-        "assortedchests:locked_chest",
-        "assortedchests:locked_ender_chest"
-      ],
-      "text": "manual.assortedstorage.chapter.chests.locked",
-      "title": "manual.assortedstorage.chapter.chests.locked.title"
     }
   ]
 }

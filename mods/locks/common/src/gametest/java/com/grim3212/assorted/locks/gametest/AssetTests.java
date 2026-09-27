@@ -41,6 +41,50 @@ final class AssetTests {
         out.accept("every_recipe_loads_or_is_conditioned_off", AssetTests::everyRecipeLoadsOrIsConditionedOff);
         out.accept("every_item_tag_has_a_name", AssetTests::everyItemTagHasAName);
         out.accept("every_locked_door_has_its_textures", AssetTests::everyLockedDoorHasItsTextures);
+        out.accept("locked_container_items_show_their_padlock", AssetTests::lockedContainerItemsShowTheirPadlock);
+    }
+
+    /**
+     * The creative tab's locked containers draw their padlock. The chests and shulker box use a special renderer that
+     * reads the stack's lock, the barrel's item model branches on it, and the hopper's sprite has the padlock drawn on.
+     */
+    private static void lockedContainerItemsShowTheirPadlock(GameTestHelper helper) {
+        List<String> wrong = new ArrayList<>();
+
+        for (String chest : List.of("locked_chest", "locked_ender_chest")) {
+            JsonObject model = itemModel(chest);
+            if (model == null || !"minecraft:special".equals(string(model, "type")) || !"assortedlocks:locked_chest".equals(string(model.getAsJsonObject("model"), "type"))) {
+                wrong.add(chest + " is not drawn by assortedlocks:locked_chest");
+            }
+        }
+
+        JsonObject shulker = itemModel("locked_shulker_box");
+        if (shulker == null || !"minecraft:special".equals(string(shulker, "type")) || !"assortedlocks:locked_shulker_box".equals(string(shulker.getAsJsonObject("model"), "type"))) {
+            wrong.add("locked_shulker_box is not drawn by assortedlocks:locked_shulker_box");
+        }
+
+        JsonObject barrel = itemModel("locked_barrel");
+        if (barrel == null || !"minecraft:condition".equals(string(barrel, "type")) || !"assortedlocks:locked".equals(string(barrel, "property"))
+                || !"assortedlocks:block/locked_barrel_locked".equals(string(barrel.getAsJsonObject("on_true"), "model"))) {
+            wrong.add("locked_barrel does not draw assortedlocks:block/locked_barrel_locked when locked");
+        }
+
+        JsonObject hopper = itemModel("locked_hopper");
+        JsonObject hopperModel = json("/assets/assortedlocks/models/item/locked_hopper.json");
+        if (hopper == null || hopperModel == null || !"assortedlocks:item/locked_hopper".equals(string(hopperModel.getAsJsonObject("textures"), "layer0"))) {
+            wrong.add("locked_hopper is not drawn with its padlock sprite");
+        }
+        if (!resourceExists("/assets/assortedlocks/textures/item/locked_hopper.png")) {
+            wrong.add("the locked hopper's sprite is missing");
+        }
+
+        helper.assertTrue(wrong.isEmpty(), wrong.size() + " locked item model problem(s): " + String.join("; ", wrong));
+        helper.succeed();
+    }
+
+    private static JsonObject itemModel(String path) {
+        JsonObject item = json("/assets/assortedlocks/items/" + path + ".json");
+        return item == null ? null : item.getAsJsonObject("model");
     }
 
     /**

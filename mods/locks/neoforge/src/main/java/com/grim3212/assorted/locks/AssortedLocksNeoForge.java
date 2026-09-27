@@ -1,15 +1,19 @@
 package com.grim3212.assorted.locks;
 
+import com.grim3212.assorted.lib.core.inventory.IInventoryBlockEntity;
 import com.grim3212.assorted.lib.core.inventory.IInventoryItem;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.lib.data.ForgeBlockTagProvider;
 import com.grim3212.assorted.lib.data.ForgeItemTagProvider;
 import com.grim3212.assorted.lib.inventory.ForgePlatformInventoryStorageHandlerUnsided;
 import com.grim3212.assorted.lib.platform.Services;
+import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.locks.client.data.LocksBlockstateProvider;
 import com.grim3212.assorted.locks.client.data.LocksItemModelProvider;
 import com.grim3212.assorted.locks.client.data.LocksLanguageProvider;
 import com.grim3212.assorted.locks.client.data.LocksManualProvider;
+import com.grim3212.assorted.locks.client.data.LocksSpriteSourceProvider;
+import com.grim3212.assorted.locks.common.block.blockentity.LocksBlockEntityTypes;
 import com.grim3212.assorted.locks.common.item.LocksItems;
 import com.grim3212.assorted.locks.compat.curios.CuriosHelper;
 import com.grim3212.assorted.locks.data.LocksBlockLoot;
@@ -20,6 +24,8 @@ import com.grim3212.assorted.locks.data.LocksRecipes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -77,12 +83,13 @@ public class AssortedLocksNeoForge {
 
         event.addProvider(new LocksBlockstateProvider(packOutput));
         event.addProvider(new LocksItemModelProvider(packOutput));
+        event.addProvider(new LocksSpriteSourceProvider(packOutput, event.getLookupProvider()));
         event.addProvider(new LocksLanguageProvider(packOutput));
         event.addProvider(new LocksManualProvider(packOutput));
     }
 
     /**
-     * Exposes the key ring as an item handler. The stack-count guard keeps a stacked ring, which has no single
+     * Exposes the key ring and the locked containers as item handlers. The stack-count guard keeps a stacked ring, which has no single
      * inventory, from answering at all.
      */
     private void registerCapabilities(final RegisterCapabilitiesEvent event) {
@@ -92,5 +99,20 @@ public class AssortedLocksNeoForge {
             }
             return ((ForgePlatformInventoryStorageHandlerUnsided) inv.getStorageHandler(stack)).getCapability();
         }, LocksItems.KEY_RING.get());
+
+        registerBlockEntity(event, LocksBlockEntityTypes.LOCKED_CHEST);
+        registerBlockEntity(event, LocksBlockEntityTypes.LOCKED_ENDER_CHEST);
+        registerBlockEntity(event, LocksBlockEntityTypes.LOCKED_BARREL);
+        registerBlockEntity(event, LocksBlockEntityTypes.LOCKED_HOPPER);
+        registerBlockEntity(event, LocksBlockEntityTypes.LOCKED_SHULKER_BOX);
+    }
+
+    private static <BE extends BlockEntity> void registerBlockEntity(RegisterCapabilitiesEvent event, IRegistryObject<BlockEntityType<BE>> type) {
+        event.registerBlockEntity(Capabilities.Item.BLOCK, type.get(), (blockEntity, side) -> {
+            if (blockEntity.isRemoved() || !(blockEntity instanceof IInventoryBlockEntity inv)) {
+                return null;
+            }
+            return ((ForgePlatformInventoryStorageHandlerUnsided) inv.getStorageHandler()).getCapability();
+        });
     }
 }

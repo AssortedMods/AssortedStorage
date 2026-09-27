@@ -3,6 +3,7 @@ package com.grim3212.assorted.locks.client.data;
 import com.grim3212.assorted.lib.data.LibLanguageProvider;
 import com.grim3212.assorted.locks.Constants;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.DyeColor;
 
 /**
  * Generates the en_us.json of this mod. A block, item or entity whose name is its id in title case
@@ -25,6 +26,19 @@ public class LocksLanguageProvider extends LibLanguageProvider {
 
         this.add("assortedlocks.container.locksmith_workbench", "Locksmith Workbench");
         this.add("assortedlocks.container.key_ring", "Key Ring");
+        this.add("assortedlocks.container.locked_chest", "Locked Chest");
+        this.add("assortedlocks.container.locked_ender_chest", "Ender Chest");
+        this.add("assortedlocks.container.locked_barrel", "Locked Barrel");
+        this.add("assortedlocks.container.locked_hopper", "Locked Hopper");
+        this.add("assortedlocks.container.locked_shulker_box", "Locked Shulker Box");
+
+        // Item tag names, which recipe viewers show in place of the raw tag id.
+        this.add("tag.item.c.hoppers", "Hoppers");
+
+        // A dyed locked shulker box is named for its color.
+        for (DyeColor color : DyeColor.values()) {
+            this.add("block.assortedlocks.locked_shulker_box_" + color.getName(), titleCase(color.getName()) + " Locked Shulker Box");
+        }
 
         this.addManual();
     }
@@ -44,9 +58,15 @@ public class LocksLanguageProvider extends LibLanguageProvider {
 
         this.add("manual.assortedstorage.chapter.locking.locks.title", "Padlocks and Keys");
         this.add("manual.assortedstorage.chapter.locking.locks",
-                "Use a padlock on a door and it becomes the locked version of itself. With the other Assorted Storage "
-                        + "mods installed a chest, barrel, hopper, shulker box or ender chest takes one the same way and keeps whatever was inside." + BREAK
+                "Use a padlock on a door, chest, ender chest, barrel, hopper or shulker box and it becomes the locked version of itself. "
+                        + "The containers from the other Assorted Storage mods take one the same way." + BREAK
                         + "After that only a key with the matching combination opens it.");
+
+        this.add("manual.assortedstorage.chapter.locking.containers.title", "Locked Containers");
+        this.add("manual.assortedstorage.chapter.locking.containers",
+                "A locked chest, barrel, hopper or shulker box keeps whatever was inside when the padlock went on. "
+                        + "A locked ender chest opens the ender storage tied to its combination instead of your own." + BREAK
+                        + "Sneak and use it with an empty hand while you carry the matching key to take the padlock off and get the plain one back.");
 
         this.add("manual.assortedstorage.chapter.locking.key_ring.title", "Key Ring");
         this.add("manual.assortedstorage.chapter.locking.key_ring",

@@ -37,7 +37,6 @@ final class TooltipTests {
 
         ItemStack lockedHopper = StorageUtil.setCodeOnStack("1234", new ItemStack(HoppersBlocks.HOPPERS.values().iterator().next().get()));
         helper.assertValueEqual(tooltipKeys(helper, lockedHopper, info), List.of(combo, level), "a locked hopper item's tooltip");
-        helper.assertValueEqual(tooltipKeys(helper, new ItemStack(HoppersBlocks.LOCKED_HOPPER.get()), info), List.of(level), "an unlocked vanilla stand-in's tooltip");
 
         if (onNeoForge()) {
             helper.assertTrue(fullTooltipKeys(helper, lockedHopper).contains(combo), "the hopper's lock line is missing from its tooltip");

@@ -2,10 +2,6 @@
   "sources": [
     {
       "type": "minecraft:single",
-      "resource": "assortedshulkers:model/shulkers/normal"
-    },
-    {
-      "type": "minecraft:single",
       "resource": "assortedshulkers:model/shulkers/stone"
     },
     {

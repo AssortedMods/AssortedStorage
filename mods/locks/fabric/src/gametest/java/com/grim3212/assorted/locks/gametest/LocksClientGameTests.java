@@ -3,11 +3,14 @@ package com.grim3212.assorted.locks.gametest;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
+import com.grim3212.assorted.locks.common.handlers.LocksCreativeItems;
 import com.grim3212.assorted.locks.common.item.LocksItems;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -17,9 +20,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
@@ -27,11 +32,12 @@ import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
  * What only a client can check: tooltips as Fabric builds them, the workbench menu arriving through
- * Fabric's packet path, and locked doors reaching other clients whole. Run with
+ * Fabric's packet path, locked doors reaching other clients whole, and the locked containers' padlocks. Run with
  * {@code ./gradlew :locks:fabric:runClientGameTest}; it exits non-zero on a failure.
  */
 public class LocksClientGameTests implements FabricClientGameTest {
@@ -44,6 +50,7 @@ public class LocksClientGameTests implements FabricClientGameTest {
             tooltipsShowTheCode(context);
             workbenchOpensOnTheClient(context, world);
             lockedDoorsReachOtherClientsWhole(context, world);
+            lockedContainersShowTheirPadlockInTheTab(context, world);
         }
     }
 
@@ -130,6 +137,42 @@ public class LocksClientGameTests implements FabricClientGameTest {
                     + ", upper " + client.level.getBlockState(lower.above()).getBlock());
             throw new AssertionError("a door the server locked reached this client as " + seen, timedOut);
         }
+    }
+
+    /**
+     * The locked containers in the family's creative tab, each coded so it draws its padlock. The screenshot
+     * {@code assortedlocks_locked_containers} is the visual check.
+     */
+    private static void lockedContainersShowTheirPadlockInTheTab(ClientGameTestContext context, TestSingleplayerContext world) {
+        world.getServer().runCommand("gamemode creative @a");
+        context.waitFor(client -> client.gameMode != null && client.gameMode.getPlayerMode() == GameType.CREATIVE);
+
+        CreativeModeTab tab = context.computeOnClient(client -> BuiltInRegistries.CREATIVE_MODE_TAB.getValue(LocksCreativeItems.TAB));
+        context.runOnClient(client -> {
+            try {
+                // The screen opens on its remembered tab, which is private, as is selectTab.
+                Field selected = CreativeModeInventoryScreen.class.getDeclaredField("selectedTab");
+                selected.setAccessible(true);
+                selected.set(null, tab);
+            } catch (ReflectiveOperationException e) {
+                throw new AssertionError("could not pick the Assorted Storage tab", e);
+            }
+        });
+        context.setScreen(() -> new CreativeModeInventoryScreen(Minecraft.getInstance().player, Minecraft.getInstance().player.connection.enabledFeatures(), false));
+        context.waitFor(client -> client.gui.screen() instanceof CreativeModeInventoryScreen);
+        context.getInput().setCursorPos(0, 0);
+        // The tab's items are only built once the creative screen has opened.
+        context.runOnClient(client -> {
+            for (Block block : LocksBlocks.lockedContainers()) {
+                boolean shown = tab.getDisplayItems().stream().anyMatch(stack -> stack.is(block.asItem()) && StorageUtil.hasCode(stack));
+                check(shown, BuiltInRegistries.BLOCK.getKey(block) + " is not in the tab with a lock on it");
+            }
+        });
+        context.waitTicks(5);
+        System.out.println("Locked containers screenshot: " + context.takeScreenshot("assortedlocks_locked_containers").toAbsolutePath());
+
+        context.setScreen(() -> null);
+        world.getServer().runCommand("gamemode survival @a");
     }
 
     /** A right click on the top of {@code pos}, through the game mode, so the loader's use-block event runs. */

@@ -4,7 +4,13 @@ import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.chests.Constants;
 import com.grim3212.assorted.chests.Family;
+import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageTypes;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlockEntity;
+import com.grim3212.assorted.chests.common.block.blockentity.ChestsBlockEntityTypes;
+import com.grim3212.assorted.chests.common.inventory.ChestsContainerTypes;
 import com.grim3212.assorted.chests.common.item.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -12,9 +18,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -26,16 +29,13 @@ public class ChestsBlocks {
     public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
     public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
 
-    public static final IRegistryObject<LockedEnderChestBlock> LOCKED_ENDER_CHEST = registerStorageItem("locked_ender_chest", key -> new LockedEnderChestBlock(Block.Properties.of().setId(key).mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(22.5F, 600.0F).lightLevel((state) -> {
-        return 7;
-    })));
-
-    public static final IRegistryObject<LockedChestBlock> LOCKED_CHEST = registerChest("locked_chest", key -> new LockedChestBlock(null, BlockBehaviour.Properties.of().setId(key).mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.5F).sound(SoundType.WOOD)), ChestsBlocks::itemProperties);
+    // Lambdas, as the types register after the blocks that name them.
+    public static final StorageTypes<LockedChestBlockEntity, LockedMaterialContainer> TYPES = new StorageTypes<>(() -> ChestsBlockEntityTypes.LOCKED_CHEST.get(), () -> ChestsContainerTypes.LOCKED_CHEST.get());
 
     public static final Map<StorageMaterial, IRegistryObject<LockedChestBlock>> CHESTS = new EnumMap<>(StorageMaterial.class);
 
     static {
-        Stream.of(StorageMaterial.values()).forEach((type) -> CHESTS.put(type, registerChest("chest_" + type.toString(), key -> new LockedChestBlock(type, type.getProps().setId(key)), itemProperties(type))));
+        Stream.of(StorageMaterial.values()).forEach((type) -> CHESTS.put(type, registerChest("chest_" + type.toString(), key -> new LockedChestBlock(type, TYPES, type.getProps().setId(key)), itemProperties(type))));
     }
 
     /**
@@ -49,10 +49,6 @@ public class ChestsBlocks {
 
     private static Function<ResourceKey<Item>, Item.Properties> itemProperties(StorageMaterial type) {
         return type == StorageMaterial.NETHERITE ? (key) -> itemProperties(key).fireResistant() : ChestsBlocks::itemProperties;
-    }
-
-    private static <T extends Block> IRegistryObject<T> registerStorageItem(String name, Function<ResourceKey<Block>, ? extends T> factory) {
-        return register(name, factory, name, (block, key) -> new ChestsBlockItem(block.get(), itemProperties(key)));
     }
 
     private static <T extends LockedChestBlock> IRegistryObject<T> registerChest(String name, Function<ResourceKey<Block>, ? extends T> factory, Function<ResourceKey<Item>, Item.Properties> itemProperties) {

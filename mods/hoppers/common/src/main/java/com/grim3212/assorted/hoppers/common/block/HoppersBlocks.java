@@ -3,7 +3,13 @@ package com.grim3212.assorted.hoppers.common.block;
 import com.grim3212.assorted.hoppers.Constants;
 import com.grim3212.assorted.hoppers.Family;
 import com.grim3212.assorted.hoppers.common.item.HoppersBlockItem;
+import com.grim3212.assorted.hoppers.common.block.blockentity.HoppersBlockEntityTypes;
+import com.grim3212.assorted.hoppers.common.inventory.HoppersContainerTypes;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageTypes;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlock;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlockEntity;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperContainer;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import net.minecraft.core.registries.Registries;
@@ -11,9 +17,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -25,13 +28,14 @@ public class HoppersBlocks {
     public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
     public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
 
-    public static final IRegistryObject<LockedHopperBlock> LOCKED_HOPPER = register("locked_hopper", key -> new LockedHopperBlock(null, BlockBehaviour.Properties.of().setId(key).mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 4.8F).sound(SoundType.METAL).noOcclusion()), HoppersBlocks::itemProperties);
+    // Lambdas, as the types register after the blocks that name them.
+    public static final StorageTypes<LockedHopperBlockEntity, LockedHopperContainer> TYPES = new StorageTypes<>(() -> HoppersBlockEntityTypes.LOCKED_HOPPER.get(), () -> HoppersContainerTypes.LOCKED_HOPPER.get());
 
     public static final Map<StorageMaterial, IRegistryObject<LockedHopperBlock>> HOPPERS = new EnumMap<>(StorageMaterial.class);
 
     static {
         Stream.of(StorageMaterial.values()).forEach((type) -> {
-            HOPPERS.put(type, register("hopper_" + type.toString(), key -> new LockedHopperBlock(type, type.getProps().setId(key)), itemProperties(type)));
+            HOPPERS.put(type, register("hopper_" + type.toString(), key -> new LockedHopperBlock(type, TYPES, type.getProps().setId(key)), itemProperties(type)));
         });
     }
 

@@ -3,8 +3,7 @@ package com.grim3212.assorted.hoppers.data;
 import com.grim3212.assorted.hoppers.Constants;
 import com.grim3212.assorted.hoppers.api.HoppersTags;
 import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
-import com.grim3212.assorted.hoppers.common.block.LockedHopperBlock;
-import com.grim3212.assorted.hoppers.common.crafting.LockedHopperRecipe;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlock;
 import com.grim3212.assorted.hoppers.common.crafting.LockedUpgradingRecipeBuilder;
 import com.grim3212.assorted.lib.core.conditions.ConditionalRecipeProvider;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
@@ -17,7 +16,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -55,8 +53,6 @@ public class HoppersRecipes extends ConditionalRecipeProvider {
     @Override
     public void buildRecipes() {
         super.buildRecipes();
-
-        SpecialRecipeBuilder.special(() -> LockedHopperRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_hopper").toString());
 
         for (Map.Entry<StorageMaterial, IRegistryObject<LockedHopperBlock>> hopper : HoppersBlocks.HOPPERS.entrySet()) {
             TagKey<Item> mat = hopper.getKey().getMaterial();

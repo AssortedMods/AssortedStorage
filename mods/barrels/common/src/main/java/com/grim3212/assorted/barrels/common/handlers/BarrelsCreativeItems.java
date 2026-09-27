@@ -2,7 +2,6 @@ package com.grim3212.assorted.barrels.common.handlers;
 
 import com.grim3212.assorted.lib.core.creative.CreativeTabItems;
 import com.grim3212.assorted.lib.core.creative.SharedCreativeTabs;
-import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.barrels.BarrelsCommonMod;
 import com.grim3212.assorted.barrels.Family;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
@@ -21,8 +20,6 @@ public class BarrelsCreativeItems {
     public static final ResourceKey<CreativeModeTab> TAB = SharedCreativeTabs.tab(Identifier.fromNamespaceAndPath(Family.ID, "tab"), Family.ICONS);
 
     public static void init() {
-        // The locked barrel sits with the other locked containers, the material barrels with the other materials.
-        SharedCreativeTabs.add(TAB, 630, () -> List.of(StorageUtil.setCodeOnStack("default", new ItemStack(BarrelsBlocks.LOCKED_BARREL.get()))));
         SharedCreativeTabs.add(TAB, 720, BarrelsCreativeItems::materialBarrels);
     }
 

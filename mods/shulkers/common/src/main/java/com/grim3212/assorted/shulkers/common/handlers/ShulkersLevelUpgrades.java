@@ -2,9 +2,9 @@ package com.grim3212.assorted.shulkers.common.handlers;
 
 import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.lib.core.storage.LevelUpgrades;
-import com.grim3212.assorted.shulkers.common.block.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
 import com.grim3212.assorted.shulkers.common.block.ShulkersBlocks;
-import com.grim3212.assorted.shulkers.common.block.blockentity.LockedShulkerBoxBlockEntity;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;

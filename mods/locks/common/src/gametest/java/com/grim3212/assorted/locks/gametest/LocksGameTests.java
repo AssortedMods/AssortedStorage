@@ -16,6 +16,7 @@ public final class LocksGameTests {
     /** Every test in this mod, named once, so both loaders register the same set. */
     public static void forEach(BiConsumer<String, Consumer<GameTestHelper>> out) {
         LockTests.register(out);
+        LockedContainerTests.register(out);
         MenuTests.register(out);
         TooltipTests.register(out);
         AssetTests.register(out);

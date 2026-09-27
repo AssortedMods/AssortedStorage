@@ -1,10 +1,26 @@
 package com.grim3212.assorted.locks.common.block;
 
+import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
+import com.grim3212.assorted.lib.core.storage.StorageBlockItem;
+import com.grim3212.assorted.lib.core.storage.StorageTypes;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlock;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlockEntity;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlockEntity;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlock;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlockEntity;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperContainer;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlockEntity;
+import com.grim3212.assorted.lib.core.storage.shulker.ShulkerBoxBlockItem;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.locks.Constants;
 import com.grim3212.assorted.locks.Family;
 import com.grim3212.assorted.locks.api.Wood;
+import com.grim3212.assorted.locks.common.block.blockentity.LocksBlockEntityTypes;
+import com.grim3212.assorted.locks.common.inventory.LocksContainerTypes;
+import com.grim3212.assorted.locks.common.item.LocksDataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -22,6 +38,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -44,6 +61,18 @@ public class LocksBlocks {
     public static final Map<Block, IRegistryObject<LockedDoorBlock>> VANILLA_DOORS = new LinkedHashMap<>();
 
     public static final IRegistryObject<LocksmithWorkbenchBlock> LOCKSMITH_WORKBENCH = register("locksmith_workbench", key -> new LocksmithWorkbenchBlock(Block.Properties.of().setId(key).mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD).strength(3.0f, 5.0f)));
+
+    // Lambdas, as the types register after the blocks that name them.
+    public static final StorageTypes<LockedChestBlockEntity, LockedMaterialContainer> CHEST_TYPES = new StorageTypes<>(() -> LocksBlockEntityTypes.LOCKED_CHEST.get(), () -> LocksContainerTypes.LOCKED_CHEST.get());
+    public static final StorageTypes<LockedBarrelBlockEntity, LockedMaterialContainer> BARREL_TYPES = new StorageTypes<>(() -> LocksBlockEntityTypes.LOCKED_BARREL.get(), () -> LocksContainerTypes.LOCKED_BARREL.get());
+    public static final StorageTypes<LockedHopperBlockEntity, LockedHopperContainer> HOPPER_TYPES = new StorageTypes<>(() -> LocksBlockEntityTypes.LOCKED_HOPPER.get(), () -> LocksContainerTypes.LOCKED_HOPPER.get());
+    public static final StorageTypes<LockedShulkerBoxBlockEntity, LockedMaterialContainer> SHULKER_TYPES = new StorageTypes<>(() -> LocksBlockEntityTypes.LOCKED_SHULKER_BOX.get(), () -> LocksContainerTypes.LOCKED_SHULKER_BOX.get());
+
+    public static final IRegistryObject<LockedEnderChestBlock> LOCKED_ENDER_CHEST = registerStorage("locked_ender_chest", key -> new LockedEnderChestBlock(Block.Properties.of().setId(key).mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(22.5F, 600.0F).lightLevel(state -> 7)), LocksBlocks::storageItem);
+    public static final IRegistryObject<LockedChestBlock> LOCKED_CHEST = registerStorage("locked_chest", key -> new LockedChestBlock(null, CHEST_TYPES, woodStorage(key)), LocksBlocks::storageItem);
+    public static final IRegistryObject<LockedShulkerBoxBlock> LOCKED_SHULKER_BOX = registerStorage("locked_shulker_box", key -> new LockedShulkerBoxBlock(null, SHULKER_TYPES, Block.Properties.of().setId(key).mapColor(MapColor.COLOR_PURPLE)), LocksBlocks::shulkerItem);
+    public static final IRegistryObject<LockedBarrelBlock> LOCKED_BARREL = registerStorage("locked_barrel", key -> new LockedBarrelBlock(null, BARREL_TYPES, woodStorage(key)), LocksBlocks::storageItem);
+    public static final IRegistryObject<LockedHopperBlock> LOCKED_HOPPER = registerStorage("locked_hopper", key -> new LockedHopperBlock(null, HOPPER_TYPES, Block.Properties.of().setId(key).mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 4.8F).sound(SoundType.METAL).noOcclusion()), LocksBlocks::storageItem);
 
     public static final IRegistryObject<LockedDoorBlock> LOCKED_IRON_DOOR = registerVanillaDoor(Blocks.IRON_DOOR, key -> new LockedDoorBlock((DoorBlock) Blocks.IRON_DOOR, Block.Properties.of().setId(key).mapColor(Blocks.IRON_DOOR.defaultMapColor()).requiresCorrectToolForDrops().strength(5.0F).sound(SoundType.METAL).noOcclusion()));
 
@@ -95,6 +124,32 @@ public class LocksBlocks {
     private static BlockBehaviour.Properties copperDoorProps(Block parent, ResourceKey<Block> key, boolean oxidises) {
         BlockBehaviour.Properties props = Block.Properties.of().setId(key).mapColor(parent.defaultMapColor()).requiresCorrectToolForDrops().strength(3.0F).sound(SoundType.COPPER).noOcclusion();
         return oxidises ? props.randomTicks() : props;
+    }
+
+    /** The locked vanilla chests and barrels, which burn and break like the wooden ones they stand in for. */
+    private static BlockBehaviour.Properties woodStorage(ResourceKey<Block> key) {
+        return BlockBehaviour.Properties.of().setId(key).mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.5F).sound(SoundType.WOOD);
+    }
+
+    /** A locked container, whose item shows the lock it carries. */
+    private static <T extends Block> IRegistryObject<T> registerStorage(String name, Function<ResourceKey<Block>, ? extends T> factory, BiFunction<Block, Item.Properties, BlockItem> item) {
+        IRegistryObject<T> ret = registerNoItem(name, factory);
+        final ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
+        ITEMS.register(name, () -> item.apply(ret.get(), new Item.Properties().useBlockDescriptionPrefix().setId(itemKey)));
+        return ret;
+    }
+
+    private static BlockItem storageItem(Block block, Item.Properties props) {
+        return new StorageBlockItem(block, props, LocksDataComponents.STORAGE_INFO);
+    }
+
+    private static BlockItem shulkerItem(Block block, Item.Properties props) {
+        return new ShulkerBoxBlockItem(block, props, LocksDataComponents.STORAGE_INFO);
+    }
+
+    /** The locked containers, in the order they show in the creative tab and the manual. */
+    public static Block[] lockedContainers() {
+        return new Block[]{LOCKED_ENDER_CHEST.get(), LOCKED_CHEST.get(), LOCKED_SHULKER_BOX.get(), LOCKED_BARREL.get(), LOCKED_HOPPER.get()};
     }
 
     private static <T extends Block> IRegistryObject<T> register(String name, Function<ResourceKey<Block>, ? extends T> factory) {

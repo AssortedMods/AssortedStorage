@@ -1,11 +1,18 @@
 package com.grim3212.assorted.shulkers.common.block;
 
+import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageTypes;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlockEntity;
+import com.grim3212.assorted.lib.core.storage.shulker.ShulkerBoxBlockItem;
+import com.grim3212.assorted.shulkers.common.block.blockentity.ShulkersBlockEntityTypes;
+import com.grim3212.assorted.shulkers.common.inventory.ShulkersContainerTypes;
+import com.grim3212.assorted.shulkers.common.item.ShulkersDataComponents;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.shulkers.Constants;
 import com.grim3212.assorted.shulkers.Family;
-import com.grim3212.assorted.shulkers.common.item.ShulkerBoxBlockItem;
 import net.minecraft.core.dispenser.ShulkerBoxDispenseBehavior;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -13,8 +20,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -26,13 +31,14 @@ public class ShulkersBlocks {
     public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
     public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
 
-    public static final IRegistryObject<LockedShulkerBoxBlock> LOCKED_SHULKER_BOX = registerShulker("locked_shulker_box", key -> new LockedShulkerBoxBlock(null, BlockBehaviour.Properties.of().setId(key).mapColor(MapColor.COLOR_PURPLE)), ShulkersBlocks::itemProperties);
+    // Lambdas, as the types register after the blocks that name them.
+    public static final StorageTypes<LockedShulkerBoxBlockEntity, LockedMaterialContainer> TYPES = new StorageTypes<>(() -> ShulkersBlockEntityTypes.LOCKED_SHULKER_BOX.get(), () -> ShulkersContainerTypes.LOCKED_SHULKER_BOX.get());
 
     public static final Map<StorageMaterial, IRegistryObject<LockedShulkerBoxBlock>> SHULKERS = new EnumMap<>(StorageMaterial.class);
 
     static {
         Stream.of(StorageMaterial.values()).forEach((type) -> {
-            SHULKERS.put(type, registerShulker("shulker_box_" + type.toString(), key -> new LockedShulkerBoxBlock(type, type.getProps().setId(key)), itemProperties(type)));
+            SHULKERS.put(type, registerShulker("shulker_box_" + type.toString(), key -> new LockedShulkerBoxBlock(type, TYPES, type.getProps().setId(key)), itemProperties(type)));
         });
     }
 
@@ -62,7 +68,7 @@ public class ShulkersBlocks {
         final ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
         IRegistryObject<T> ret = BLOCKS.register(name, () -> factory.apply(key));
         final ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
-        ITEMS.register(name, () -> new ShulkerBoxBlockItem(ret.get(), itemProperties.apply(itemKey)));
+        ITEMS.register(name, () -> new ShulkerBoxBlockItem(ret.get(), itemProperties.apply(itemKey), ShulkersDataComponents.STORAGE_INFO));
         return ret;
     }
 

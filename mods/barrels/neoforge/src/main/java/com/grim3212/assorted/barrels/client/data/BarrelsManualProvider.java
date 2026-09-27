@@ -28,6 +28,5 @@ public class BarrelsManualProvider extends LibManualProvider {
         ChapterBuilder chapter = this.chapter("barrels", 1);
         chapter.text("materials");
         chapter.recipes("barrels", barrels).opens(barrels);
-        chapter.items("locked", BarrelsBlocks.LOCKED_BARREL.get()).opens(BarrelsBlocks.LOCKED_BARREL.get());
     }
 }

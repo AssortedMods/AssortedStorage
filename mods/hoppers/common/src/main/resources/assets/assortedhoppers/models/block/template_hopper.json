@@ -4,7 +4,7 @@
         "particle": "block/hopper_outside",
         "top": "block/hopper_top",
         "side": "block/hopper_outside",
-        "topsides": "assortedhoppers:block/hoppers/locked_hopper_top_outside",
+        "topsides": "#side",
         "inside": "block/hopper_inside"
     },
     "elements": [

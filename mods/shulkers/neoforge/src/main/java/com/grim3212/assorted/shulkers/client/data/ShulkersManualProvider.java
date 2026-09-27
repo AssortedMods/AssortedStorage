@@ -28,6 +28,5 @@ public class ShulkersManualProvider extends LibManualProvider {
         ChapterBuilder chapter = this.chapter("shulker_boxes", 2);
         chapter.text("materials");
         chapter.recipes("shulker_boxes", shulkers).opens(shulkers);
-        chapter.items("locked", ShulkersBlocks.LOCKED_SHULKER_BOX.get()).opens(ShulkersBlocks.LOCKED_SHULKER_BOX.get());
     }
 }

@@ -1,0 +1,12 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "assortedlocks:model/chests/normal"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedlocks:model/locked_ender_chest"
+    }
+  ]
+}

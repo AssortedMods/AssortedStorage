@@ -1,0 +1,75 @@
+package com.grim3212.assorted.locks.common.crafting;
+
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
+import com.mojang.serialization.MapCodec;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
+import com.grim3212.assorted.lib.util.LibCommonTags;
+import com.grim3212.assorted.locks.common.block.LocksBlocks;
+import net.minecraft.world.item.AirItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+
+/** A wooden chest and a coded padlock make a locked chest. */
+public class LockedChestRecipe extends CustomRecipe {
+
+    public static final LockedChestRecipe INSTANCE = new LockedChestRecipe();
+    public static final MapCodec<LockedChestRecipe> MAP_CODEC = MapCodec.unit(INSTANCE);
+    public static final StreamCodec<RegistryFriendlyByteBuf, LockedChestRecipe> STREAM_CODEC = StreamCodec.unit(INSTANCE);
+    public static final RecipeSerializer<LockedChestRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+
+    @Override
+    public boolean matches(CraftingInput inv, Level worldIn) {
+        ItemStack chest = ItemStack.EMPTY;
+        ItemStack lock = ItemStack.EMPTY;
+
+        for (int i = 0; i < inv.size(); i++) {
+            ItemStack stack = inv.getItem(i);
+            if (stack.isEmpty())
+                continue;
+            Item item = stack.getItem();
+            if (item instanceof AirItem)
+                continue;
+            if (stack.is(LibCommonTags.Items.CHESTS_WOODEN) && chest.isEmpty())
+                chest = stack;
+            else if (LockItems.isLock(stack) && lock.isEmpty() && StorageUtil.hasCode(stack))
+                lock = stack;
+            else
+                return false;
+        }
+        return !chest.isEmpty() && !lock.isEmpty();
+    }
+
+    @Override
+    public ItemStack assemble(CraftingInput inv) {
+        ItemStack chest = ItemStack.EMPTY;
+        ItemStack lock = ItemStack.EMPTY;
+
+        for (int i = 0; i < inv.size(); i++) {
+            ItemStack stack = inv.getItem(i);
+            Item item = stack.getItem();
+            if (stack.is(LibCommonTags.Items.CHESTS_WOODEN) && chest.isEmpty())
+                chest = stack;
+            else if (LockItems.isLock(stack) && lock.isEmpty() && StorageUtil.hasCode(stack))
+                lock = stack;
+        }
+
+        if (chest.isEmpty() || lock.isEmpty())
+            return ItemStack.EMPTY;
+
+        String lockCode = StorageUtil.getCode(lock);
+        return StorageUtil.setCodeOnStack(lockCode, new ItemStack(LocksBlocks.LOCKED_CHEST.get()));
+    }
+
+
+    @Override
+    public RecipeSerializer<LockedChestRecipe> getSerializer() {
+        return SERIALIZER;
+    }
+
+}

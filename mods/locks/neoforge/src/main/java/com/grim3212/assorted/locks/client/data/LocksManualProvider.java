@@ -27,6 +27,7 @@ public class LocksManualProvider extends LibManualProvider {
         locking.recipes("locks", LocksItems.LOCKSMITH_LOCK.get(), LocksItems.LOCKSMITH_KEY.get()).every(50)
                 .opens(LocksItems.LOCKSMITH_LOCK.get(), LocksItems.LOCKSMITH_KEY.get());
         locking.recipes("key_ring", LocksItems.KEY_RING.get()).opens(LocksItems.KEY_RING.get());
+        locking.items("containers", LocksBlocks.lockedContainers()).opens(LocksBlocks.lockedContainers());
         // A locked door is made by locking one that is already hung, so there is no item to draw.
         locking.text("doors").opens(LocksBlocks.lockedDoors());
     }

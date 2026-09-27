@@ -50,7 +50,7 @@ public class ChestsClientGameTests implements FabricClientGameTest {
      * from what arrives, material and all.
      */
     private static void menusOpenOnTheClient(ClientGameTestContext context, TestSingleplayerContext world) {
-        List<Block> blocks = List.of(ChestsBlocks.CHESTS.get(StorageMaterial.GOLD).get(), ChestsBlocks.LOCKED_CHEST.get());
+        List<Block> blocks = List.of(ChestsBlocks.CHESTS.get(StorageMaterial.GOLD).get(), ChestsBlocks.CHESTS.get(StorageMaterial.STONE).get());
 
         for (int i = 0; i < blocks.size(); i++) {
             Block block = blocks.get(i);

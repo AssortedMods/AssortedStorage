@@ -28,6 +28,5 @@ public class HoppersManualProvider extends LibManualProvider {
         ChapterBuilder chapter = this.chapter("hoppers", 3);
         chapter.text("materials");
         chapter.recipes("hoppers", hoppers).opens(hoppers);
-        chapter.items("locked", HoppersBlocks.LOCKED_HOPPER.get()).opens(HoppersBlocks.LOCKED_HOPPER.get());
     }
 }

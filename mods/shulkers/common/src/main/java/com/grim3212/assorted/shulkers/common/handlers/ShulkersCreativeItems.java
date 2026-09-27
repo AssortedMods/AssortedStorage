@@ -2,7 +2,6 @@ package com.grim3212.assorted.shulkers.common.handlers;
 
 import com.grim3212.assorted.lib.core.creative.CreativeTabItems;
 import com.grim3212.assorted.lib.core.creative.SharedCreativeTabs;
-import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.shulkers.Family;
 import com.grim3212.assorted.shulkers.ShulkersCommonMod;
@@ -21,13 +20,7 @@ public class ShulkersCreativeItems {
     public static final ResourceKey<CreativeModeTab> TAB = SharedCreativeTabs.tab(Identifier.fromNamespaceAndPath(Family.ID, "tab"), Family.ICONS);
 
     public static void init() {
-        // The locked box sits with the other locked containers and the materials with the other materials, as when this was all one mod.
-        SharedCreativeTabs.add(TAB, 620, ShulkersCreativeItems::lockedItems);
         SharedCreativeTabs.add(TAB, 710, ShulkersCreativeItems::materialItems);
-    }
-
-    private static List<ItemStack> lockedItems() {
-        return List.of(StorageUtil.setCodeOnStack("default", new ItemStack(ShulkersBlocks.LOCKED_SHULKER_BOX.get())));
     }
 
     private static List<ItemStack> materialItems() {

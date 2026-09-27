@@ -3,6 +3,7 @@ package com.grim3212.assorted.locks;
 import com.grim3212.assorted.lib.migration.MovedIds;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import com.grim3212.assorted.locks.common.block.blockentity.LocksBlockEntityTypes;
+import com.grim3212.assorted.locks.common.crafting.LocksRecipeSerializers;
 import com.grim3212.assorted.locks.common.handlers.LocksCreativeItems;
 import com.grim3212.assorted.locks.common.handlers.LocksLocks;
 import com.grim3212.assorted.locks.common.inventory.LocksContainerTypes;
@@ -22,6 +23,7 @@ public class LocksCommonMod {
         LocksBlockEntityTypes.init();
         LocksItems.init();
         LocksContainerTypes.init();
+        LocksRecipeSerializers.init();
         LocksPackets.init();
         LocksLootConditions.init();
         LocksLootEntries.init();

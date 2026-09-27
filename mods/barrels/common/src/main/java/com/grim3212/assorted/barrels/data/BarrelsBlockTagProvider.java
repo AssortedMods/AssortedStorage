@@ -6,6 +6,7 @@ import com.grim3212.assorted.lib.util.LibCommonTags;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.barrels.api.BarrelsTags;
 import com.grim3212.assorted.barrels.common.block.*;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlock;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -61,10 +62,8 @@ public class BarrelsBlockTagProvider extends LibBlockTagProvider {
             }
         }
 
-        tagger.apply(LibCommonTags.Blocks.BARRELS_WOODEN).add(BarrelsBlocks.LOCKED_BARREL.get());
         tagger.apply(BarrelsTags.Blocks.BARRELS_LEVEL_0).addTag(LibCommonTags.Blocks.BARRELS_WOODEN);
 
-        tagger.apply(BlockTags.MINEABLE_WITH_AXE).add(BarrelsBlocks.LOCKED_BARREL.get());
     }
 
     /**

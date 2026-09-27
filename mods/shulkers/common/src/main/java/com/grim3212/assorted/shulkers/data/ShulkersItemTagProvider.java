@@ -4,7 +4,7 @@ import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.data.LibItemTagProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.shulkers.api.ShulkersTags;
-import com.grim3212.assorted.shulkers.common.block.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
 import com.grim3212.assorted.shulkers.common.block.ShulkersBlocks;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.BuiltInRegistries;

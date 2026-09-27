@@ -3,8 +3,9 @@ package com.grim3212.assorted.barrels.client.data;
 import com.grim3212.assorted.lib.client.data.SpecificationBlockStateModelBuilder;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.barrels.Constants;
-import com.grim3212.assorted.barrels.client.properties.HasStorageTagProperty;
-import com.grim3212.assorted.barrels.common.block.LockedBarrelBlock;
+import com.grim3212.assorted.barrels.client.BarrelsClient;
+import com.grim3212.assorted.lib.client.data.LockedModelBuilder;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlock;
 import com.grim3212.assorted.barrels.common.block.BarrelsBlocks;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -47,27 +48,9 @@ public class BarrelsBlockstateProvider extends ModelProvider {
 
     @Override
     protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
-        normalBarrel(blockModels, BarrelsBlocks.LOCKED_BARREL.get());
         for (IRegistryObject<LockedBarrelBlock> b : BarrelsBlocks.BARRELS.values()) {
             materialBarrel(blockModels, b.get());
         }
-    }
-
-    private void normalBarrel(BlockModelGenerators blockModels, LockedBarrelBlock b) {
-        Identifier unlocked = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(b, "_unlocked", barrelTextures(
-                new Material(Identifier.parse("block/barrel_side")),
-                new Material(Identifier.parse("block/barrel_bottom")),
-                new Material(Identifier.parse("block/barrel_top"))), blockModels.modelOutput);
-        Identifier locked = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(b, "_locked", barrelTextures(
-                new Material(Identifier.parse("block/barrel_side")),
-                new Material(Identifier.parse("block/barrel_bottom")),
-                texture("block/barrels/locked_barrel_top")), blockModels.modelOutput);
-        Identifier open = ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(b, "_open", barrelTextures(
-                new Material(Identifier.parse("block/barrel_side")),
-                new Material(Identifier.parse("block/barrel_bottom")),
-                new Material(Identifier.parse("block/barrel_top_open"))), blockModels.modelOutput);
-
-        barrelState(blockModels, b, unlocked, locked, open, new Material(Identifier.parse("block/barrel_side")));
     }
 
     private void materialBarrel(BlockModelGenerators blockModels, LockedBarrelBlock b) {
@@ -99,7 +82,7 @@ public class BarrelsBlockstateProvider extends ModelProvider {
                 .with(BlockModelGenerators.createBooleanModelDispatch(LockedBarrelBlock.OPEN, openModel, closedModel))
                 .with(BARREL_ROTATION));
 
-        blockModels.itemModelOutput.accept(b.asItem(), ItemModelUtils.conditional(HasStorageTagProperty.LOCKED,
+        blockModels.itemModelOutput.accept(b.asItem(), ItemModelUtils.conditional(BarrelsClient.LOCKED_PROPERTY,
                 ItemModelUtils.plainModel(locked), ItemModelUtils.plainModel(unlocked)));
     }
 
@@ -113,7 +96,7 @@ public class BarrelsBlockstateProvider extends ModelProvider {
                 // (ResolvedModel#getTopTransforms); parenting to nothing yields ItemTransforms.NO_TRANSFORMS.
                 // block/block supplies the standard display block and gui_light, and no geometry.
                 .parent(Identifier.withDefaultNamespace("block/block"))
-                .customLoader(LockedModelBuilder::begin, b -> b.unlockedModel(unlocked).lockedModel(locked))
+                .customLoader(() -> LockedModelBuilder.begin(BarrelsClient.LOCKED_MODEL_LOADER), b -> b.unlockedModel(unlocked).lockedModel(locked))
                 .requiredTextureSlot(TextureSlot.PARTICLE)
                 .build()
                 .create(target, new TextureMapping().put(TextureSlot.PARTICLE, particle), output);

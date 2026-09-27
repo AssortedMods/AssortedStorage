@@ -2,12 +2,16 @@ package com.grim3212.assorted.locks.gametest;
 
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.core.storage.StorageInfo;
+import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import com.grim3212.assorted.locks.common.item.LocksDataComponents;
 import com.grim3212.assorted.locks.common.item.LocksItems;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -38,6 +42,17 @@ final class TooltipTests {
         helper.assertValueEqual(tooltipKeys(helper, cutKey, info), List.of(combo), "a cut key's tooltip");
         helper.assertValueEqual(tooltipKeys(helper, StorageUtil.setCodeOnStack("1234", new ItemStack(LocksItems.LOCKSMITH_LOCK.get())), info), List.of(combo), "a coded padlock's tooltip");
         helper.assertValueEqual(tooltipKeys(helper, new ItemStack(LocksItems.LOCKSMITH_KEY.get()), info), List.of(), "a blank key's tooltip");
+
+        // A locked container stands in for a vanilla one at storage level 0; the ender chest has no level to upgrade.
+        String level = "assortedlib.info.storage_level";
+        for (Block block : LocksBlocks.lockedContainers()) {
+            String name = BuiltInRegistries.BLOCK.getKey(block).toString();
+            List<String> levelLine = block == LocksBlocks.LOCKED_ENDER_CHEST.get() ? List.of() : List.of(level);
+            helper.assertValueEqual(tooltipKeys(helper, new ItemStack(block), info), levelLine, "an uncoded " + name + "'s tooltip");
+            List<String> coded = new ArrayList<>(List.of(combo));
+            coded.addAll(levelLine);
+            helper.assertValueEqual(tooltipKeys(helper, StorageUtil.setCodeOnStack("1234", new ItemStack(block)), info), coded, "a coded " + name + "'s tooltip");
+        }
 
         if (onNeoForge()) {
             helper.assertTrue(fullTooltipKeys(helper, cutKey).contains(combo), "the key's code line is missing from its tooltip");

@@ -2,14 +2,16 @@ package com.grim3212.assorted.hoppers.data;
 
 import com.grim3212.assorted.hoppers.api.HoppersTags;
 import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
-import com.grim3212.assorted.hoppers.common.block.LockedHopperBlock;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlock;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.data.LibBlockTagProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagAppender;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -62,9 +64,10 @@ public class HoppersBlockTagProvider extends LibBlockTagProvider {
             }
         }
 
-        tagger.apply(HoppersTags.Blocks.HOPPERS).add(Blocks.HOPPER, HoppersBlocks.LOCKED_HOPPER.get());
-        tagger.apply(HoppersTags.Blocks.HOPPERS_LEVEL_0).add(Blocks.HOPPER, HoppersBlocks.LOCKED_HOPPER.get());
-        tagger.apply(BlockTags.MINEABLE_WITH_PICKAXE).add(HoppersBlocks.LOCKED_HOPPER.get());
+        tagger.apply(HoppersTags.Blocks.HOPPERS).add(Blocks.HOPPER);
+        tagger.apply(HoppersTags.Blocks.HOPPERS_LEVEL_0).add(Blocks.HOPPER);
+        // Assorted Locks' locked hopper, when it is installed.
+        rawTagger.apply(HoppersTags.Blocks.HOPPERS_LEVEL_0).addOptional(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("assortedlocks", "locked_hopper")));
     }
 
     /**

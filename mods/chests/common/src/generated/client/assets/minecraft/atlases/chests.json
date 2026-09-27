@@ -2,10 +2,6 @@
   "sources": [
     {
       "type": "minecraft:single",
-      "resource": "assortedchests:model/chests/normal"
-    },
-    {
-      "type": "minecraft:single",
       "resource": "assortedchests:model/chests/stone"
     },
     {

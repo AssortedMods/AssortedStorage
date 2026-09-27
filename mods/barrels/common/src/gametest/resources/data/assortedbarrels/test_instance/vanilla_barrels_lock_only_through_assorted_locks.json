@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedbarrels:vanilla_barrels_lock_only_through_assorted_locks",
+  "structure": "assortedbarrels:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

@@ -6,7 +6,6 @@ import com.grim3212.assorted.barrels.common.crafting.BarrelsRecipeSerializers;
 import com.grim3212.assorted.barrels.common.crafting.LockedUpgradingRecipe;
 import com.grim3212.assorted.barrels.common.handlers.BarrelsCreativeItems;
 import com.grim3212.assorted.barrels.common.handlers.BarrelsLevelUpgrades;
-import com.grim3212.assorted.barrels.common.handlers.BarrelsLocks;
 import com.grim3212.assorted.barrels.common.inventory.BarrelsContainerTypes;
 import com.grim3212.assorted.barrels.common.item.BarrelsDataComponents;
 import com.grim3212.assorted.barrels.config.BarrelsCommonConfig;
@@ -29,7 +28,6 @@ public class BarrelsCommonMod {
         // The manual and JEI read whole recipes. NeoForge sends every crafting recipe;
         // Fabric sends only serializers that were named.
         SyncedRecipes.require(() -> RecipeType.CRAFTING, LockedUpgradingRecipe.SERIALIZER);
-        BarrelsLocks.init();
         BarrelsLevelUpgrades.init();
         BarrelsCreativeItems.init();
 

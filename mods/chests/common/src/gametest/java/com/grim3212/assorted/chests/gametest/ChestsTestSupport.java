@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.grim3212.assorted.chests.Constants;
 import com.grim3212.assorted.chests.common.block.ChestsBlocks;
-import com.grim3212.assorted.chests.common.block.blockentity.LockedEnderChestBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -28,10 +27,9 @@ final class ChestsTestSupport {
 
     static final String CODE = "3212";
 
-    /** The locked chest and every material chest. */
+    /** Every material chest. */
     static List<Block> storageBlocks() {
         List<Block> blocks = new ArrayList<>();
-        blocks.add(ChestsBlocks.LOCKED_CHEST.get());
         ChestsBlocks.CHESTS.values().forEach(chest -> blocks.add(chest.get()));
         return blocks;
     }
@@ -72,14 +70,5 @@ final class ChestsTestSupport {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    static LockedEnderChestBlockEntity enderChest(GameTestHelper helper, BlockPos pos, String code) {
-        helper.setBlock(pos, ChestsBlocks.LOCKED_ENDER_CHEST.get());
-        LockedEnderChestBlockEntity chest = helper.getBlockEntity(pos, LockedEnderChestBlockEntity.class);
-        chest.setLockCode(code);
-        // The saved-data inventory is only bound when the platform handler is first asked for.
-        chest.getStorageHandler();
-        return chest;
     }
 }

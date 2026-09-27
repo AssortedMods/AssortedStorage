@@ -42,7 +42,7 @@ final class MenuTests {
     @SuppressWarnings("deprecation")
     private static void dataMenusRebuildOnTheClient(GameTestHelper helper) {
         ServerPlayer player = survivalPlayer(helper, ItemStack.EMPTY);
-        List<Block> blocks = List.of(ShulkersBlocks.LOCKED_SHULKER_BOX.get(), ShulkersBlocks.SHULKERS.get(StorageMaterial.GOLD).get());
+        List<Block> blocks = List.of(ShulkersBlocks.SHULKERS.get(StorageMaterial.STONE).get(), ShulkersBlocks.SHULKERS.get(StorageMaterial.GOLD).get());
 
         for (int i = 0; i < blocks.size(); i++) {
             Block block = blocks.get(i);

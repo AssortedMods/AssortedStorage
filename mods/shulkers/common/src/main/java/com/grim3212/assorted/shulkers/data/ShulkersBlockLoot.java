@@ -2,7 +2,7 @@ package com.grim3212.assorted.shulkers.data;
 
 import com.grim3212.assorted.lib.data.LibBlockLootProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
-import com.grim3212.assorted.shulkers.common.block.LockedShulkerBoxBlock;
+import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlock;
 import com.grim3212.assorted.shulkers.common.block.ShulkersBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
@@ -27,7 +27,6 @@ public class ShulkersBlockLoot extends LibBlockLootProvider {
 
     @Override
     public void generate() {
-        this.add(ShulkersBlocks.LOCKED_SHULKER_BOX.get(), createLockedShulkerTable(ShulkersBlocks.LOCKED_SHULKER_BOX.get()));
         for (IRegistryObject<LockedShulkerBoxBlock> b : ShulkersBlocks.SHULKERS.values()) {
             this.add(b.get(), createLockedShulkerTable(b.get()));
         }

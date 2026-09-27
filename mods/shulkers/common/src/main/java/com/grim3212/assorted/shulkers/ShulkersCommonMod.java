@@ -8,7 +8,6 @@ import com.grim3212.assorted.shulkers.common.crafting.LockedUpgradingRecipe;
 import com.grim3212.assorted.shulkers.common.crafting.ShulkersRecipeSerializers;
 import com.grim3212.assorted.shulkers.common.handlers.ShulkersCreativeItems;
 import com.grim3212.assorted.shulkers.common.handlers.ShulkersLevelUpgrades;
-import com.grim3212.assorted.shulkers.common.handlers.ShulkersLocks;
 import com.grim3212.assorted.shulkers.common.inventory.ShulkersContainerTypes;
 import com.grim3212.assorted.shulkers.common.item.ShulkersDataComponents;
 import com.grim3212.assorted.shulkers.config.ShulkersCommonConfig;
@@ -28,7 +27,6 @@ public class ShulkersCommonMod {
         ShulkersRecipeSerializers.init();
         // The manual reads whole recipes, and Fabric only sends clients the serializers named here.
         SyncedRecipes.require(() -> RecipeType.CRAFTING, LockedUpgradingRecipe.SERIALIZER);
-        ShulkersLocks.init();
         ShulkersLevelUpgrades.init();
         ShulkersCreativeItems.init();
 

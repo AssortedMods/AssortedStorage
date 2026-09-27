@@ -24,11 +24,9 @@ public class ChestsManualProvider extends LibManualProvider {
         this.section(Family.MANUAL_ORDER, Family.ICONS.toArray(Identifier[]::new));
 
         Block[] chests = ChestsBlocks.CHESTS.values().stream().map(IRegistryObject::get).toArray(Block[]::new);
-        Block[] locked = {ChestsBlocks.LOCKED_CHEST.get(), ChestsBlocks.LOCKED_ENDER_CHEST.get()};
 
         ChapterBuilder chapter = this.chapter("chests", 0);
         chapter.text("materials");
         chapter.recipes("chests", chests).opens(chests);
-        chapter.items("locked", locked).opens(locked);
     }
 }

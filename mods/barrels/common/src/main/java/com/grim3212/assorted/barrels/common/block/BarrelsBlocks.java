@@ -4,16 +4,19 @@ import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.barrels.Constants;
 import com.grim3212.assorted.barrels.Family;
+import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageTypes;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlock;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlockEntity;
+import com.grim3212.assorted.barrels.common.block.blockentity.BarrelsBlockEntityTypes;
+import com.grim3212.assorted.barrels.common.inventory.BarrelsContainerTypes;
 import com.grim3212.assorted.barrels.common.item.BarrelsBlockItem;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.material.MapColor;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -25,12 +28,13 @@ public class BarrelsBlocks {
     public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
     public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
 
-    public static final IRegistryObject<LockedBarrelBlock> LOCKED_BARREL = register("locked_barrel", key -> new LockedBarrelBlock(null, BlockBehaviour.Properties.of().setId(key).mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.5F).sound(SoundType.WOOD)), BarrelsBlocks::itemProperties);
+    // Lambdas, as the types register after the blocks that name them.
+    public static final StorageTypes<LockedBarrelBlockEntity, LockedMaterialContainer> TYPES = new StorageTypes<>(() -> BarrelsBlockEntityTypes.LOCKED_BARREL.get(), () -> BarrelsContainerTypes.LOCKED_BARREL.get());
 
     public static final Map<StorageMaterial, IRegistryObject<LockedBarrelBlock>> BARRELS = new EnumMap<>(StorageMaterial.class);
 
     static {
-        Stream.of(StorageMaterial.values()).forEach((type) -> BARRELS.put(type, register("barrel_" + type.toString(), key -> new LockedBarrelBlock(type, type.getProps().setId(key)), itemProperties(type))));
+        Stream.of(StorageMaterial.values()).forEach((type) -> BARRELS.put(type, register("barrel_" + type.toString(), key -> new LockedBarrelBlock(type, TYPES, type.getProps().setId(key)), itemProperties(type))));
     }
 
     /**

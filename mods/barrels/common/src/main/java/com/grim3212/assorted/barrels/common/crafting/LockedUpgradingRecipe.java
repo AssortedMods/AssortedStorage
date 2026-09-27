@@ -2,7 +2,7 @@ package com.grim3212.assorted.barrels.common.crafting;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.grim3212.assorted.barrels.common.block.LockedBarrelBlock;
+import com.grim3212.assorted.lib.core.storage.barrel.LockedBarrelBlock;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;

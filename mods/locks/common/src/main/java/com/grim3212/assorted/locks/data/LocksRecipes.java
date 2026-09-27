@@ -4,6 +4,12 @@ import com.grim3212.assorted.lib.core.conditions.ConditionalRecipeProvider;
 import com.grim3212.assorted.lib.util.LibCommonTags;
 import com.grim3212.assorted.locks.Constants;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
+import com.grim3212.assorted.locks.common.crafting.LockedBarrelRecipe;
+import com.grim3212.assorted.locks.common.crafting.LockedChestRecipe;
+import com.grim3212.assorted.locks.common.crafting.LockedEnderChestRecipe;
+import com.grim3212.assorted.locks.common.crafting.LockedHopperRecipe;
+import com.grim3212.assorted.locks.common.crafting.LockedShulkerBoxColoring;
+import com.grim3212.assorted.locks.common.crafting.LockedShulkerBoxRecipe;
 import com.grim3212.assorted.locks.common.item.LocksItems;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -40,6 +46,13 @@ public class LocksRecipes extends ConditionalRecipeProvider {
         ShapedRecipeBuilder.shaped(this.items, RecipeCategory.MISC, LocksItems.KEY_RING.get(), 1).define('X', LibCommonTags.Items.INGOTS_IRON).define('K', LocksItems.LOCKSMITH_KEY.get()).pattern(" X ").pattern("XKX").pattern(" X ").unlockedBy("has_iron", has(LibCommonTags.Items.INGOTS_IRON)).unlockedBy("has_key", has(LocksItems.LOCKSMITH_KEY.get())).save(this.output);
         ShapedRecipeBuilder.shaped(this.items, RecipeCategory.MISC, LocksBlocks.LOCKSMITH_WORKBENCH.get(), 1).define('L', LocksItems.LOCKSMITH_LOCK.get()).define('K', LocksItems.LOCKSMITH_KEY.get()).define('W', Blocks.CRAFTING_TABLE).pattern("L").pattern("K").pattern("W").unlockedBy("has_lock", has(LocksItems.LOCKSMITH_LOCK.get())).save(this.output);
         ShapedRecipeBuilder.shaped(this.items, RecipeCategory.MISC, LocksBlocks.LOCKSMITH_WORKBENCH.get(), 1).define('L', LocksItems.LOCKSMITH_LOCK.get()).define('K', LocksItems.LOCKSMITH_KEY.get()).define('W', Blocks.CRAFTING_TABLE).pattern("K").pattern("L").pattern("W").unlockedBy("has_lock", has(LocksItems.LOCKSMITH_LOCK.get())).save(this.output, key(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locksmith_workbench_alt")));
+
+        SpecialRecipeBuilder.special(() -> LockedEnderChestRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_ender_chest").toString());
+        SpecialRecipeBuilder.special(() -> LockedChestRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_chest").toString());
+        SpecialRecipeBuilder.special(() -> LockedBarrelRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_barrel").toString());
+        SpecialRecipeBuilder.special(() -> LockedHopperRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_hopper").toString());
+        SpecialRecipeBuilder.special(() -> LockedShulkerBoxRecipe.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_shulker_box").toString());
+        SpecialRecipeBuilder.special(() -> LockedShulkerBoxColoring.INSTANCE).save(this.output, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locked_shulker_box_coloring").toString());
     }
 
     /**

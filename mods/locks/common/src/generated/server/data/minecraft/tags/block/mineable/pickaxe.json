@@ -10,6 +10,8 @@
     "assortedlocks:locked_waxed_copper_door",
     "assortedlocks:locked_waxed_exposed_copper_door",
     "assortedlocks:locked_waxed_weathered_copper_door",
-    "assortedlocks:locked_waxed_oxidized_copper_door"
+    "assortedlocks:locked_waxed_oxidized_copper_door",
+    "assortedlocks:locked_ender_chest",
+    "assortedlocks:locked_hopper"
   ]
 }

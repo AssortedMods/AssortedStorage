@@ -22,8 +22,6 @@ public class BarrelsLanguageProvider extends LibLanguageProvider {
     protected void addNames() {
         this.add("itemGroup.assortedstorage", "Assorted Storage");
 
-        this.add("assortedbarrels.container.locked_barrel", "Locked Barrel");
-
         // The material comes first in each name, where the id puts it last.
         for (StorageMaterial material : StorageMaterial.values()) {
             String id = material.toString();
@@ -61,10 +59,5 @@ public class BarrelsLanguageProvider extends LibLanguageProvider {
         this.add("manual.assortedstorage.chapter.barrels.barrels.title", "Barrels");
         this.add("manual.assortedstorage.chapter.barrels.barrels",
                 "Barrels hold the same as their chest and open without needing space above them.");
-
-        this.add("manual.assortedstorage.chapter.barrels.locked.title", "Locked Barrel");
-        this.add("manual.assortedstorage.chapter.barrels.locked",
-                "Use a padlock on a barrel and it becomes the locked version of itself, keeping whatever was "
-                        + "inside. After that only a key with the matching combination opens it.");
     }
 }

@@ -1,8 +1,8 @@
 package com.grim3212.assorted.hoppers.common.handlers;
 
 import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
-import com.grim3212.assorted.hoppers.common.block.LockedHopperBlock;
-import com.grim3212.assorted.hoppers.common.block.blockentity.LockedHopperBlockEntity;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlock;
+import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlockEntity;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.lib.core.storage.LevelUpgrades;
