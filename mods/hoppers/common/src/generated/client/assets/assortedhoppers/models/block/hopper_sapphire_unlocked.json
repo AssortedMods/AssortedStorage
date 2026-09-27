@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/hopper",
+  "textures": {
+    "inside": "assortedhoppers:block/hoppers/sapphire/hopper_inside",
+    "particle": "assortedhoppers:block/hoppers/sapphire/hopper_outside",
+    "side": "assortedhoppers:block/hoppers/sapphire/hopper_outside",
+    "top": "assortedhoppers:block/hoppers/sapphire/hopper_top"
+  }
+}

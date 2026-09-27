@@ -1,0 +1,32 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/steel"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/steel"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedcrates:crates/triple",
+    "D": "#c:deepslate",
+    "I": "#c:ingots/steel",
+    "P": "#c:pistons"
+  },
+  "pattern": [
+    "DDD",
+    "PCP",
+    "DID"
+  ],
+  "result": {
+    "id": "assortedcrates:crate_compacting"
+  }
+}

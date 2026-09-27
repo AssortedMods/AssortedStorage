@@ -9,6 +9,8 @@ import com.grim3212.assorted.storage.common.crafting.StorageConditions;
 import com.grim3212.assorted.storage.common.crafting.StorageRecipeSerializers;
 import com.grim3212.assorted.storage.common.events.StorageEvents;
 import com.grim3212.assorted.storage.common.handlers.StorageCreativeItems;
+import com.grim3212.assorted.storage.common.handlers.StorageLevelUpgrades;
+import com.grim3212.assorted.storage.common.handlers.StorageLocks;
 import com.grim3212.assorted.storage.common.inventory.StorageContainerTypes;
 import com.grim3212.assorted.storage.common.item.StorageItems;
 import com.grim3212.assorted.storage.common.loot.StorageLootConditions;
@@ -38,6 +40,8 @@ public class StorageCommonMod {
         // Fabric sends only serializers that were named.
         SyncedRecipes.require(() -> RecipeType.CRAFTING, LockedUpgradingRecipe.SERIALIZER);
         StorageEvents.init();
+        StorageLocks.init();
+        StorageLevelUpgrades.init();
         StorageCreativeItems.init();
     }
 }

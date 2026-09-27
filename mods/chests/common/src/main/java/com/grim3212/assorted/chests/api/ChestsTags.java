@@ -1,0 +1,45 @@
+package com.grim3212.assorted.chests.api;
+
+import com.grim3212.assorted.chests.Constants;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+
+public class ChestsTags {
+
+    public static class Blocks {
+        public static final TagKey<Block> CHESTS_LEVEL_0 = storageTag("chests/level_0");
+        public static final TagKey<Block> CHESTS_LEVEL_1 = storageTag("chests/level_1");
+        public static final TagKey<Block> CHESTS_LEVEL_2 = storageTag("chests/level_2");
+        public static final TagKey<Block> CHESTS_LEVEL_3 = storageTag("chests/level_3");
+        public static final TagKey<Block> CHESTS_LEVEL_4 = storageTag("chests/level_4");
+        public static final TagKey<Block> CHESTS_LEVEL_5 = storageTag("chests/level_5");
+
+        private static TagKey<Block> storageTag(String name) {
+            return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
+        }
+    }
+
+    public static class Items {
+        public static final TagKey<Item> CAN_UPGRADE_LEVEL_0 = storageTag("can_upgrade/level_0");
+        public static final TagKey<Item> CAN_UPGRADE_LEVEL_1 = storageTag("can_upgrade/level_1");
+        public static final TagKey<Item> CAN_UPGRADE_LEVEL_2 = storageTag("can_upgrade/level_2");
+        public static final TagKey<Item> CAN_UPGRADE_LEVEL_3 = storageTag("can_upgrade/level_3");
+        public static final TagKey<Item> CAN_UPGRADE_LEVEL_4 = storageTag("can_upgrade/level_4");
+        public static final TagKey<Item> CAN_UPGRADE_LEVEL_5 = storageTag("can_upgrade/level_5");
+
+        public static final TagKey<Item> CHESTS_LEVEL_0 = storageTag("chests/level_0");
+        public static final TagKey<Item> CHESTS_LEVEL_1 = storageTag("chests/level_1");
+        public static final TagKey<Item> CHESTS_LEVEL_2 = storageTag("chests/level_2");
+        public static final TagKey<Item> CHESTS_LEVEL_3 = storageTag("chests/level_3");
+        public static final TagKey<Item> CHESTS_LEVEL_4 = storageTag("chests/level_4");
+        public static final TagKey<Item> CHESTS_LEVEL_5 = storageTag("chests/level_5");
+
+        private static TagKey<Item> storageTag(String name) {
+            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
+        }
+    }
+
+}

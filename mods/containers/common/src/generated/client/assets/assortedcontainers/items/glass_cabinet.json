@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "assortedcontainers:item/glass_cabinet",
+    "model": {
+      "type": "assortedcontainers:storage",
+      "model": "glass_cabinet",
+      "texture": "assortedcontainers:textures/model/cabinet.png"
+    }
+  }
+}

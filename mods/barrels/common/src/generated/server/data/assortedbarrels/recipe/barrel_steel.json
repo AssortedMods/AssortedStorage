@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/steel"
+    }
+  ],
+  "type": "assortedbarrels:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/steel"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedbarrels:barrels/level_3",
+    "M": "#c:ingots/steel"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedbarrels:barrel_steel"
+  }
+}

@@ -1,15 +1,16 @@
 package com.grim3212.assorted.storage.common.block;
 
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.lib.core.inventory.INamed;
 import com.grim3212.assorted.lib.core.inventory.locking.ILockable;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.platform.Services;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
-import com.grim3212.assorted.storage.api.StorageMaterial;
-import com.grim3212.assorted.storage.api.block.IStorageMaterial;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.IStorageMaterial;
 import com.grim3212.assorted.storage.common.block.blockentity.LockedHopperBlockEntity;
 import com.grim3212.assorted.storage.common.block.blockentity.StorageBlockEntityTypes;
-import com.grim3212.assorted.storage.common.item.StorageItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.component.DataComponents;
@@ -41,7 +42,6 @@ import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-
 
 public class LockedHopperBlock extends HopperBlock implements IStorageMaterial {
 
@@ -110,7 +110,7 @@ public class LockedHopperBlock extends HopperBlock implements IStorageMaterial {
 
     @Override
     protected InteractionResult useItemOn(ItemStack heldStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (this.canBeLocked(worldIn, pos) && player.getItemInHand(handIn).getItem() == StorageItems.LOCKSMITH_LOCK.get()) {
+        if (this.canBeLocked(worldIn, pos) && LockItems.isLock(player.getItemInHand(handIn))) {
             if (BaseStorageBlock.tryPlaceLock(worldIn, pos, player, handIn))
                 return InteractionResult.SUCCESS;
         }
@@ -121,7 +121,7 @@ public class LockedHopperBlock extends HopperBlock implements IStorageMaterial {
                 ILockable teStorage = (ILockable) tileentity;
 
                 if (teStorage.isLocked()) {
-                    ItemStack lockStack = StorageUtil.setCodeOnStack(teStorage.getLockCode(), new ItemStack(StorageItems.LOCKSMITH_LOCK.get()));
+                    ItemStack lockStack = LockItems.createLock(teStorage.getLockCode());
 
                     if (removeLock(worldIn, pos, player)) {
                         ItemEntity blockDropped = new ItemEntity(worldIn, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), lockStack);

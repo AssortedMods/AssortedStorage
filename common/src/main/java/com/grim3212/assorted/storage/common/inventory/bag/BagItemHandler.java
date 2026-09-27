@@ -2,7 +2,7 @@ package com.grim3212.assorted.storage.common.inventory.bag;
 
 import com.grim3212.assorted.lib.core.inventory.impl.ItemStackStorageHandler;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;

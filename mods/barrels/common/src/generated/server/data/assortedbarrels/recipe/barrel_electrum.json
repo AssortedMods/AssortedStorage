@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/electrum"
+    }
+  ],
+  "type": "assortedbarrels:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/electrum"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedbarrels:barrels/level_3",
+    "M": "#c:ingots/electrum"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedbarrels:barrel_electrum"
+  }
+}

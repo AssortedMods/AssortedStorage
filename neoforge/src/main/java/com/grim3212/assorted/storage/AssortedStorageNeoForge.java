@@ -4,14 +4,17 @@ import com.grim3212.assorted.storage.client.data.StorageLanguageProvider;
 import com.grim3212.assorted.storage.client.data.StorageManualProvider;
 import com.grim3212.assorted.lib.core.inventory.IInventoryBlockEntity;
 import com.grim3212.assorted.lib.core.inventory.IInventoryItem;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.lib.data.ForgeBlockTagProvider;
 import com.grim3212.assorted.lib.data.ForgeItemTagProvider;
 import com.grim3212.assorted.lib.inventory.ForgePlatformInventoryStorageHandlerUnsided;
+import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.storage.client.data.StorageBlockstateProvider;
 import com.grim3212.assorted.storage.client.data.StorageItemModelProvider;
 import com.grim3212.assorted.storage.client.data.StorageSpriteSourceProvider;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
+import com.grim3212.assorted.storage.compat.curios.CuriosHelper;
 import com.grim3212.assorted.storage.common.block.blockentity.StorageBlockEntityTypes;
 import com.grim3212.assorted.storage.common.item.StorageItems;
 import com.grim3212.assorted.storage.data.StorageBlockLoot;
@@ -52,6 +55,11 @@ public class AssortedStorageNeoForge {
         modBus.addListener(this::registerCapabilities);
 
         StorageCommonMod.init();
+
+        // A key worn in a Curios slot opens its locks too
+        if (Services.PLATFORM.isModLoaded("curios")) {
+            StorageAccessUtil.registerKeySource(CuriosHelper::hasCodeMatch);
+        }
     }
 
     private void setup(final FMLCommonSetupEvent event) {

@@ -3,7 +3,7 @@ package com.grim3212.assorted.storage.data;
 import com.grim3212.assorted.lib.data.LibItemTagProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.util.LibCommonTags;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.api.StorageTags;
 import com.grim3212.assorted.storage.common.block.*;
 import com.grim3212.assorted.storage.common.item.BagItem;
@@ -44,6 +44,8 @@ public class StorageItemTagProvider extends LibItemTagProvider {
         copier.accept(StorageTags.Blocks.DEEPSLATE, StorageTags.Items.DEEPSLATE);
         copier.accept(StorageTags.Blocks.PISTONS, StorageTags.Items.PISTONS);
 
+        tagger.apply(LibCommonTags.Items.LOCKS).add(StorageItems.LOCKSMITH_LOCK.get());
+        tagger.apply(LibCommonTags.Items.KEYS).add(StorageItems.LOCKSMITH_KEY.get(), StorageItems.KEY_RING.get());
         tagger.apply(LibCommonTags.Items.CHESTS_ENDER).add(StorageBlocks.LOCKED_ENDER_CHEST.get().asItem());
         tagger.apply(LibCommonTags.Items.CHESTS_WOODEN).add(StorageBlocks.LOCKED_CHEST.get().asItem());
         tagger.apply(LibCommonTags.Items.BARRELS_WOODEN).add(StorageBlocks.LOCKED_BARREL.get().asItem());

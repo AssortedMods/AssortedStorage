@@ -1,0 +1,9 @@
+plugins {
+    id 'com.grim3212.assorted.neoforge'
+}
+
+dependencies {
+    // Curios' optional integration: compileOnly, since CuriosHelper is only reached when Curios is loaded.
+    // transitive = false keeps Curios' own net.neoforged dependencies out of the graph.
+    compileOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}:api") { transitive = false }
+}

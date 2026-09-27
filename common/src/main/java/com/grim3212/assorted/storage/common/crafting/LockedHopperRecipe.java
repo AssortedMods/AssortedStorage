@@ -1,9 +1,9 @@
 package com.grim3212.assorted.storage.common.crafting;
 
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
 import com.mojang.serialization.MapCodec;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
-import com.grim3212.assorted.storage.common.item.StorageItems;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -36,7 +36,7 @@ public class LockedHopperRecipe extends CustomRecipe {
                 continue;
             if (stack.getItem() == Items.HOPPER && hopper.isEmpty())
                 hopper = stack;
-            else if (item == StorageItems.LOCKSMITH_LOCK.get() && lock.isEmpty() && StorageUtil.hasCode(stack))
+            else if (LockItems.isLock(stack) && lock.isEmpty() && StorageUtil.hasCode(stack))
                 lock = stack;
             else
                 return false;
@@ -54,7 +54,7 @@ public class LockedHopperRecipe extends CustomRecipe {
             Item item = stack.getItem();
             if (stack.getItem() == Items.HOPPER && hopper.isEmpty())
                 hopper = stack;
-            else if (item == StorageItems.LOCKSMITH_LOCK.get() && lock.isEmpty() && StorageUtil.hasCode(stack))
+            else if (LockItems.isLock(stack) && lock.isEmpty() && StorageUtil.hasCode(stack))
                 lock = stack;
         }
 

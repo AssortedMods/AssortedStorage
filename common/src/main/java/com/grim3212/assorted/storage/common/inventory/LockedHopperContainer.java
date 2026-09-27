@@ -3,7 +3,7 @@ package com.grim3212.assorted.storage.common.inventory;
 import com.grim3212.assorted.lib.core.inventory.IItemStorageHandler;
 import com.grim3212.assorted.lib.core.inventory.impl.ItemStackStorageHandler;
 import com.grim3212.assorted.lib.core.inventory.slot.SlotStorageHandler;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;

@@ -1,0 +1,65 @@
+{
+  "pages": [
+    {
+      "type": "assortedlib:recipe",
+      "id": "locker",
+      "recipes": [
+        "assortedcontainers:locker"
+      ],
+      "text": "manual.assortedstorage.chapter.furniture.locker",
+      "title": "manual.assortedstorage.chapter.furniture.locker.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "cabinets",
+      "interval": 50,
+      "recipes": [
+        "assortedcontainers:wood_cabinet",
+        "assortedcontainers:glass_cabinet"
+      ],
+      "text": "manual.assortedstorage.chapter.furniture.cabinets",
+      "title": "manual.assortedstorage.chapter.furniture.cabinets.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "safes",
+      "interval": 50,
+      "recipes": [
+        "assortedcontainers:gold_safe",
+        "assortedcontainers:obsidian_safe"
+      ],
+      "text": "manual.assortedstorage.chapter.furniture.safes",
+      "title": "manual.assortedstorage.chapter.furniture.safes.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "item_tower",
+      "recipes": [
+        "assortedcontainers:item_tower"
+      ],
+      "text": "manual.assortedstorage.chapter.furniture.item_tower",
+      "title": "manual.assortedstorage.chapter.furniture.item_tower.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "warehouse",
+      "recipes": [
+        "assortedcontainers:oak_warehouse_crate",
+        "assortedcontainers:spruce_warehouse_crate",
+        "assortedcontainers:birch_warehouse_crate",
+        "assortedcontainers:acacia_warehouse_crate",
+        "assortedcontainers:cherry_warehouse_crate",
+        "assortedcontainers:jungle_warehouse_crate",
+        "assortedcontainers:dark_oak_warehouse_crate",
+        "assortedcontainers:pale_oak_warehouse_crate",
+        "assortedcontainers:crimson_warehouse_crate",
+        "assortedcontainers:warped_warehouse_crate",
+        "assortedcontainers:mangrove_warehouse_crate",
+        "assortedcontainers:bamboo_warehouse_crate"
+      ],
+      "text": "manual.assortedstorage.chapter.furniture.warehouse",
+      "title": "manual.assortedstorage.chapter.furniture.warehouse.title"
+    }
+  ],
+  "sort_order": 8
+}

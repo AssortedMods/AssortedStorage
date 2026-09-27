@@ -2,7 +2,7 @@ package com.grim3212.assorted.storage.common.inventory.crates;
 
 import com.grim3212.assorted.lib.core.inventory.IItemStorageHandler;
 import com.grim3212.assorted.lib.core.inventory.slot.SlotStorageHandler;
-import com.grim3212.assorted.storage.api.crates.ICrateUpgrade;
+import com.grim3212.assorted.lib.core.storage.ICrateUpgrade;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;

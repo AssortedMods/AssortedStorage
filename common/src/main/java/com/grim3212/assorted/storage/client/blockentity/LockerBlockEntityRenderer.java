@@ -2,14 +2,14 @@ package com.grim3212.assorted.storage.client.blockentity;
 
 import com.grim3212.assorted.storage.Constants;
 import com.grim3212.assorted.storage.api.LockerHalf;
-import com.grim3212.assorted.storage.api.blockentity.IStorage;
+import com.grim3212.assorted.lib.core.storage.IStorage;
 import com.grim3212.assorted.storage.client.blockentity.state.LockerRenderState;
 import com.grim3212.assorted.storage.client.model.BaseStorageModel;
 import com.grim3212.assorted.storage.client.model.DualLockerModel;
 import com.grim3212.assorted.storage.client.model.LockerModel;
 import com.grim3212.assorted.storage.client.model.StorageModelLayers;
 import com.grim3212.assorted.storage.client.model.StorageModelState;
-import com.grim3212.assorted.storage.common.block.BaseStorageBlock;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.storage.common.block.LockerBlock;
 import com.grim3212.assorted.storage.common.block.blockentity.LockerBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;

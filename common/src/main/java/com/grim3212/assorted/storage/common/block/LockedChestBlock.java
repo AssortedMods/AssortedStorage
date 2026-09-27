@@ -1,9 +1,10 @@
 package com.grim3212.assorted.storage.common.block;
 
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.lib.core.inventory.locking.ILockable;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
-import com.grim3212.assorted.storage.api.StorageMaterial;
-import com.grim3212.assorted.storage.api.block.IStorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.IStorageMaterial;
 import com.grim3212.assorted.storage.common.block.blockentity.LockedChestBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
 
 public class LockedChestBlock extends BaseStorageBlock implements IStorageMaterial {
 

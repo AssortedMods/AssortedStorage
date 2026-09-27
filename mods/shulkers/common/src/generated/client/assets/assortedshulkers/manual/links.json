@@ -1,0 +1,37 @@
+{
+  "links": [
+    {
+      "blocks": [
+        "assortedshulkers:shulker_box_stone",
+        "assortedshulkers:shulker_box_copper",
+        "assortedshulkers:shulker_box_iron",
+        "assortedshulkers:shulker_box_amethyst",
+        "assortedshulkers:shulker_box_emerald",
+        "assortedshulkers:shulker_box_gold",
+        "assortedshulkers:shulker_box_diamond",
+        "assortedshulkers:shulker_box_netherite",
+        "assortedshulkers:shulker_box_aluminum",
+        "assortedshulkers:shulker_box_tin",
+        "assortedshulkers:shulker_box_topaz",
+        "assortedshulkers:shulker_box_peridot",
+        "assortedshulkers:shulker_box_lead",
+        "assortedshulkers:shulker_box_nickel",
+        "assortedshulkers:shulker_box_sapphire",
+        "assortedshulkers:shulker_box_bronze",
+        "assortedshulkers:shulker_box_ruby",
+        "assortedshulkers:shulker_box_invar",
+        "assortedshulkers:shulker_box_silver",
+        "assortedshulkers:shulker_box_electrum",
+        "assortedshulkers:shulker_box_steel",
+        "assortedshulkers:shulker_box_platinum"
+      ],
+      "page": "assortedstorage:shulker_boxes/shulker_boxes"
+    },
+    {
+      "blocks": [
+        "assortedshulkers:locked_shulker_box"
+      ],
+      "page": "assortedstorage:shulker_boxes/locked"
+    }
+  ]
+}

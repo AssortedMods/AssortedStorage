@@ -1,8 +1,7 @@
 package com.grim3212.assorted.storage.common.inventory.crates;
 
 import com.grim3212.assorted.lib.core.inventory.IItemStorageHandler;
-import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
-import com.grim3212.assorted.storage.common.item.PadlockItem;
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
 import net.minecraft.world.item.ItemStack;
 
 public class CrateLockSlot extends EnhancementSlot {
@@ -18,6 +17,6 @@ public class CrateLockSlot extends EnhancementSlot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.getItem() instanceof PadlockItem && !StorageUtil.getCode(stack).isEmpty();
+        return LockItems.isCodedLock(stack);
     }
 }

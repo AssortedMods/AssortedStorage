@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/bronze"
+    }
+  ],
+  "type": "assortedchests:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/bronze"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedchests:chests/level_2",
+    "M": "#c:ingots/bronze"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedchests:chest_bronze"
+  }
+}

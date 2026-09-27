@@ -1,14 +1,15 @@
 package com.grim3212.assorted.storage.common.block.blockentity;
 
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.lib.client.model.data.IBlockModelData;
 import com.grim3212.assorted.lib.client.model.data.IModelDataBuilder;
 import com.grim3212.assorted.lib.core.block.IBlockEntityWithModelData;
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.common.block.LockedBarrelBlock;
-import com.grim3212.assorted.storage.common.inventory.LockedMaterialContainer;
+import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
 import com.grim3212.assorted.storage.common.inventory.StorageContainerTypes;
-import com.grim3212.assorted.storage.common.inventory.StorageItemStackStorageHandler;
+import com.grim3212.assorted.lib.core.storage.StorageItemStackStorageHandler;
 import com.grim3212.assorted.storage.common.properties.StorageModelProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
@@ -82,6 +84,14 @@ public class LockedBarrelBlockEntity extends BaseStorageBlockEntity implements I
         }
 
         return i;
+    }
+
+    /** A barrel shows it is open through its block state rather than a lid. */
+    @Override
+    public void onOpenOrClose() {
+        if (this.getBlockState().getBlock() instanceof LockedBarrelBlock) {
+            this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(BarrelBlock.OPEN, this.numPlayersUsing > 0), 3);
+        }
     }
 
     @Override

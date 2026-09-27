@@ -1,0 +1,50 @@
+{
+  "pages": [
+    {
+      "type": "assortedlib:text",
+      "id": "materials",
+      "text": "manual.assortedstorage.chapter.barrels.materials",
+      "title": "manual.assortedstorage.chapter.barrels.materials.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "barrels",
+      "recipes": [
+        "assortedbarrels:barrel_stone",
+        "assortedbarrels:barrel_copper",
+        "assortedbarrels:barrel_iron",
+        "assortedbarrels:barrel_amethyst",
+        "assortedbarrels:barrel_emerald",
+        "assortedbarrels:barrel_gold",
+        "assortedbarrels:barrel_diamond",
+        "assortedbarrels:barrel_netherite",
+        "assortedbarrels:barrel_aluminum",
+        "assortedbarrels:barrel_tin",
+        "assortedbarrels:barrel_topaz",
+        "assortedbarrels:barrel_peridot",
+        "assortedbarrels:barrel_lead",
+        "assortedbarrels:barrel_nickel",
+        "assortedbarrels:barrel_sapphire",
+        "assortedbarrels:barrel_bronze",
+        "assortedbarrels:barrel_ruby",
+        "assortedbarrels:barrel_invar",
+        "assortedbarrels:barrel_silver",
+        "assortedbarrels:barrel_electrum",
+        "assortedbarrels:barrel_steel",
+        "assortedbarrels:barrel_platinum"
+      ],
+      "text": "manual.assortedstorage.chapter.barrels.barrels",
+      "title": "manual.assortedstorage.chapter.barrels.barrels.title"
+    },
+    {
+      "type": "assortedlib:item",
+      "id": "locked",
+      "items": [
+        "assortedbarrels:locked_barrel"
+      ],
+      "text": "manual.assortedstorage.chapter.barrels.locked",
+      "title": "manual.assortedstorage.chapter.barrels.locked.title"
+    }
+  ],
+  "sort_order": 1
+}

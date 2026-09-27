@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "assortedbags:item/ender_bag"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "assortedbags:item/ender_bag_locked"
+    },
+    "property": "assortedbags:locked"
+  }
+}

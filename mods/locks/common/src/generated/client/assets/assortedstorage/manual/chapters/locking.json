@@ -1,0 +1,40 @@
+{
+  "pages": [
+    {
+      "type": "assortedlib:recipe",
+      "id": "workbench",
+      "recipes": [
+        "assortedlocks:locksmith_workbench"
+      ],
+      "text": "manual.assortedstorage.chapter.locking.workbench",
+      "title": "manual.assortedstorage.chapter.locking.workbench.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "locks",
+      "interval": 50,
+      "recipes": [
+        "assortedlocks:locksmith_lock",
+        "assortedlocks:locksmith_key"
+      ],
+      "text": "manual.assortedstorage.chapter.locking.locks",
+      "title": "manual.assortedstorage.chapter.locking.locks.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "key_ring",
+      "recipes": [
+        "assortedlocks:key_ring"
+      ],
+      "text": "manual.assortedstorage.chapter.locking.key_ring",
+      "title": "manual.assortedstorage.chapter.locking.key_ring.title"
+    },
+    {
+      "type": "assortedlib:text",
+      "id": "doors",
+      "text": "manual.assortedstorage.chapter.locking.doors",
+      "title": "manual.assortedstorage.chapter.locking.doors.title"
+    }
+  ],
+  "sort_order": 7
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "O": "#c:obsidians",
+    "U": "assortedcrates:blank_upgrade"
+  },
+  "pattern": [
+    "OOO",
+    "OUO",
+    "OOO"
+  ],
+  "result": {
+    "id": "assortedcrates:void_upgrade"
+  }
+}

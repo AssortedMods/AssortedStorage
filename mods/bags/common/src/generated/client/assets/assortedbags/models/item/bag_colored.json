@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "assortedbags:item/bag_colored",
+    "layer1": "assortedbags:item/bag_strap"
+  }
+}

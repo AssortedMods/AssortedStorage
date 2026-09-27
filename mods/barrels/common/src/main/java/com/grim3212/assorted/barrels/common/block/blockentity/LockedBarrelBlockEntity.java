@@ -1,0 +1,101 @@
+package com.grim3212.assorted.barrels.common.block.blockentity;
+
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
+import com.grim3212.assorted.lib.client.model.data.IBlockModelData;
+import com.grim3212.assorted.lib.client.model.data.IModelDataBuilder;
+import com.grim3212.assorted.lib.core.block.IBlockEntityWithModelData;
+import com.grim3212.assorted.barrels.Constants;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.barrels.common.block.LockedBarrelBlock;
+import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
+import com.grim3212.assorted.barrels.common.inventory.BarrelsContainerTypes;
+import com.grim3212.assorted.lib.core.storage.StorageItemStackStorageHandler;
+import com.grim3212.assorted.barrels.common.properties.BarrelsModelProperties;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
+import com.grim3212.assorted.lib.core.inventory.IMenuDataProvider;
+import net.minecraft.server.level.ServerPlayer;
+import java.util.Optional;
+
+public class LockedBarrelBlockEntity extends BaseStorageBlockEntity implements IBlockEntityWithModelData, IMenuDataProvider<Optional<StorageMaterial>> {
+
+    private final StorageMaterial storageMaterial;
+
+    public LockedBarrelBlockEntity(BlockPos pos, BlockState state) {
+        super(BarrelsBlockEntityTypes.LOCKED_BARREL.get(), pos, state);
+
+        if (state.getBlock() instanceof LockedBarrelBlock lockedBarrel) {
+            this.storageMaterial = lockedBarrel.getStorageMaterial();
+        } else {
+            // Default to regular chest
+            this.storageMaterial = null;
+        }
+
+        this.setStorageHandler(new StorageItemStackStorageHandler(this, storageMaterial != null ? storageMaterial.totalItems() : 27));
+    }
+
+    @Override
+    public Optional<StorageMaterial> getMenuData(ServerPlayer player) {
+        return Optional.ofNullable(this.storageMaterial);
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int windowId, Inventory player, Player playerEntity) {
+        return new LockedMaterialContainer(BarrelsContainerTypes.LOCKED_BARREL.get(), windowId, player, this.getItemStackStorageHandler(), storageMaterial, false);
+    }
+
+    @Override
+    protected Component getDefaultName() {
+        if (this.storageMaterial == null) {
+            return Component.translatable(Constants.MOD_ID + ".container.locked_barrel");
+        }
+
+        return Component.translatable(Constants.MOD_ID + ".container.barrel_" + this.storageMaterial.toString());
+    }
+
+    @Override
+    protected SoundEvent openSound() {
+        return SoundEvents.BARREL_OPEN;
+    }
+
+    @Override
+    protected SoundEvent closeSound() {
+        return SoundEvents.BARREL_CLOSE;
+    }
+
+    @Override
+    public int getNumberOfPlayersUsing(Level world, BaseStorageBlockEntity lockableTileEntity, int x, int y, int z) {
+        int i = 0;
+
+        for (Player playerentity : world.getEntitiesOfClass(Player.class, new AABB((double) ((float) x - 5.0F), (double) ((float) y - 5.0F), (double) ((float) z - 5.0F), (double) ((float) (x + 1) + 5.0F), (double) ((float) (y + 1) + 5.0F), (double) ((float) (z + 1) + 5.0F)))) {
+            if (playerentity.containerMenu instanceof LockedMaterialContainer) {
+                ++i;
+            }
+        }
+
+        return i;
+    }
+
+    /** A barrel shows it is open through its block state rather than a lid. */
+    @Override
+    public void onOpenOrClose() {
+        if (this.getBlockState().getBlock() instanceof LockedBarrelBlock) {
+            this.level.setBlock(this.getBlockPos(), this.getBlockState().setValue(BarrelBlock.OPEN, this.numPlayersUsing > 0), 3);
+        }
+    }
+
+    @Override
+    public @NotNull IBlockModelData getBlockModelData() {
+        return IModelDataBuilder.create().withInitial(BarrelsModelProperties.IS_LOCKED, this.isLocked()).build();
+    }
+}

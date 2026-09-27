@@ -1,5 +1,6 @@
 package com.grim3212.assorted.storage.common.block.blockentity;
 
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
 import com.google.common.collect.Queues;
 import com.grim3212.assorted.lib.client.model.data.IBlockModelData;
 import com.grim3212.assorted.lib.client.model.data.IModelDataBuilder;
@@ -17,7 +18,6 @@ import com.grim3212.assorted.storage.common.inventory.crates.CrateControllerInvW
 import com.grim3212.assorted.storage.common.properties.StorageModelProperties;
 import net.minecraft.util.Util;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
-import com.grim3212.assorted.storage.common.item.StorageItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -160,7 +160,7 @@ public class CrateControllerBlockEntity extends BlockEntity implements INamed, I
         super.preRemoveSideEffects(pos, state);
 
         if (this.level != null && this.isLocked()) {
-            Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), StorageUtil.setCodeOnStack(this.lockCode, new ItemStack(StorageItems.LOCKSMITH_LOCK.get())));
+            Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), LockItems.createLock(this.lockCode));
         }
     }
 

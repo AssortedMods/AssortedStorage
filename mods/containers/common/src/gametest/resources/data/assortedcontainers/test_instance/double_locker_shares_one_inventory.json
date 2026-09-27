@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcontainers:double_locker_shares_one_inventory",
+  "structure": "assortedcontainers:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

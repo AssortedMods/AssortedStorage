@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/lead"
+    }
+  ],
+  "type": "assortedchests:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/lead"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedchests:chests/level_1",
+    "M": "#c:ingots/lead"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedchests:chest_lead"
+  }
+}

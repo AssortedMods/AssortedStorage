@@ -6,7 +6,7 @@ import com.grim3212.assorted.lib.core.inventory.locking.LockedStorageHandler;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.util.NBTHelper;
 import com.grim3212.assorted.storage.api.LargeItemStack;
-import com.grim3212.assorted.storage.api.crates.ICrateUpgrade;
+import com.grim3212.assorted.lib.core.storage.ICrateUpgrade;
 import com.grim3212.assorted.storage.common.block.blockentity.CrateBlockEntity;
 import com.grim3212.assorted.storage.common.block.blockentity.CrateCompactingBlockEntity;
 import com.grim3212.assorted.storage.common.item.StorageItems;

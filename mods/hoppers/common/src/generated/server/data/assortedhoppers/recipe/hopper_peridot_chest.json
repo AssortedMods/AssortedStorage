@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "assortedchests"
+    }
+  ],
+  "type": "assortedhoppers:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "assortedchests"
+      ]
+    }
+  ],
+  "key": {
+    "C": "assortedchests:chest_peridot",
+    "M": "#c:ingots/iron"
+  },
+  "pattern": [
+    "M M",
+    "MCM",
+    " M "
+  ],
+  "result": {
+    "id": "assortedhoppers:hopper_peridot"
+  }
+}

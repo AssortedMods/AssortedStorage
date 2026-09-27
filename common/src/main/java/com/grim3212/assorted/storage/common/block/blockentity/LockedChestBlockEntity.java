@@ -1,11 +1,12 @@
 package com.grim3212.assorted.storage.common.block.blockentity;
 
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.common.block.LockedChestBlock;
-import com.grim3212.assorted.storage.common.inventory.LockedMaterialContainer;
+import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
 import com.grim3212.assorted.storage.common.inventory.StorageContainerTypes;
-import com.grim3212.assorted.storage.common.inventory.StorageItemStackStorageHandler;
+import com.grim3212.assorted.lib.core.storage.StorageItemStackStorageHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;

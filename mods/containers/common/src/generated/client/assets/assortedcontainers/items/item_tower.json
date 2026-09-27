@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "assortedcontainers:item/item_tower",
+    "model": {
+      "type": "assortedcontainers:item_tower"
+    }
+  }
+}

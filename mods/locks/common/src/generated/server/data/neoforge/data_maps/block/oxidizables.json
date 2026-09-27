@@ -1,0 +1,13 @@
+{
+  "values": {
+    "assortedlocks:locked_copper_door": {
+      "next_oxidation_stage": "assortedlocks:locked_exposed_copper_door"
+    },
+    "assortedlocks:locked_exposed_copper_door": {
+      "next_oxidation_stage": "assortedlocks:locked_weathered_copper_door"
+    },
+    "assortedlocks:locked_weathered_copper_door": {
+      "next_oxidation_stage": "assortedlocks:locked_oxidized_copper_door"
+    }
+  }
+}

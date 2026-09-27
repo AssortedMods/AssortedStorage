@@ -1,0 +1,16 @@
+{
+  "values": {
+    "assortedlocks:locked_copper_door": {
+      "waxed": "assortedlocks:locked_waxed_copper_door"
+    },
+    "assortedlocks:locked_exposed_copper_door": {
+      "waxed": "assortedlocks:locked_waxed_exposed_copper_door"
+    },
+    "assortedlocks:locked_oxidized_copper_door": {
+      "waxed": "assortedlocks:locked_waxed_oxidized_copper_door"
+    },
+    "assortedlocks:locked_weathered_copper_door": {
+      "waxed": "assortedlocks:locked_waxed_weathered_copper_door"
+    }
+  }
+}

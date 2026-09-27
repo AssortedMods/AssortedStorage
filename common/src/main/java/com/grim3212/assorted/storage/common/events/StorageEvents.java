@@ -1,12 +1,11 @@
 package com.grim3212.assorted.storage.common.events;
 
-import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
 import com.grim3212.assorted.lib.events.UseBlockEvent;
 import com.grim3212.assorted.lib.platform.Services;
-import com.grim3212.assorted.storage.api.crates.ICrateUpgrade;
+import com.grim3212.assorted.lib.core.storage.ICrateUpgrade;
 import com.grim3212.assorted.storage.common.block.blockentity.CrateBlockEntity;
-import com.grim3212.assorted.storage.common.item.PadlockItem;
-import com.grim3212.assorted.storage.common.item.upgrades.LevelUpgradeItem;
+import com.grim3212.assorted.storage.api.StorageTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +32,8 @@ public class StorageEvents {
         ItemStack stack = player.getItemInHand(hand);
         BlockPos pos = hitResult.getBlockPos();
 
-        if (stack.getItem() instanceof LevelUpgradeItem) {
+        // By tag, so crates need not know the mod that adds level upgrades, and unlike other upgrades several fit
+        if (stack.is(StorageTags.Items.STORAGE_LEVEL_UPGRADES)) {
             if (level.getBlockEntity(pos) instanceof CrateBlockEntity crate) {
                 int firstEmptySlot = firstEmptyUpgradeSlot(crate);
                 if (firstEmptySlot > 0) {
@@ -42,9 +42,9 @@ public class StorageEvents {
             }
 
             return InteractionResult.PASS;
-        } else if (stack.getItem() instanceof PadlockItem) {
+        } else if (LockItems.isLock(stack)) {
             if (level.getBlockEntity(pos) instanceof CrateBlockEntity crate) {
-                if (!crate.isLocked() && StorageUtil.hasCode(stack)) {
+                if (!crate.isLocked() && LockItems.isCodedLock(stack)) {
                     // The 0 slot is for Padlocks only
                     return install(level, crate, 0, stack);
                 }

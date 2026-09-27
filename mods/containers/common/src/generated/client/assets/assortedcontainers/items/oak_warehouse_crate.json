@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "assortedcontainers:item/oak_warehouse_crate",
+    "model": {
+      "type": "assortedcontainers:storage",
+      "model": "warehouse_crate",
+      "texture": "assortedcontainers:textures/model/warehouse_crate/oak.png"
+    }
+  }
+}

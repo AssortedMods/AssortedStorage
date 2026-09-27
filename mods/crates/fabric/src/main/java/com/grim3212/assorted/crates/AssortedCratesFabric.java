@@ -1,0 +1,26 @@
+package com.grim3212.assorted.crates;
+
+import com.grim3212.assorted.lib.core.inventory.IInventoryBlockEntity;
+import com.grim3212.assorted.lib.inventory.FabricPlatformInventoryStorageHandlerUnsided;
+import com.grim3212.assorted.crates.common.block.blockentity.CratesBlockEntityTypes;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+
+public class AssortedCratesFabric implements ModInitializer {
+
+    @Override
+    public void onInitialize() {
+        CratesCommonMod.init();
+
+        ItemStorage.SIDED.registerForBlockEntities((be, direction) ->
+                {
+                    if (be instanceof IInventoryBlockEntity inv)
+                        return ((FabricPlatformInventoryStorageHandlerUnsided) inv.getStorageHandler()).getFabricInventory();
+                    return null;
+                },
+                CratesBlockEntityTypes.CRATE.get(),
+                CratesBlockEntityTypes.CRATE_CONTROLLER.get(),
+                CratesBlockEntityTypes.CRATE_COMPACTING.get()
+        );
+    }
+}

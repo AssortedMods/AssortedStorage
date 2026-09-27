@@ -1,12 +1,13 @@
 package com.grim3212.assorted.storage.common.item;
 
+import com.grim3212.assorted.lib.core.storage.StorageInfo;
 import com.grim3212.assorted.lib.annotations.LoaderImplement;
 import com.grim3212.assorted.lib.core.inventory.IInventoryItem;
 import com.grim3212.assorted.lib.core.inventory.IPlatformInventoryStorageHandler;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.util.NBTHelper;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.common.inventory.bag.BagContainer;
 import com.grim3212.assorted.storage.common.inventory.bag.BagItemHandler;
 import net.minecraft.network.chat.Component;
@@ -22,7 +23,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
-
 
 public class BagItem extends Item implements IInventoryItem {
 

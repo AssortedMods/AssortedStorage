@@ -1,11 +1,11 @@
 package com.grim3212.assorted.storage.client.blockentity;
 
-import com.grim3212.assorted.storage.api.blockentity.IStorage;
+import com.grim3212.assorted.lib.core.storage.IStorage;
 import com.grim3212.assorted.storage.client.blockentity.state.StorageBlockRenderState;
 import com.grim3212.assorted.storage.client.model.BaseStorageModel;
 import com.grim3212.assorted.storage.client.model.StorageModelState;
-import com.grim3212.assorted.storage.common.block.BaseStorageBlock;
-import com.grim3212.assorted.storage.common.block.blockentity.BaseStorageBlockEntity;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;

@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "assortedbarrels:block/barrel_steel_unlocked"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "assortedbarrels:block/barrel_steel_locked"
+    },
+    "property": "assortedbarrels:locked"
+  }
+}

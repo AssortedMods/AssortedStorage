@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "minecraft:block/oak_planks",
+    "east": "assortedlocks:block/locksmith_side",
+    "north": "assortedlocks:block/locksmith_front",
+    "particle": "assortedlocks:block/locksmith_front",
+    "south": "assortedlocks:block/locksmith_side",
+    "up": "assortedlocks:block/locksmith_top",
+    "west": "assortedlocks:block/locksmith_front"
+  }
+}

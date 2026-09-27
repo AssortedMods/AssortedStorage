@@ -1,0 +1,7 @@
+{
+  "parent": "assortedcrates:block/base_crate_single",
+  "textures": {
+    "facing": "assortedcrates:block/crates/mangrove_facing",
+    "sides": "minecraft:block/mangrove_log"
+  }
+}

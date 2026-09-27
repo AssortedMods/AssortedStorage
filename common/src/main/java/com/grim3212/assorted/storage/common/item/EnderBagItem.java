@@ -1,10 +1,11 @@
 package com.grim3212.assorted.storage.common.item;
 
+import com.grim3212.assorted.lib.core.storage.StorageInfo;
 import com.grim3212.assorted.lib.annotations.LoaderImplement;
 import com.grim3212.assorted.lib.core.inventory.IInventoryItem;
 import com.grim3212.assorted.lib.core.inventory.IPlatformInventoryStorageHandler;
 import com.grim3212.assorted.lib.platform.Services;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.storage.common.inventory.enderbag.EnderBagContainer;
 import com.grim3212.assorted.storage.common.inventory.enderbag.EnderBagItemHandler;
 import net.minecraft.network.chat.Component;
@@ -20,7 +21,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-
 
 public class EnderBagItem extends Item implements IInventoryItem {
 

@@ -1,5 +1,6 @@
 package com.grim3212.assorted.storage.common.block.blockentity;
 
+import com.grim3212.assorted.lib.core.inventory.locking.BaseLockedBlockEntity;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
@@ -25,7 +26,7 @@ public class StorageBlockEntityTypes {
 
     public static final IRegistryObject<BlockEntityType<WarehouseCrateBlockEntity>> WAREHOUSE_CRATE = BLOCK_ENTITIES.register("warehouse_crate", () -> Services.PLATFORM.createBlockEntityType(WarehouseCrateBlockEntity::new, getWarehouseCrates()));
 
-    public static final IRegistryObject<BlockEntityType<BaseLockedBlockEntity>> BASE_LOCKED = BLOCK_ENTITIES.register("base_locked", () -> Services.PLATFORM.createBlockEntityType(BaseLockedBlockEntity::new, StorageBlocks.lockedDoors()));
+    public static final IRegistryObject<BlockEntityType<BaseLockedBlockEntity>> BASE_LOCKED = BLOCK_ENTITIES.register("base_locked", () -> Services.PLATFORM.createBlockEntityType((pos, state) -> new BaseLockedBlockEntity(StorageBlockEntityTypes.BASE_LOCKED.get(), pos, state), StorageBlocks.lockedDoors()));
 
     public static final IRegistryObject<BlockEntityType<LockedEnderChestBlockEntity>> LOCKED_ENDER_CHEST = BLOCK_ENTITIES.register("locked_ender_chest", () -> Services.PLATFORM.createBlockEntityType(LockedEnderChestBlockEntity::new, StorageBlocks.LOCKED_ENDER_CHEST.get()));
 

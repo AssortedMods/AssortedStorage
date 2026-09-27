@@ -3,7 +3,7 @@ package com.grim3212.assorted.storage.common.inventory.enderbag;
 import com.grim3212.assorted.lib.core.inventory.IItemStorageHandler;
 import com.grim3212.assorted.lib.core.inventory.slot.SlotStorageHandler;
 import com.grim3212.assorted.lib.platform.Services;
-import com.grim3212.assorted.storage.common.inventory.LockedEnderChestInventory;
+import com.grim3212.assorted.lib.core.storage.ender.LockedEnderChestInventory;
 import com.grim3212.assorted.storage.common.item.EnderBagItem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

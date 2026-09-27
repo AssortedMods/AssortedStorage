@@ -1,5 +1,7 @@
 package com.grim3212.assorted.storage.client;
 
+import com.grim3212.assorted.lib.client.screen.storage.GenericStorageScreen;
+import com.grim3212.assorted.lib.client.screen.storage.LockedMaterialScreen;
 import com.grim3212.assorted.lib.platform.ClientServices;
 import com.grim3212.assorted.storage.client.blockentity.*;
 import com.grim3212.assorted.storage.client.blockentity.item.ItemTowerSpecialRenderer;
@@ -85,5 +87,4 @@ public class StorageClient {
             register.registerSpecialModelRenderer(LockedShulkerBoxSpecialRenderer.ID, LockedShulkerBoxSpecialRenderer.Unbaked.MAP_CODEC);
         });
     }
-
 }

@@ -1,5 +1,6 @@
 package com.grim3212.assorted.storage.client.screen;
 
+import com.grim3212.assorted.lib.client.screen.storage.BaseStorageScreen;
 import com.grim3212.assorted.storage.Constants;
 import com.grim3212.assorted.storage.common.inventory.LockerContainer;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

@@ -1,7 +1,7 @@
 package com.grim3212.assorted.storage.client.blockentity;
 
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.blockentity.IStorage;
+import com.grim3212.assorted.lib.core.storage.IStorage;
 import com.grim3212.assorted.storage.client.model.ChestModel;
 import com.grim3212.assorted.storage.client.model.StorageModelLayers;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;

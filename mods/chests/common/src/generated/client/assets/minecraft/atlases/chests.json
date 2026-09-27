@@ -1,0 +1,96 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/normal"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/stone"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/copper"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/iron"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/amethyst"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/emerald"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/gold"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/diamond"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/netherite"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/aluminum"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/tin"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/topaz"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/peridot"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/lead"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/nickel"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/sapphire"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/bronze"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/ruby"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/invar"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/silver"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/electrum"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/steel"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedchests:model/chests/platinum"
+    }
+  ]
+}

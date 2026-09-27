@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/topaz"
+    }
+  ],
+  "type": "assortedhoppers:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/topaz"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedhoppers:hoppers/level_0",
+    "M": "#c:gems/topaz"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedhoppers:hopper_topaz"
+  }
+}

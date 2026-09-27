@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "assortedchests:block/locked_chest"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedbarrels:locked_blocks_send_their_lock_to_clients",
+  "structure": "assortedbarrels:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

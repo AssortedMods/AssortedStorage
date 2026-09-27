@@ -60,20 +60,20 @@ public class StorageTags {
     }
 
     public static class Items {
-        public static final TagKey<Item> INGOTS_TIN = commonTag("ingots/tin");
-        public static final TagKey<Item> INGOTS_SILVER = commonTag("ingots/silver");
-        public static final TagKey<Item> INGOTS_ALUMINUM = commonTag("ingots/aluminum");
-        public static final TagKey<Item> INGOTS_NICKEL = commonTag("ingots/nickel");
-        public static final TagKey<Item> INGOTS_PLATINUM = commonTag("ingots/platinum");
-        public static final TagKey<Item> INGOTS_LEAD = commonTag("ingots/lead");
-        public static final TagKey<Item> INGOTS_BRONZE = commonTag("ingots/bronze");
-        public static final TagKey<Item> INGOTS_ELECTRUM = commonTag("ingots/electrum");
-        public static final TagKey<Item> INGOTS_INVAR = commonTag("ingots/invar");
-        public static final TagKey<Item> INGOTS_STEEL = commonTag("ingots/steel");
-        public static final TagKey<Item> GEMS_RUBY = commonTag("gems/ruby");
-        public static final TagKey<Item> GEMS_SAPPHIRE = commonTag("gems/sapphire");
-        public static final TagKey<Item> GEMS_TOPAZ = commonTag("gems/topaz");
-        public static final TagKey<Item> GEMS_PERIDOT = commonTag("gems/peridot");
+        public static final TagKey<Item> INGOTS_TIN = LibCommonTags.Items.INGOTS_TIN;
+        public static final TagKey<Item> INGOTS_SILVER = LibCommonTags.Items.INGOTS_SILVER;
+        public static final TagKey<Item> INGOTS_ALUMINUM = LibCommonTags.Items.INGOTS_ALUMINUM;
+        public static final TagKey<Item> INGOTS_NICKEL = LibCommonTags.Items.INGOTS_NICKEL;
+        public static final TagKey<Item> INGOTS_PLATINUM = LibCommonTags.Items.INGOTS_PLATINUM;
+        public static final TagKey<Item> INGOTS_LEAD = LibCommonTags.Items.INGOTS_LEAD;
+        public static final TagKey<Item> INGOTS_BRONZE = LibCommonTags.Items.INGOTS_BRONZE;
+        public static final TagKey<Item> INGOTS_ELECTRUM = LibCommonTags.Items.INGOTS_ELECTRUM;
+        public static final TagKey<Item> INGOTS_INVAR = LibCommonTags.Items.INGOTS_INVAR;
+        public static final TagKey<Item> INGOTS_STEEL = LibCommonTags.Items.INGOTS_STEEL;
+        public static final TagKey<Item> GEMS_RUBY = LibCommonTags.Items.GEMS_RUBY;
+        public static final TagKey<Item> GEMS_SAPPHIRE = LibCommonTags.Items.GEMS_SAPPHIRE;
+        public static final TagKey<Item> GEMS_TOPAZ = LibCommonTags.Items.GEMS_TOPAZ;
+        public static final TagKey<Item> GEMS_PERIDOT = LibCommonTags.Items.GEMS_PERIDOT;
 
         public static final TagKey<Item> PAPER = commonTag("paper");
 

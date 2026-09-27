@@ -1,14 +1,14 @@
 package com.grim3212.assorted.storage.client.blockentity;
 
-import com.grim3212.assorted.storage.api.blockentity.IStorage;
+import com.grim3212.assorted.lib.core.storage.IStorage;
 import com.grim3212.assorted.storage.client.blockentity.state.SpriteStorageRenderState;
 import com.grim3212.assorted.storage.client.model.ChestModel;
 import com.grim3212.assorted.storage.client.model.StorageModelLayers;
 import com.grim3212.assorted.storage.client.model.StorageModelState;
 import com.grim3212.assorted.storage.client.model.StorageModels;
-import com.grim3212.assorted.storage.common.block.BaseStorageBlock;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.storage.common.block.LockedChestBlock;
-import com.grim3212.assorted.storage.common.block.blockentity.BaseStorageBlockEntity;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.Sheets;

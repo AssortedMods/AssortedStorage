@@ -1,5 +1,6 @@
 package com.grim3212.assorted.storage.common.block.blockentity;
 
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
 import com.grim3212.assorted.lib.core.inventory.IInventoryBlockEntity;
 import com.grim3212.assorted.lib.core.inventory.INamed;
 import com.grim3212.assorted.lib.core.inventory.IPlatformInventoryStorageHandler;
@@ -103,7 +104,7 @@ public class CrateBlockEntity extends BlockEntity implements IMenuDataProvider<B
     @Override
     public void setLockCode(String s) {
         if (s != null && !s.isEmpty()) {
-            this.getItemStackStorageHandler().setLockStack(StorageUtil.setCodeOnStack(s, new ItemStack(StorageItems.LOCKSMITH_LOCK.get())));
+            this.getItemStackStorageHandler().setLockStack(LockItems.createLock(s));
 
             this.setChanged();
             this.modelUpdate();

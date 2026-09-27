@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "assortedchests:item/chest_gold",
+    "model": {
+      "type": "assortedchests:locked_chest",
+      "texture": "assortedchests:model/chests/gold"
+    }
+  }
+}

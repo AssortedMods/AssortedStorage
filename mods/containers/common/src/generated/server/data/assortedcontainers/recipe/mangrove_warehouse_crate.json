@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": "#minecraft:mangrove_logs",
+    "P": "minecraft:mangrove_planks"
+  },
+  "pattern": [
+    "LLL",
+    "P P",
+    "PPP"
+  ],
+  "result": {
+    "id": "assortedcontainers:mangrove_warehouse_crate"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "pages": [
+    {
+      "type": "assortedlib:recipe",
+      "id": "crates",
+      "recipes": [
+        "assortedcrates:oak_crate",
+        "assortedcrates:spruce_crate",
+        "assortedcrates:birch_crate",
+        "assortedcrates:acacia_crate",
+        "assortedcrates:cherry_crate",
+        "assortedcrates:jungle_crate",
+        "assortedcrates:dark_oak_crate",
+        "assortedcrates:pale_oak_crate",
+        "assortedcrates:crimson_crate",
+        "assortedcrates:warped_crate",
+        "assortedcrates:mangrove_crate",
+        "assortedcrates:bamboo_crate"
+      ],
+      "text": "manual.assortedstorage.chapter.crates.crates",
+      "title": "manual.assortedstorage.chapter.crates.crates.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "sizes",
+      "interval": 50,
+      "recipes": [
+        "assortedcrates:oak_crate",
+        "assortedcrates:oak_crate_double",
+        "assortedcrates:oak_crate_triple",
+        "assortedcrates:oak_crate_quadruple"
+      ],
+      "text": "manual.assortedstorage.chapter.crates.sizes",
+      "title": "manual.assortedstorage.chapter.crates.sizes.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "controller",
+      "recipes": [
+        "assortedcrates:crate_controller"
+      ],
+      "text": "manual.assortedstorage.chapter.crates.controller",
+      "title": "manual.assortedstorage.chapter.crates.controller.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "bridge",
+      "interval": 60,
+      "recipes": [
+        "assortedcrates:crate_bridge_copper",
+        "assortedcrates:crate_bridge_bronze",
+        "assortedcrates:crate_bridge_gold"
+      ],
+      "text": "manual.assortedstorage.chapter.crates.bridge",
+      "title": "manual.assortedstorage.chapter.crates.bridge.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "compacting",
+      "interval": 60,
+      "recipes": [
+        "assortedcrates:crate_compacting_iron",
+        "assortedcrates:crate_compacting_aluminum",
+        "assortedcrates:crate_compacting_steel"
+      ],
+      "text": "manual.assortedstorage.chapter.crates.compacting",
+      "title": "manual.assortedstorage.chapter.crates.compacting.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "upgrades",
+      "interval": 50,
+      "recipes": [
+        "assortedcrates:blank_upgrade",
+        "assortedcrates:glow_upgrade",
+        "assortedcrates:void_upgrade",
+        "assortedcrates:amount_upgrade",
+        "assortedcrates:redstone_upgrade"
+      ],
+      "text": "manual.assortedstorage.chapter.crates.upgrades",
+      "title": "manual.assortedstorage.chapter.crates.upgrades.title"
+    },
+    {
+      "type": "assortedlib:recipe",
+      "id": "rotator_majig",
+      "interval": 60,
+      "recipes": [
+        "assortedcrates:rotator_majig_iron",
+        "assortedcrates:rotator_majig_aluminum",
+        "assortedcrates:rotator_majig_steel"
+      ],
+      "text": "manual.assortedstorage.chapter.crates.rotator_majig",
+      "title": "manual.assortedstorage.chapter.crates.rotator_majig.title"
+    }
+  ],
+  "sort_order": 5
+}

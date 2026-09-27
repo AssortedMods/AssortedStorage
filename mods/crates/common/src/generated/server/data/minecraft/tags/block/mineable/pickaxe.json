@@ -1,0 +1,7 @@
+{
+  "values": [
+    "assortedcrates:crate_compacting",
+    "assortedcrates:crate_controller",
+    "assortedcrates:crate_bridge"
+  ]
+}

@@ -1,11 +1,11 @@
 package com.grim3212.assorted.storage.common.crafting;
 
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
 import com.mojang.serialization.MapCodec;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.util.NBTHelper;
 import com.grim3212.assorted.storage.api.StorageTags;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
-import com.grim3212.assorted.storage.common.item.StorageItems;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -40,7 +40,7 @@ public class LockedShulkerBoxRecipe extends CustomRecipe {
                 continue;
             if (stack.is(StorageTags.Items.SHULKERS_NORMAL) && shulker.isEmpty())
                 shulker = stack;
-            else if (item == StorageItems.LOCKSMITH_LOCK.get() && lock.isEmpty() && StorageUtil.hasCode(stack))
+            else if (LockItems.isLock(stack) && lock.isEmpty() && StorageUtil.hasCode(stack))
                 lock = stack;
             else
                 return false;
@@ -58,7 +58,7 @@ public class LockedShulkerBoxRecipe extends CustomRecipe {
             Item item = stack.getItem();
             if (stack.is(StorageTags.Items.SHULKERS_NORMAL) && shulker.isEmpty())
                 shulker = stack;
-            else if (item == StorageItems.LOCKSMITH_LOCK.get() && lock.isEmpty() && StorageUtil.hasCode(stack))
+            else if (LockItems.isLock(stack) && lock.isEmpty() && StorageUtil.hasCode(stack))
                 lock = stack;
         }
 

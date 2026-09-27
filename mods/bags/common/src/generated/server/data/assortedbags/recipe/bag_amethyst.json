@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/amethyst"
+    }
+  ],
+  "type": "assortedbags:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/amethyst"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedbags:bags/level_1",
+    "M": "#c:gems/amethyst"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedbags:bag_amethyst"
+  }
+}

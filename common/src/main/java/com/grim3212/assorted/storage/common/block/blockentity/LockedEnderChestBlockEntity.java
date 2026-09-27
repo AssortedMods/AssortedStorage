@@ -1,12 +1,13 @@
 package com.grim3212.assorted.storage.common.block.blockentity;
 
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.lib.core.inventory.IPlatformInventoryStorageHandler;
 import com.grim3212.assorted.lib.core.inventory.impl.LockedItemStackStorageHandler;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.common.inventory.LockedEnderChestInventory;
-import com.grim3212.assorted.storage.common.inventory.StorageContainer;
-import com.grim3212.assorted.storage.common.save.EnderSavedData;
+import com.grim3212.assorted.lib.core.storage.ender.LockedEnderChestInventory;
+import com.grim3212.assorted.storage.common.inventory.StorageMenus;
+import com.grim3212.assorted.lib.core.storage.ender.EnderSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
@@ -73,7 +74,7 @@ public class LockedEnderChestBlockEntity extends BaseStorageBlockEntity {
 
     @Override
     public AbstractContainerMenu createMenu(int windowId, Inventory playerInv, Player player) {
-        return StorageContainer.createEnderChestContainer(windowId, playerInv, this.getStorageHandler().getItemStorageHandler(null));
+        return StorageMenus.createEnderChestContainer(windowId, playerInv, this.getStorageHandler().getItemStorageHandler(null));
     }
 
     @Override

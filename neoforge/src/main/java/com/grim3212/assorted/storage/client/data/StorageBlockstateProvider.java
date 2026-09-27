@@ -3,7 +3,7 @@ package com.grim3212.assorted.storage.client.data;
 import com.grim3212.assorted.lib.client.data.SpecificationBlockStateModelBuilder;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.api.crates.CrateLayout;
 import com.grim3212.assorted.storage.client.blockentity.item.ItemTowerSpecialRenderer;
 import com.grim3212.assorted.storage.client.blockentity.item.LockedChestSpecialRenderer;
@@ -115,11 +115,11 @@ public class StorageBlockstateProvider extends ModelProvider {
         particle(StorageBlocks.LOCKED_SHULKER_BOX.get(), Identifier.parse("block/shulker_box"));
 
         for (IRegistryObject<LockedChestBlock> b : StorageBlocks.CHESTS.values()) {
-            particle(b.get(), b.get().getStorageMaterial().getParticle());
+            particle(b.get(), b.get().getStorageMaterial().getParticle(Constants.MOD_ID));
         }
 
         for (IRegistryObject<LockedShulkerBoxBlock> b : StorageBlocks.SHULKERS.values()) {
-            particle(b.get(), b.get().getStorageMaterial().getParticle());
+            particle(b.get(), b.get().getStorageMaterial().getParticle(Constants.MOD_ID));
         }
 
         // Which renderer each of those items uses. The textures are the ones the matching block

@@ -1,5 +1,6 @@
 package com.grim3212.assorted.storage.common.block;
 
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.storage.common.block.blockentity.GlassCabinetBlockEntity;
 
 import net.minecraft.core.BlockPos;

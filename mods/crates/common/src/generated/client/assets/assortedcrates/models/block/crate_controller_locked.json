@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "assortedcrates:block/crates/crate_controller_front_locked",
+    "side": "assortedcrates:block/crates/crate_controller_side",
+    "top": "assortedcrates:block/crates/crate_top"
+  }
+}

@@ -4,7 +4,7 @@ import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.storage.Constants;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
 import com.grim3212.assorted.storage.common.item.StorageDataComponents;
-import com.grim3212.assorted.storage.common.item.StorageInfo;
+import com.grim3212.assorted.lib.core.storage.StorageInfo;
 import com.grim3212.assorted.storage.common.item.StorageItems;
 import com.grim3212.assorted.storage.common.item.UpgradeModeInfo;
 import net.minecraft.core.component.DataComponentType;
@@ -39,9 +39,9 @@ final class TooltipTests {
     private static void storageTooltipsComeFromComponents(GameTestHelper helper) {
         DataComponentType<StorageInfo> info = StorageDataComponents.STORAGE_INFO.get();
         DataComponentType<UpgradeModeInfo> modeInfo = StorageDataComponents.UPGRADE_MODE_INFO.get();
-        String locked = Constants.MOD_ID + ".info.locked";
-        String combo = Constants.MOD_ID + ".info.combo";
-        String level = Constants.MOD_ID + ".info.level_upgrade_level";
+        String locked = "assortedlib.info.locked";
+        String combo = "assortedlib.info.combo";
+        String level = "assortedlib.info.storage_level";
         String mode = Constants.MOD_ID + ".info.upgrade.mode";
 
         ItemStack lockedBag = StorageUtil.setCodeOnStack("1234", new ItemStack(StorageItems.BAG.get()));

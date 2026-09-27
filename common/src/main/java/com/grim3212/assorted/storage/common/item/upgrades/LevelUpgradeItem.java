@@ -1,34 +1,23 @@
 package com.grim3212.assorted.storage.common.item.upgrades;
 
-import com.grim3212.assorted.storage.common.item.StorageInfo;
-import com.grim3212.assorted.storage.common.item.StorageDataComponents;
+import com.grim3212.assorted.lib.core.storage.ICrateUpgrade;
+import com.grim3212.assorted.lib.core.storage.LevelUpgrades;
+import com.grim3212.assorted.lib.core.storage.PreparedLevelUpgrade;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.StorageCommonMod;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
-import com.grim3212.assorted.storage.api.StorageMaterial;
-import com.grim3212.assorted.storage.api.crates.ICrateUpgrade;
-import com.grim3212.assorted.storage.common.block.*;
-import com.grim3212.assorted.storage.common.block.blockentity.*;
-import com.grim3212.assorted.storage.mixin.block.BarrelBlockEntityAccessor;
+import com.grim3212.assorted.storage.common.item.StorageDataComponents;
+import com.grim3212.assorted.lib.core.storage.StorageInfo;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BarrelBlock;
-import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.HopperBlock;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
-import net.minecraft.world.level.block.entity.*;
-import net.minecraft.world.level.block.state.BlockState;
 
-
+/** Upgrades a container in place to its material, through whatever each mod registered with {@link LevelUpgrades}. */
 public class LevelUpgradeItem extends Item implements ICrateUpgrade {
 
     private final StorageMaterial storageMaterial;
@@ -50,234 +39,15 @@ public class LevelUpgradeItem extends Item implements ICrateUpgrade {
 
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
-
         Player player = context.getPlayer();
-        InteractionHand hand = context.getHand();
-        ItemStack itemstack = player.getItemInHand(hand);
+        ItemStack itemstack = player.getItemInHand(context.getHand());
 
-        String currentLockCode = null;
-        Component currentCustomName = null;
-        NonNullList<ItemStack> currentItems = null;
-
-        BlockState newState = null;
-        BlockEntity newBlockEntity = null;
-
-        if (world.getBlockState(pos).getBlock() instanceof LockedChestBlock chestBlock) {
-            int currentStorageLevel = chestBlock.getStorageMaterial() != null ? chestBlock.getStorageMaterial().getStorageLevel() : 0;
-            boolean startingUpgrade = this.storageMaterial.getStorageLevel() == 0 || this.storageMaterial.getStorageLevel() == 1;
-            boolean canUpgrade = (startingUpgrade && (chestBlock.getStorageMaterial() == null || chestBlock.getStorageMaterial().getStorageLevel() == 0)) || currentStorageLevel == this.storageMaterial.getStorageLevel() - 1;
-
-            if (canUpgrade) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity != null && blockEntity instanceof LockedChestBlockEntity storageBE) {
-                    if (storageBE.getNumberOfPlayersUsing(world, storageBE) > 0) {
-                        return InteractionResult.PASS;
-                    }
-
-                    if (storageBE.isLocked() && !StorageAccessUtil.canAccess(world, pos, player)) {
-                        return InteractionResult.PASS;
-                    }
-
-                    currentLockCode = storageBE.getLockCode();
-                    currentCustomName = storageBE.getCustomName();
-                    currentItems = storageBE.getItemStackStorageHandler().getStacks();
-
-                    newState = StorageBlocks.CHESTS.get(storageMaterial).get().defaultBlockState().setValue(BaseStorageBlock.FACING, world.getBlockState(pos).getValue(BaseStorageBlock.FACING));
-                    newBlockEntity = new LockedChestBlockEntity(pos, newState);
-                }
-            }
-        } else if (world.getBlockState(pos).getBlock() instanceof LockedBarrelBlock barrelBlock) {
-            int currentStorageLevel = barrelBlock.getStorageMaterial() != null ? barrelBlock.getStorageMaterial().getStorageLevel() : 0;
-            boolean startingUpgrade = this.storageMaterial.getStorageLevel() == 0 || this.storageMaterial.getStorageLevel() == 1;
-            boolean canUpgrade = (startingUpgrade && (barrelBlock.getStorageMaterial() == null || barrelBlock.getStorageMaterial().getStorageLevel() == 0)) || currentStorageLevel == this.storageMaterial.getStorageLevel() - 1;
-
-            if (canUpgrade) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity != null && blockEntity instanceof LockedBarrelBlockEntity barrelBE) {
-                    if (barrelBE.getNumberOfPlayersUsing(world, barrelBE) > 0) {
-                        return InteractionResult.PASS;
-                    }
-
-                    if (barrelBE.isLocked() && !StorageAccessUtil.canAccess(world, pos, player)) {
-                        return InteractionResult.PASS;
-                    }
-
-                    currentLockCode = barrelBE.getLockCode();
-                    currentCustomName = barrelBE.getCustomName();
-                    currentItems = barrelBE.getItemStackStorageHandler().getStacks();
-
-                    newState = StorageBlocks.BARRELS.get(storageMaterial).get().defaultBlockState().setValue(LockedBarrelBlock.FACING, world.getBlockState(pos).getValue(LockedBarrelBlock.FACING));
-                    newBlockEntity = new LockedBarrelBlockEntity(pos, newState);
-                }
-            }
-        } else if (world.getBlockState(pos).getBlock() instanceof LockedHopperBlock hopperBlock) {
-            int currentStorageLevel = hopperBlock.getStorageMaterial() != null ? hopperBlock.getStorageMaterial().getStorageLevel() : 0;
-            boolean startingUpgrade = this.storageMaterial.getStorageLevel() == 0 || this.storageMaterial.getStorageLevel() == 1;
-            boolean canUpgrade = (startingUpgrade && (hopperBlock.getStorageMaterial() == null || hopperBlock.getStorageMaterial().getStorageLevel() == 0)) || currentStorageLevel == this.storageMaterial.getStorageLevel() - 1;
-
-            if (canUpgrade) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity != null && blockEntity instanceof LockedHopperBlockEntity hopperBE) {
-                    if (hopperBE.getNumberOfPlayersUsing(world, hopperBE) > 0) {
-                        return InteractionResult.PASS;
-                    }
-
-                    if (hopperBE.isLocked() && !StorageAccessUtil.canAccess(world, pos, player)) {
-                        return InteractionResult.PASS;
-                    }
-
-                    currentLockCode = hopperBE.getLockCode();
-                    currentCustomName = hopperBE.getCustomName();
-                    currentItems = hopperBE.getItemStackStorageHandler().getStacks();
-
-                    newState = StorageBlocks.HOPPERS.get(storageMaterial).get().defaultBlockState().setValue(LockedHopperBlock.FACING, world.getBlockState(pos).getValue(LockedHopperBlock.FACING)).setValue(LockedHopperBlock.ENABLED, world.getBlockState(pos).getValue(LockedHopperBlock.ENABLED));
-                    newBlockEntity = new LockedHopperBlockEntity(pos, newState);
-                }
-            }
-        } else if (world.getBlockState(pos).getBlock() instanceof LockedShulkerBoxBlock shulkerBlock) {
-            int currentStorageLevel = shulkerBlock.getStorageMaterial() != null ? shulkerBlock.getStorageMaterial().getStorageLevel() : 0;
-            boolean startingUpgrade = this.storageMaterial.getStorageLevel() == 0 || this.storageMaterial.getStorageLevel() == 1;
-            boolean canUpgrade = (startingUpgrade && (shulkerBlock.getStorageMaterial() == null || shulkerBlock.getStorageMaterial().getStorageLevel() == 0)) || currentStorageLevel == this.storageMaterial.getStorageLevel() - 1;
-
-            if (canUpgrade) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity != null && blockEntity instanceof LockedShulkerBoxBlockEntity storageBE) {
-                    if (!storageBE.isClosed()) {
-                        return InteractionResult.PASS;
-                    }
-
-                    if (storageBE.isLocked() && !StorageAccessUtil.canAccess(world, pos, player)) {
-                        return InteractionResult.PASS;
-                    }
-
-                    currentLockCode = storageBE.getLockCode();
-                    currentCustomName = storageBE.getCustomName();
-                    currentItems = storageBE.getItemStackStorageHandler().getStacks();
-
-                    newState = StorageBlocks.SHULKERS.get(storageMaterial).get().defaultBlockState().setValue(ShulkerBoxBlock.FACING, world.getBlockState(pos).getValue(ShulkerBoxBlock.FACING));
-
-                    LockedShulkerBoxBlockEntity newShulkerEntity = new LockedShulkerBoxBlockEntity(pos, newState);
-                    newShulkerEntity.setColor(storageBE.getColor());
-                    newBlockEntity = newShulkerEntity;
-                }
-            }
-        } else if (world.getBlockState(pos).getBlock() instanceof ChestBlock chestToUpgrade) {
-            if (this.storageMaterial.getStorageLevel() == 0 || this.storageMaterial.getStorageLevel() == 1) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity != null && blockEntity instanceof ChestBlockEntity chestBE) {
-                    if (ChestBlockEntity.getOpenCount(world, pos) > 0) {
-                        return InteractionResult.PASS;
-                    }
-
-                    if (!chestBE.canOpen(player)) {
-                        return InteractionResult.PASS;
-                    }
-
-                    currentCustomName = chestBE.getCustomName();
-
-                    currentItems = NonNullList.withSize(chestBE.getContainerSize(), ItemStack.EMPTY);
-
-                    for (int slot = 0; slot < chestBE.getContainerSize(); slot++) {
-                        currentItems.set(slot, chestBE.getItem(slot).copy());
-                    }
-
-                    newState = StorageBlocks.CHESTS.get(storageMaterial).get().defaultBlockState().setValue(BaseStorageBlock.FACING, world.getBlockState(pos).getValue(ChestBlock.FACING));
-                    newBlockEntity = new LockedChestBlockEntity(pos, newState);
-                }
-            }
-        } else if (world.getBlockState(pos).getBlock() instanceof BarrelBlock barrelToUpgrade) {
-            if (this.storageMaterial.getStorageLevel() == 0 || this.storageMaterial.getStorageLevel() == 1) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity != null && blockEntity instanceof BarrelBlockEntity barrelBE) {
-                    if (((BarrelBlockEntityAccessor) barrelBE).getOpenersCounter().getOpenerCount() > 0) {
-                        return InteractionResult.PASS;
-                    }
-
-                    if (!barrelBE.canOpen(player)) {
-                        return InteractionResult.PASS;
-                    }
-
-                    currentCustomName = barrelBE.getCustomName();
-
-                    currentItems = NonNullList.withSize(barrelBE.getContainerSize(), ItemStack.EMPTY);
-
-                    for (int slot = 0; slot < barrelBE.getContainerSize(); slot++) {
-                        currentItems.set(slot, barrelBE.getItem(slot).copy());
-                    }
-
-                    newState = StorageBlocks.BARRELS.get(storageMaterial).get().defaultBlockState().setValue(LockedBarrelBlock.FACING, world.getBlockState(pos).getValue(BarrelBlock.FACING));
-                    newBlockEntity = new LockedBarrelBlockEntity(pos, newState);
-                }
-            }
-        } else if (world.getBlockState(pos).getBlock() instanceof HopperBlock hopperToUpgrade) {
-            if (this.storageMaterial.getStorageLevel() == 0 || this.storageMaterial.getStorageLevel() == 1) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity != null && blockEntity instanceof HopperBlockEntity hopperBE) {
-                    if (!hopperBE.canOpen(player)) {
-                        return InteractionResult.PASS;
-                    }
-
-                    currentCustomName = hopperBE.getCustomName();
-                    currentItems = NonNullList.withSize(hopperBE.getContainerSize(), ItemStack.EMPTY);
-
-                    for (int slot = 0; slot < hopperBE.getContainerSize(); slot++) {
-                        currentItems.set(slot, hopperBE.getItem(slot).copy());
-                    }
-
-                    newState = StorageBlocks.HOPPERS.get(storageMaterial).get().defaultBlockState().setValue(LockedHopperBlock.FACING, world.getBlockState(pos).getValue(HopperBlock.FACING)).setValue(LockedHopperBlock.ENABLED, world.getBlockState(pos).getValue(HopperBlock.ENABLED));
-                    newBlockEntity = new LockedHopperBlockEntity(pos, newState);
-                }
-            }
-        } else if (world.getBlockState(pos).getBlock() instanceof ShulkerBoxBlock shulkerToUpgrade) {
-            if (this.storageMaterial.getStorageLevel() == 0 || this.storageMaterial.getStorageLevel() == 1) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity != null && blockEntity instanceof ShulkerBoxBlockEntity shulkerBE) {
-                    if (!shulkerBE.isClosed()) {
-                        return InteractionResult.PASS;
-                    }
-
-                    if (!shulkerBE.canOpen(player)) {
-                        return InteractionResult.PASS;
-                    }
-
-                    currentCustomName = shulkerBE.getCustomName();
-
-                    currentItems = NonNullList.withSize(shulkerBE.getContainerSize(), ItemStack.EMPTY);
-
-                    for (int slot = 0; slot < shulkerBE.getContainerSize(); slot++) {
-                        currentItems.set(slot, shulkerBE.getItem(slot).copy());
-                    }
-
-                    newState = StorageBlocks.SHULKERS.get(storageMaterial).get().defaultBlockState().setValue(ShulkerBoxBlock.FACING, world.getBlockState(pos).getValue(ShulkerBoxBlock.FACING));
-                    LockedShulkerBoxBlockEntity newShulkerEntity = new LockedShulkerBoxBlockEntity(pos, newState);
-                    newShulkerEntity.setColor(shulkerToUpgrade.getColor());
-                    newBlockEntity = newShulkerEntity;
-                }
-            }
-        }
-
-        if (newState == null || newBlockEntity == null) {
+        PreparedLevelUpgrade upgrade = LevelUpgrades.prepare(world, pos, player, this.storageMaterial);
+        if (upgrade == null) {
             return InteractionResult.PASS;
         }
 
-        world.removeBlockEntity(pos);
-        world.removeBlock(pos, false);
-
-        world.setBlock(pos, newState, 3);
-        world.setBlockEntity(newBlockEntity);
-
-        world.sendBlockUpdated(pos, newState, newState, 3);
-
-        BlockEntity freshlySetBE = world.getBlockEntity(pos);
-
-        if (freshlySetBE instanceof BaseStorageBlockEntity baseStorageBlockEntity) {
-            if (currentCustomName != null) {
-                baseStorageBlockEntity.setCustomName(currentCustomName);
-            }
-
-            baseStorageBlockEntity.getItemStackStorageHandler().setStacks(currentItems);
-            baseStorageBlockEntity.setLockCode(currentLockCode);
-
+        if (LevelUpgrades.apply(world, pos, upgrade)) {
             if (!player.isCreative())
                 itemstack.shrink(1);
 

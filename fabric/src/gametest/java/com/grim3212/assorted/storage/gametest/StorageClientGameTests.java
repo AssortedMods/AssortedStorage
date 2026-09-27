@@ -4,7 +4,7 @@ import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.storage.Constants;
 import com.grim3212.assorted.storage.api.LargeItemStack;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.client.blockentity.state.CrateRenderState;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
 import com.grim3212.assorted.storage.common.block.blockentity.CrateBlockEntity;
@@ -85,7 +85,7 @@ public class StorageClientGameTests implements FabricClientGameTest {
     private static void tooltipsShowStorageInfo(ClientGameTestContext context) {
         context.runOnClient(client -> {
             List<String> bag = tooltipKeys(client, StorageUtil.setCodeOnStack("1234", new ItemStack(StorageItems.BAG.get())));
-            check(bag.contains(Constants.MOD_ID + ".info.locked") && bag.contains(Constants.MOD_ID + ".info.level_upgrade_level"), "a locked bag's tooltip is " + bag);
+            check(bag.contains("assortedlib.info.locked") && bag.contains("assortedlib.info.storage_level"), "a locked bag's tooltip is " + bag);
 
             List<String> upgrade = tooltipKeys(client, new ItemStack(StorageItems.AMOUNT_UPGRADE.get()));
             check(upgrade.contains(Constants.MOD_ID + ".info.upgrade.mode"), "an amount upgrade's tooltip is " + upgrade);

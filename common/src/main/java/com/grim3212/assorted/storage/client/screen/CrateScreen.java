@@ -5,7 +5,7 @@ import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.storage.Constants;
 import com.grim3212.assorted.storage.api.LargeItemStack;
 import com.grim3212.assorted.storage.api.crates.CrateLayout;
-import com.grim3212.assorted.storage.api.crates.ICrateUpgrade;
+import com.grim3212.assorted.lib.core.storage.ICrateUpgrade;
 import com.grim3212.assorted.storage.client.screen.buttons.ImageToggleButton;
 import com.grim3212.assorted.storage.common.inventory.crates.CrateContainer;
 import com.grim3212.assorted.storage.common.inventory.crates.CrateSidedInv;

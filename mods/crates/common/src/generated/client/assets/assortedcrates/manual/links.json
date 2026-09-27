@@ -1,0 +1,96 @@
+{
+  "links": [
+    {
+      "blocks": [
+        "assortedcrates:oak_crate",
+        "assortedcrates:spruce_crate",
+        "assortedcrates:birch_crate",
+        "assortedcrates:acacia_crate",
+        "assortedcrates:cherry_crate",
+        "assortedcrates:jungle_crate",
+        "assortedcrates:dark_oak_crate",
+        "assortedcrates:pale_oak_crate",
+        "assortedcrates:crimson_crate",
+        "assortedcrates:warped_crate",
+        "assortedcrates:mangrove_crate",
+        "assortedcrates:bamboo_crate"
+      ],
+      "page": "assortedstorage:crates/crates"
+    },
+    {
+      "blocks": [
+        "assortedcrates:oak_crate_double",
+        "assortedcrates:oak_crate_triple",
+        "assortedcrates:oak_crate_quadruple",
+        "assortedcrates:spruce_crate_double",
+        "assortedcrates:spruce_crate_triple",
+        "assortedcrates:spruce_crate_quadruple",
+        "assortedcrates:birch_crate_double",
+        "assortedcrates:birch_crate_triple",
+        "assortedcrates:birch_crate_quadruple",
+        "assortedcrates:acacia_crate_double",
+        "assortedcrates:acacia_crate_triple",
+        "assortedcrates:acacia_crate_quadruple",
+        "assortedcrates:cherry_crate_double",
+        "assortedcrates:cherry_crate_triple",
+        "assortedcrates:cherry_crate_quadruple",
+        "assortedcrates:jungle_crate_double",
+        "assortedcrates:jungle_crate_triple",
+        "assortedcrates:jungle_crate_quadruple",
+        "assortedcrates:dark_oak_crate_double",
+        "assortedcrates:dark_oak_crate_triple",
+        "assortedcrates:dark_oak_crate_quadruple",
+        "assortedcrates:pale_oak_crate_double",
+        "assortedcrates:pale_oak_crate_triple",
+        "assortedcrates:pale_oak_crate_quadruple",
+        "assortedcrates:crimson_crate_double",
+        "assortedcrates:crimson_crate_triple",
+        "assortedcrates:crimson_crate_quadruple",
+        "assortedcrates:warped_crate_double",
+        "assortedcrates:warped_crate_triple",
+        "assortedcrates:warped_crate_quadruple",
+        "assortedcrates:mangrove_crate_double",
+        "assortedcrates:mangrove_crate_triple",
+        "assortedcrates:mangrove_crate_quadruple",
+        "assortedcrates:bamboo_crate_double",
+        "assortedcrates:bamboo_crate_triple",
+        "assortedcrates:bamboo_crate_quadruple"
+      ],
+      "page": "assortedstorage:crates/sizes"
+    },
+    {
+      "blocks": [
+        "assortedcrates:crate_controller"
+      ],
+      "page": "assortedstorage:crates/controller"
+    },
+    {
+      "blocks": [
+        "assortedcrates:crate_bridge"
+      ],
+      "page": "assortedstorage:crates/bridge"
+    },
+    {
+      "blocks": [
+        "assortedcrates:crate_compacting"
+      ],
+      "page": "assortedstorage:crates/compacting"
+    },
+    {
+      "items": [
+        "assortedcrates:blank_upgrade",
+        "assortedcrates:glow_upgrade",
+        "assortedcrates:void_upgrade",
+        "assortedcrates:amount_upgrade",
+        "assortedcrates:redstone_upgrade"
+      ],
+      "page": "assortedstorage:crates/upgrades"
+    },
+    {
+      "items": [
+        "assortedcrates:rotator_majig"
+      ],
+      "page": "assortedstorage:crates/rotator_majig"
+    }
+  ]
+}

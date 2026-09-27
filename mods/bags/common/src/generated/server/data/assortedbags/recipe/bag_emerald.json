@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/emerald"
+    }
+  ],
+  "type": "assortedbags:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/emerald"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedbags:bags/level_1",
+    "M": "#c:gems/emerald"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedbags:bag_emerald"
+  }
+}

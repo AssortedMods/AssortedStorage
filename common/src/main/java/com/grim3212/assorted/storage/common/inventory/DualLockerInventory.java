@@ -2,7 +2,7 @@ package com.grim3212.assorted.storage.common.inventory;
 
 import com.grim3212.assorted.lib.core.inventory.impl.LockedItemStackStorageHandler;
 import com.grim3212.assorted.lib.core.inventory.locking.ILockable;
-import com.grim3212.assorted.storage.common.block.blockentity.BaseStorageBlockEntity;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;

@@ -1,10 +1,10 @@
 package com.grim3212.assorted.storage.common.item;
 
-import com.grim3212.assorted.storage.api.StorageMaterial;
-import com.grim3212.assorted.storage.api.block.IStorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageInfo;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.IStorageMaterial;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-
 
 /**
  * Shared block item for the storage blocks. Its lock and level lines come from the {@link

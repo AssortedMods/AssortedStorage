@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "#c:chests/wooden",
+    "D": "#c:deepslate",
+    "L": "#minecraft:bamboo_blocks"
+  },
+  "pattern": [
+    " D ",
+    "LCL",
+    "CDC"
+  ],
+  "result": {
+    "id": "assortedcrates:bamboo_crate_triple"
+  }
+}

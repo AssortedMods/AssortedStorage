@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_right_open",
+  "textures": {
+    "bottom": "assortedlocks:block/locked_iron_door_bottom",
+    "top": "assortedlocks:block/locked_iron_door_top"
+  }
+}

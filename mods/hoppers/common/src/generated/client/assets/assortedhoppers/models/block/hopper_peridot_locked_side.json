@@ -1,0 +1,10 @@
+{
+  "parent": "assortedhoppers:block/template_hopper_side",
+  "textures": {
+    "inside": "assortedhoppers:block/hoppers/peridot/hopper_inside",
+    "particle": "assortedhoppers:block/hoppers/peridot/hopper_outside",
+    "side": "assortedhoppers:block/hoppers/peridot/hopper_outside",
+    "top": "assortedhoppers:block/hoppers/peridot/hopper_top",
+    "topsides": "assortedhoppers:block/hoppers/peridot/locked_hopper_outside"
+  }
+}

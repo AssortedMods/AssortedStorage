@@ -1,6 +1,7 @@
 package com.grim3212.assorted.storage.client.screen;
 
-import com.grim3212.assorted.storage.Constants;
+import com.grim3212.assorted.lib.client.screen.storage.BaseStorageScreen;
+import com.grim3212.assorted.lib.client.screen.storage.StorageScreenTextures;
 import com.grim3212.assorted.storage.common.inventory.enderbag.EnderBagContainer;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -14,7 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
  */
 public class EnderBagScreen extends AbstractContainerScreen<EnderBagContainer> {
 
-    private static final Identifier CHEST_GUI_TEXTURE_9_COLS = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/generic_9x9.png");
+    private static final Identifier CHEST_GUI_TEXTURE_9_COLS = StorageScreenTextures.generic(9);
 
     private static final int X_ROWS = 3;
     private static final int Y_COLS = 9;

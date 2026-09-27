@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "conditions": [
+        {
+          "condition": "assortedlocks:mod_loaded",
+          "modId": "assortedbuildingblocks"
+        },
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "assortedlocks:optional_item",
+          "conditions": [
+            {
+              "block": "assortedlocks:locked_chain_link_door",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "half": "lower"
+              }
+            }
+          ],
+          "name": "assortedbuildingblocks:chain_link_door"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "assortedlocks:blocks/locked_chain_link_door"
+}

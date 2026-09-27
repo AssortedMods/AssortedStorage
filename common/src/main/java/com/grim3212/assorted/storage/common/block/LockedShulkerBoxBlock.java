@@ -1,18 +1,19 @@
 package com.grim3212.assorted.storage.common.block;
 
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.lib.core.block.IBlockMapColor;
 import com.grim3212.assorted.lib.core.inventory.locking.ILockable;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.util.NBTHelper;
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
-import com.grim3212.assorted.storage.api.StorageMaterial;
-import com.grim3212.assorted.storage.api.block.IStorageMaterial;
-import com.grim3212.assorted.storage.common.block.blockentity.BaseStorageBlockEntity;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.IStorageMaterial;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.storage.common.block.blockentity.LockedShulkerBoxBlockEntity;
 import com.grim3212.assorted.storage.common.block.blockentity.StorageBlockEntityTypes;
-import com.grim3212.assorted.storage.common.item.StorageItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.Direction;
@@ -121,7 +122,7 @@ public class LockedShulkerBoxBlock extends Block implements EntityBlock, IStorag
 
     @Override
     protected InteractionResult useItemOn(ItemStack heldStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (this.canBeLocked(level, pos) && player.getItemInHand(hand).getItem() == StorageItems.LOCKSMITH_LOCK.get()) {
+        if (this.canBeLocked(level, pos) && LockItems.isLock(player.getItemInHand(hand))) {
             if (BaseStorageBlock.tryPlaceLock(level, pos, player, hand))
                 return InteractionResult.SUCCESS;
         }
@@ -132,7 +133,7 @@ public class LockedShulkerBoxBlock extends Block implements EntityBlock, IStorag
                 ILockable teStorage = (ILockable) tileentity;
 
                 if (teStorage.isLocked()) {
-                    ItemStack lockStack = StorageUtil.setCodeOnStack(teStorage.getLockCode(), new ItemStack(StorageItems.LOCKSMITH_LOCK.get()));
+                    ItemStack lockStack = LockItems.createLock(teStorage.getLockCode());
 
                     if (removeLock(level, pos, player)) {
                         ItemEntity blockDropped = new ItemEntity(level, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), lockStack);

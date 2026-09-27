@@ -5,7 +5,7 @@ import com.grim3212.assorted.lib.core.inventory.INamed;
 import com.grim3212.assorted.lib.core.inventory.locking.ILockable;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.platform.Services;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.storage.api.Wood;
 import com.grim3212.assorted.storage.api.crates.CrateLayout;
 import com.grim3212.assorted.storage.api.crates.ICrateSystem;
@@ -45,7 +45,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-
 
 public class CrateBlock extends Block implements IBlockOnPlayerBreak, EntityBlock, ICrateSystem {
 

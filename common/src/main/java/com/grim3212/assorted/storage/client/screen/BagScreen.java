@@ -1,7 +1,8 @@
 package com.grim3212.assorted.storage.client.screen;
 
-import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.client.screen.storage.BaseStorageScreen;
+import com.grim3212.assorted.lib.client.screen.storage.StorageScreenTextures;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.common.inventory.bag.BagContainer;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -15,12 +16,12 @@ import net.minecraft.world.entity.player.Inventory;
  */
 public class BagScreen extends AbstractContainerScreen<BagContainer> {
 
-    private static final Identifier CHEST_GUI_TEXTURE_9_COLS = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/generic_9x9.png");
-    private static final Identifier CHEST_GUI_TEXTURE_10_COLS = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/generic_9x10.png");
-    private static final Identifier CHEST_GUI_TEXTURE_11_COLS = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/generic_9x11.png");
-    private static final Identifier CHEST_GUI_TEXTURE_12_COLS = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/generic_9x12.png");
-    private static final Identifier CHEST_GUI_TEXTURE_13_COLS = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/generic_9x13.png");
-    private static final Identifier CHEST_GUI_TEXTURE_14_COLS = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/generic_9x14.png");
+    private static final Identifier CHEST_GUI_TEXTURE_9_COLS = StorageScreenTextures.generic(9);
+    private static final Identifier CHEST_GUI_TEXTURE_10_COLS = StorageScreenTextures.generic(10);
+    private static final Identifier CHEST_GUI_TEXTURE_11_COLS = StorageScreenTextures.generic(11);
+    private static final Identifier CHEST_GUI_TEXTURE_12_COLS = StorageScreenTextures.generic(12);
+    private static final Identifier CHEST_GUI_TEXTURE_13_COLS = StorageScreenTextures.generic(13);
+    private static final Identifier CHEST_GUI_TEXTURE_14_COLS = StorageScreenTextures.generic(14);
 
     private static final int START_OF_PLAYER_INVENTORY_Y = 180;
     private static final int HEIGHT_OF_PLAYER_INVENTORY = 96;

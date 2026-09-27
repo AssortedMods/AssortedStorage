@@ -2,7 +2,7 @@ package com.grim3212.assorted.storage.client.data;
 
 import com.grim3212.assorted.lib.data.LibLanguageProvider;
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
 import com.grim3212.assorted.storage.common.block.StorageBlocks.CrateGroup;
 import net.minecraft.data.PackOutput;
@@ -26,9 +26,6 @@ public class StorageLanguageProvider extends LibLanguageProvider {
     protected void addNames() {
         this.add("itemGroup.assortedstorage", "Assorted Storage");
 
-        this.add("assortedstorage.info.combo", "Combo: %s");
-        this.add("assortedstorage.info.locked", "Locked");
-        this.add("assortedstorage.info.level_upgrade_level", "Storage Level %s");
         this.add("assortedstorage.info.level_upgrade", "Can be used on:");
         this.add("assortedstorage.info.level_upgrade_shift", "\u00A7lHold Shift\u00A7r to See \u00A7bSupported Blocks");
         this.add("assortedstorage.info.amount", "Amount %s");

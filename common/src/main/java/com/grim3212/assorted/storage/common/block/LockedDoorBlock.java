@@ -1,8 +1,9 @@
 package com.grim3212.assorted.storage.common.block;
 
 import com.grim3212.assorted.lib.platform.Services;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
-import com.grim3212.assorted.storage.common.block.blockentity.BaseLockedBlockEntity;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.inventory.locking.BaseLockedBlockEntity;
+import com.grim3212.assorted.storage.common.block.blockentity.StorageBlockEntityTypes;
 import com.grim3212.assorted.storage.mixin.block.DoorBlockAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -150,7 +151,7 @@ public class LockedDoorBlock extends DoorBlock implements EntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BaseLockedBlockEntity(pos, state);
+        return new BaseLockedBlockEntity(StorageBlockEntityTypes.BASE_LOCKED.get(), pos, state);
     }
 
     private boolean removeLock(Level worldIn, BlockPos pos, Player entityplayer) {

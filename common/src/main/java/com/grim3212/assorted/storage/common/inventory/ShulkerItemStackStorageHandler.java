@@ -1,6 +1,7 @@
 package com.grim3212.assorted.storage.common.inventory;
 
-import com.grim3212.assorted.storage.common.block.blockentity.BaseStorageBlockEntity;
+import com.grim3212.assorted.lib.core.storage.StorageItemStackStorageHandler;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

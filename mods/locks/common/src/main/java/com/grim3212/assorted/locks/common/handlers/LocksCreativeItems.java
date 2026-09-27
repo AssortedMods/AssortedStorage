@@ -1,0 +1,28 @@
+package com.grim3212.assorted.locks.common.handlers;
+
+import com.grim3212.assorted.lib.core.creative.SharedCreativeTabs;
+import com.grim3212.assorted.locks.Family;
+import com.grim3212.assorted.locks.common.block.LocksBlocks;
+import com.grim3212.assorted.locks.common.item.LocksItems;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
+
+/** This mod's share of the Assorted Storage tab, which every part asks for and the first to load registers. */
+public class LocksCreativeItems {
+
+    public static final ResourceKey<CreativeModeTab> TAB = SharedCreativeTabs.tab(Identifier.fromNamespaceAndPath(Family.ID, "tab"), Family.ICONS);
+
+    public static void init() {
+        // First in the tab, as it was when this was all one mod.
+        SharedCreativeTabs.add(TAB, 100, LocksCreativeItems::items);
+    }
+
+    private static List<ItemStack> items() {
+        return List.of(new ItemStack(LocksBlocks.LOCKSMITH_WORKBENCH.get()), new ItemStack(LocksItems.LOCKSMITH_KEY.get()),
+                new ItemStack(LocksItems.LOCKSMITH_LOCK.get()), new ItemStack(LocksItems.KEY_RING.get()));
+    }
+}

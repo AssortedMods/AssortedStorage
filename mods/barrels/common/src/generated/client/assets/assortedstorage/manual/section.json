@@ -1,0 +1,9 @@
+{
+  "icon": [
+    "assortedcontainers:wood_cabinet",
+    "assortedcrates:oak_crate",
+    "assortedbarrels:barrel_gold",
+    "assortedbags:bag"
+  ],
+  "sort_order": 80
+}

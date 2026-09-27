@@ -2,7 +2,7 @@ package com.grim3212.assorted.storage.client.model;
 
 import com.google.common.collect.Maps;
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import net.minecraft.resources.Identifier;
 
 import java.util.Map;

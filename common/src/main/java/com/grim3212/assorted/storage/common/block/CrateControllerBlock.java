@@ -1,13 +1,14 @@
 package com.grim3212.assorted.storage.common.block;
 
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.lib.core.inventory.INamed;
 import com.grim3212.assorted.lib.core.inventory.locking.ILockable;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.platform.Services;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.storage.api.crates.ICrateSystem;
 import com.grim3212.assorted.storage.common.block.blockentity.CrateControllerBlockEntity;
-import com.grim3212.assorted.storage.common.item.StorageItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Direction;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-
 
 public class CrateControllerBlock extends Block implements EntityBlock, ICrateSystem {
 
@@ -96,7 +96,7 @@ public class CrateControllerBlock extends Block implements EntityBlock, ICrateSy
 
     @Override
     protected InteractionResult useItemOn(ItemStack heldStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
-        if (this.canBeLocked(worldIn, pos) && player.getItemInHand(handIn).getItem() == StorageItems.LOCKSMITH_LOCK.get()) {
+        if (this.canBeLocked(worldIn, pos) && LockItems.isLock(player.getItemInHand(handIn))) {
             if (BaseStorageBlock.tryPlaceLock(worldIn, pos, player, handIn))
                 return InteractionResult.SUCCESS;
         }
@@ -108,7 +108,7 @@ public class CrateControllerBlock extends Block implements EntityBlock, ICrateSy
                     ILockable teStorage = (ILockable) tileentity;
 
                     if (teStorage.isLocked()) {
-                        ItemStack lockStack = StorageUtil.setCodeOnStack(teStorage.getLockCode(), new ItemStack(StorageItems.LOCKSMITH_LOCK.get()));
+                        ItemStack lockStack = LockItems.createLock(teStorage.getLockCode());
 
                         if (BaseStorageBlock.tryRemoveLock(worldIn, pos, player)) {
                             ItemEntity blockDropped = new ItemEntity(worldIn, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), lockStack);

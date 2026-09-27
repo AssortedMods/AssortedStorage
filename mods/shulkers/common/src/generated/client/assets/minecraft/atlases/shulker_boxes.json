@@ -1,0 +1,96 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/normal"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/stone"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/copper"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/iron"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/amethyst"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/emerald"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/gold"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/diamond"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/netherite"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/aluminum"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/tin"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/topaz"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/peridot"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/lead"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/nickel"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/sapphire"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/bronze"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/ruby"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/invar"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/silver"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/electrum"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/steel"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "assortedshulkers:model/shulkers/platinum"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "links": [
+    {
+      "blocks": [
+        "assortedcontainers:locker"
+      ],
+      "page": "assortedstorage:furniture/locker"
+    },
+    {
+      "blocks": [
+        "assortedcontainers:wood_cabinet",
+        "assortedcontainers:glass_cabinet"
+      ],
+      "page": "assortedstorage:furniture/cabinets"
+    },
+    {
+      "blocks": [
+        "assortedcontainers:gold_safe",
+        "assortedcontainers:obsidian_safe"
+      ],
+      "page": "assortedstorage:furniture/safes"
+    },
+    {
+      "blocks": [
+        "assortedcontainers:item_tower"
+      ],
+      "page": "assortedstorage:furniture/item_tower"
+    },
+    {
+      "blocks": [
+        "assortedcontainers:oak_warehouse_crate",
+        "assortedcontainers:spruce_warehouse_crate",
+        "assortedcontainers:birch_warehouse_crate",
+        "assortedcontainers:acacia_warehouse_crate",
+        "assortedcontainers:cherry_warehouse_crate",
+        "assortedcontainers:jungle_warehouse_crate",
+        "assortedcontainers:dark_oak_warehouse_crate",
+        "assortedcontainers:pale_oak_warehouse_crate",
+        "assortedcontainers:crimson_warehouse_crate",
+        "assortedcontainers:warped_warehouse_crate",
+        "assortedcontainers:mangrove_warehouse_crate",
+        "assortedcontainers:bamboo_warehouse_crate"
+      ],
+      "page": "assortedstorage:furniture/warehouse"
+    }
+  ]
+}

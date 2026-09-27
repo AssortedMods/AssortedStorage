@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "#c:chests/ender",
+    "L": "#c:leathers",
+    "S": "#c:strings"
+  },
+  "pattern": [
+    "SLS",
+    "LCL",
+    "LLL"
+  ],
+  "result": {
+    "id": "assortedbags:ender_bag"
+  }
+}

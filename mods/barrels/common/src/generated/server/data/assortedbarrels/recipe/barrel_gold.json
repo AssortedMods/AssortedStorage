@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/gold"
+    }
+  ],
+  "type": "assortedbarrels:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/gold"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedbarrels:barrels/level_2",
+    "M": "#c:ingots/gold"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedbarrels:barrel_gold"
+  }
+}

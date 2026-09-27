@@ -1,0 +1,16 @@
+{
+  "values": [
+    "assortedcrates:oak_crate_triple",
+    "assortedcrates:spruce_crate_triple",
+    "assortedcrates:birch_crate_triple",
+    "assortedcrates:acacia_crate_triple",
+    "assortedcrates:cherry_crate_triple",
+    "assortedcrates:jungle_crate_triple",
+    "assortedcrates:dark_oak_crate_triple",
+    "assortedcrates:pale_oak_crate_triple",
+    "assortedcrates:crimson_crate_triple",
+    "assortedcrates:warped_crate_triple",
+    "assortedcrates:mangrove_crate_triple",
+    "assortedcrates:bamboo_crate_triple"
+  ]
+}

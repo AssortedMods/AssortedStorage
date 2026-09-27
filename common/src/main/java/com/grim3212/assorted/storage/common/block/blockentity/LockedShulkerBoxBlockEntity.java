@@ -1,10 +1,11 @@
 package com.grim3212.assorted.storage.common.block.blockentity;
 
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.StorageMaterial;
-import com.grim3212.assorted.storage.api.block.IStorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.IStorageMaterial;
 import com.grim3212.assorted.storage.common.block.LockedShulkerBoxBlock;
-import com.grim3212.assorted.storage.common.inventory.LockedMaterialContainer;
+import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
 import com.grim3212.assorted.storage.common.inventory.ShulkerItemStackStorageHandler;
 import com.grim3212.assorted.storage.common.inventory.StorageContainerTypes;
 import net.minecraft.core.BlockPos;

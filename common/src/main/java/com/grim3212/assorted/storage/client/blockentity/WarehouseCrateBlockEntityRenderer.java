@@ -2,12 +2,12 @@ package com.grim3212.assorted.storage.client.blockentity;
 
 import com.grim3212.assorted.storage.Constants;
 import com.grim3212.assorted.storage.api.Wood;
-import com.grim3212.assorted.storage.api.blockentity.IStorage;
+import com.grim3212.assorted.lib.core.storage.IStorage;
 import com.grim3212.assorted.storage.client.blockentity.state.WarehouseCrateRenderState;
 import com.grim3212.assorted.storage.client.model.StorageModelLayers;
 import com.grim3212.assorted.storage.client.model.StorageModelState;
 import com.grim3212.assorted.storage.client.model.WarehouseCrateModel;
-import com.grim3212.assorted.storage.common.block.BaseStorageBlock;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.storage.common.block.WarehouseCrateBlock;
 import com.grim3212.assorted.storage.common.block.blockentity.WarehouseCrateBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;

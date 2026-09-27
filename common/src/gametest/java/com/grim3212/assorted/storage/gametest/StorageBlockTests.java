@@ -5,7 +5,7 @@ import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.storage.api.LockerHalf;
 import com.grim3212.assorted.storage.common.block.LockerBlock;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
-import com.grim3212.assorted.storage.common.block.blockentity.BaseStorageBlockEntity;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.storage.common.block.blockentity.LockerBlockEntity;
 import com.grim3212.assorted.storage.common.block.blockentity.WoodCabinetBlockEntity;
 import com.grim3212.assorted.storage.common.item.StorageItems;

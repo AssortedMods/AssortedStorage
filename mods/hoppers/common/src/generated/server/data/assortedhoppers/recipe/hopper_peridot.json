@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/peridot"
+    }
+  ],
+  "type": "assortedhoppers:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/peridot"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedhoppers:hoppers/level_1",
+    "M": "#c:gems/peridot"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedhoppers:hopper_peridot"
+  }
+}

@@ -1,5 +1,6 @@
 package com.grim3212.assorted.storage.client.blockentity;
 
+import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
 import com.grim3212.assorted.lib.client.util.RenderHelper;
 import com.grim3212.assorted.storage.api.LargeItemStack;
 import com.grim3212.assorted.storage.api.StreamHelper;
@@ -12,7 +13,6 @@ import com.grim3212.assorted.storage.client.util.ClientResources;
 import com.grim3212.assorted.storage.common.block.CrateBlock;
 import com.grim3212.assorted.storage.common.block.blockentity.CrateBlockEntity;
 import com.grim3212.assorted.storage.common.inventory.crates.CrateSidedInv;
-import com.grim3212.assorted.storage.common.item.PadlockItem;
 import com.grim3212.assorted.storage.common.item.upgrades.AmountUpgradeItem;
 import com.grim3212.assorted.storage.common.item.upgrades.VoidUpgradeItem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -153,7 +153,7 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
     private void submitUpgrades(CrateRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
         poseStack.pushPose();
         for (ItemStack stack : state.upgrades) {
-            if (stack.getItem() instanceof PadlockItem) {
+            if (LockItems.isLock(stack)) {
                 PadlockUpgradeRenderer.INSTANCE.submit(state, stack, poseStack, submitNodeCollector);
             } else if (stack.getItem() instanceof VoidUpgradeItem) {
                 VoidUpgradeRenderer.INSTANCE.submit(state, stack, poseStack, submitNodeCollector);

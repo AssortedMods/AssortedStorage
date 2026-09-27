@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedshulkers:cross_loader_data_matches_translator",
+  "structure": "assortedshulkers:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

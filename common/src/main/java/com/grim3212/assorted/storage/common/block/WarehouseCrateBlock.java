@@ -1,5 +1,6 @@
 package com.grim3212.assorted.storage.common.block;
 
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.storage.api.Wood;
 import com.grim3212.assorted.storage.common.block.blockentity.WarehouseCrateBlockEntity;
 import net.minecraft.core.BlockPos;

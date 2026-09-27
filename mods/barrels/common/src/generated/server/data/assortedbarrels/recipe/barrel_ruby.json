@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/ruby"
+    }
+  ],
+  "type": "assortedbarrels:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/ruby"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedbarrels:barrels/level_2",
+    "M": "#c:gems/ruby"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedbarrels:barrel_ruby"
+  }
+}

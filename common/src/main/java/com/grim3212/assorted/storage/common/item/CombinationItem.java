@@ -1,5 +1,6 @@
 package com.grim3212.assorted.storage.common.item;
 
+import com.grim3212.assorted.lib.core.storage.StorageInfo;
 import net.minecraft.world.item.Item;
 
 

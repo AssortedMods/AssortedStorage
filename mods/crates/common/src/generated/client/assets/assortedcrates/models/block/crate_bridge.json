@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "assortedcrates:block/crates/crate_bridge"
+  }
+}

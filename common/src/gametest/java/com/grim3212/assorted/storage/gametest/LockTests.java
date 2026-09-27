@@ -2,13 +2,13 @@ package com.grim3212.assorted.storage.gametest;
 
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import com.grim3212.assorted.lib.platform.Services;
-import com.grim3212.assorted.storage.common.block.BaseStorageBlock;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.storage.common.block.LockedCopperDoorBlock;
 import com.grim3212.assorted.storage.common.block.LockedDoorBlock;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
-import com.grim3212.assorted.storage.common.block.blockentity.BaseLockedBlockEntity;
+import com.grim3212.assorted.lib.core.inventory.locking.BaseLockedBlockEntity;
 import com.grim3212.assorted.storage.common.block.blockentity.LockedEnderChestBlockEntity;
 import com.grim3212.assorted.storage.common.block.blockentity.WoodCabinetBlockEntity;
 import com.grim3212.assorted.storage.common.inventory.LocksmithWorkbenchContainer;

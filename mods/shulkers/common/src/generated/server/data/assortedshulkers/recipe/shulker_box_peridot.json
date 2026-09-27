@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/peridot"
+    }
+  ],
+  "type": "assortedshulkers:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/peridot"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedshulkers:shulkers/level_1",
+    "M": "#c:gems/peridot"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedshulkers:shulker_box_peridot"
+  }
+}

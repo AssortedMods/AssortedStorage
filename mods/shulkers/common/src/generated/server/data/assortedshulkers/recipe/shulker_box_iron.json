@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/iron"
+    }
+  ],
+  "type": "assortedshulkers:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/iron"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedshulkers:shulkers/level_0",
+    "M": "#c:ingots/iron"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedshulkers:shulker_box_iron"
+  }
+}

@@ -2,7 +2,7 @@ package com.grim3212.assorted.storage.gametest;
 
 import com.grim3212.assorted.lib.core.inventory.IMenuDataProvider;
 import com.grim3212.assorted.lib.core.inventory.MenuData;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.api.Wood;
 import com.grim3212.assorted.storage.common.block.StorageBlocks;
 import io.netty.buffer.Unpooled;

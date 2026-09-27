@@ -3,7 +3,7 @@ package com.grim3212.assorted.storage.data;
 import com.grim3212.assorted.lib.data.LibBlockTagProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.util.LibCommonTags;
-import com.grim3212.assorted.storage.api.StorageMaterial;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.storage.api.StorageTags;
 import com.grim3212.assorted.storage.common.block.*;
 import com.grim3212.assorted.storage.common.block.StorageBlocks.CrateGroup;

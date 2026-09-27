@@ -1,6 +1,6 @@
 package com.grim3212.assorted.storage.compat.curios;
 
-import com.grim3212.assorted.storage.api.StorageAccessUtil;
+import com.grim3212.assorted.lib.core.inventory.locking.StorageAccessUtil;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 import top.theillusivec4.curios.api.CuriosApi;

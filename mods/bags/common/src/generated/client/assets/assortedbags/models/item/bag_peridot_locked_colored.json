@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "assortedbags:item/bag_material_colored_lock_cutout",
+    "layer1": "assortedbags:item/bag_strap_lock_cutout",
+    "layer2": "assortedbags:item/bag_peridot",
+    "layer3": "assortedbags:item/bag_lock"
+  }
+}

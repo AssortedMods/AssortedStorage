@@ -1,11 +1,11 @@
 package com.grim3212.assorted.storage.client.blockentity;
 
 import com.grim3212.assorted.storage.Constants;
-import com.grim3212.assorted.storage.api.blockentity.IStorage;
+import com.grim3212.assorted.lib.core.storage.IStorage;
 import com.grim3212.assorted.storage.client.blockentity.state.ItemTowerRenderState;
 import com.grim3212.assorted.storage.client.model.ItemTowerModel;
 import com.grim3212.assorted.storage.client.model.StorageModelLayers;
-import com.grim3212.assorted.storage.common.block.BaseStorageBlock;
+import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.storage.common.block.blockentity.ItemTowerBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

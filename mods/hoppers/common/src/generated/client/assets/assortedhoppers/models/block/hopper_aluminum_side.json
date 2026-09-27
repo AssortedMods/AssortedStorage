@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/block",
+  "fabric:type": "assortedhoppers:locked",
+  "loader": "assortedhoppers:locked",
+  "locked": "assortedhoppers:block/hopper_aluminum_locked_side",
+  "textures": {
+    "particle": "assortedhoppers:block/hoppers/aluminum/hopper_outside"
+  },
+  "unlocked": "assortedhoppers:block/hopper_aluminum_unlocked_side"
+}

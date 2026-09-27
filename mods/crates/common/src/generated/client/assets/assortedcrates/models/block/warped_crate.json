@@ -1,0 +1,7 @@
+{
+  "parent": "assortedcrates:block/base_crate_single",
+  "textures": {
+    "facing": "assortedcrates:block/crates/warped_facing",
+    "sides": "minecraft:block/warped_stem"
+  }
+}

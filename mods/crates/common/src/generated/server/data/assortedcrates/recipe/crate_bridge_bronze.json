@@ -1,0 +1,32 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/bronze"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/bronze"
+      ]
+    }
+  ],
+  "key": {
+    "C": "#assortedcrates:crates",
+    "D": "#c:deepslate",
+    "I": "#c:ingots/bronze",
+    "R": "minecraft:repeater"
+  },
+  "pattern": [
+    "DDD",
+    "RCR",
+    "DID"
+  ],
+  "result": {
+    "id": "assortedcrates:crate_bridge"
+  }
+}
