@@ -1,15 +1,12 @@
 package com.grim3212.assorted.bags.common.handlers;
 
-import com.grim3212.assorted.bags.BagsCommonMod;
 import com.grim3212.assorted.bags.Constants;
 import com.grim3212.assorted.bags.common.item.BagItem;
 import com.grim3212.assorted.bags.common.item.BagsItems;
 import com.grim3212.assorted.lib.core.creative.CreativeTabItems;
 import com.grim3212.assorted.lib.core.creative.SharedCreativeTabs;
-import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.util.NBTHelper;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DyeColor;
@@ -32,22 +29,9 @@ public class BagsCreativeItems {
             items.add(NBTHelper.putIntItemStack(new ItemStack(BagsItems.BAG.get()), BagItem.TAG_PRIMARY_COLOR, color.getId()));
         }
 
-        BagsItems.BAGS.forEach((mat, bag) -> {
-            if (canNotCraft(mat)) {
-                return;
-            }
-
-            items.add(bag.get());
-        });
+        BagsItems.BAGS.forEach((mat, bag) -> items.addIfObtainable(bag.get(), mat.getMaterial()));
 
         return items.getItems();
-    }
-
-    private static boolean canNotCraft(StorageMaterial type) {
-        // getTag returned an Optional<HolderSet>; getTagOrEmpty yields the holders directly, so
-        // "tag exists but is empty" collapses to a plain emptiness check.
-        return BagsCommonMod.COMMON_CONFIG.hideUncraftableItems.get()
-                && !BuiltInRegistries.ITEM.getTagOrEmpty(type.getMaterial()).iterator().hasNext();
     }
 
     public static void init() {

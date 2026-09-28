@@ -6,7 +6,6 @@ import com.grim3212.assorted.bags.common.handlers.BagsCreativeItems;
 import com.grim3212.assorted.bags.common.inventory.BagsContainerTypes;
 import com.grim3212.assorted.bags.common.item.BagsDataComponents;
 import com.grim3212.assorted.bags.common.item.BagsItems;
-import com.grim3212.assorted.bags.config.BagsCommonConfig;
 import com.grim3212.assorted.lib.crafting.SyncedRecipes;
 import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
@@ -14,8 +13,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class BagsCommonMod {
-
-    public static final BagsCommonConfig COMMON_CONFIG = new BagsCommonConfig();
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");

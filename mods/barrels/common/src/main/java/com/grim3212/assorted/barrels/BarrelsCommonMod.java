@@ -8,7 +8,6 @@ import com.grim3212.assorted.barrels.common.handlers.BarrelsCreativeItems;
 import com.grim3212.assorted.barrels.common.handlers.BarrelsLevelUpgrades;
 import com.grim3212.assorted.barrels.common.inventory.BarrelsContainerTypes;
 import com.grim3212.assorted.barrels.common.item.BarrelsDataComponents;
-import com.grim3212.assorted.barrels.config.BarrelsCommonConfig;
 import com.grim3212.assorted.lib.crafting.SyncedRecipes;
 import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
@@ -16,8 +15,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class BarrelsCommonMod {
-
-    public static final BarrelsCommonConfig COMMON_CONFIG = new BarrelsCommonConfig();
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");

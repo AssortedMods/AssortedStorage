@@ -8,7 +8,6 @@ import com.grim3212.assorted.chests.common.handlers.ChestsCreativeItems;
 import com.grim3212.assorted.chests.common.handlers.ChestsLevelUpgrades;
 import com.grim3212.assorted.chests.common.inventory.ChestsContainerTypes;
 import com.grim3212.assorted.chests.common.item.ChestsDataComponents;
-import com.grim3212.assorted.chests.config.ChestsCommonConfig;
 import com.grim3212.assorted.lib.crafting.SyncedRecipes;
 import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
@@ -16,8 +15,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class ChestsCommonMod {
-
-    public static final ChestsCommonConfig COMMON_CONFIG = new ChestsCommonConfig();
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");

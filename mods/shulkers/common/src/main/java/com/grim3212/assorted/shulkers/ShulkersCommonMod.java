@@ -11,13 +11,10 @@ import com.grim3212.assorted.shulkers.common.handlers.ShulkersCreativeItems;
 import com.grim3212.assorted.shulkers.common.handlers.ShulkersLevelUpgrades;
 import com.grim3212.assorted.shulkers.common.inventory.ShulkersContainerTypes;
 import com.grim3212.assorted.shulkers.common.item.ShulkersDataComponents;
-import com.grim3212.assorted.shulkers.config.ShulkersCommonConfig;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class ShulkersCommonMod {
-
-    public static final ShulkersCommonConfig COMMON_CONFIG = new ShulkersCommonConfig();
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
