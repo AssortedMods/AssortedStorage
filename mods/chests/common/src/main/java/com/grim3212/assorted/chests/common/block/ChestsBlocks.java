@@ -3,7 +3,6 @@ package com.grim3212.assorted.chests.common.block;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.chests.Constants;
-import com.grim3212.assorted.chests.Family;
 import com.grim3212.assorted.lib.core.storage.LockedMaterialContainer;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.core.storage.StorageTypes;
@@ -26,8 +25,8 @@ import java.util.stream.Stream;
 
 public class ChestsBlocks {
 
-    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
-    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
+    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     // Lambdas, as the types register after the blocks that name them.
     public static final StorageTypes<LockedChestBlockEntity, LockedMaterialContainer> TYPES = new StorageTypes<>(() -> ChestsBlockEntityTypes.LOCKED_CHEST.get(), () -> ChestsContainerTypes.LOCKED_CHEST.get());

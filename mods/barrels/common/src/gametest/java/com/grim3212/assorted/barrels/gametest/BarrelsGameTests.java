@@ -21,5 +21,6 @@ public final class BarrelsGameTests {
         LockedBarrelTests.register(out);
         MenuTests.register(out);
         TooltipTests.register(out);
+        FamilyTests.register(out);
     }
 }

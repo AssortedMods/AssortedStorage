@@ -3,7 +3,6 @@ package com.grim3212.assorted.crates.common.block;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.crates.Constants;
-import com.grim3212.assorted.crates.Family;
 import com.grim3212.assorted.crates.api.Wood;
 import com.grim3212.assorted.crates.api.crates.CrateLayout;
 import com.grim3212.assorted.crates.common.item.CratesBlockItem;
@@ -25,8 +24,8 @@ import java.util.stream.Stream;
 
 public class CratesBlocks {
 
-    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
-    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
+    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     public static final IRegistryObject<CrateCompactingBlock> CRATE_COMPACTING = register("crate_compacting", key -> new CrateCompactingBlock(CrateLayout.TRIPLE, BlockBehaviour.Properties.of().setId(key).mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASEDRUM).strength(1.5F, 6.0F).sound(SoundType.STONE)));
     public static final IRegistryObject<CrateControllerBlock> CRATE_CONTROLLER = register("crate_controller", key -> new CrateControllerBlock(BlockBehaviour.Properties.of().setId(key).mapColor(MapColor.DEEPSLATE).instrument(NoteBlockInstrument.BASEDRUM).strength(1.5F, 6.0F).sound(SoundType.STONE)));

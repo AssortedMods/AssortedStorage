@@ -2,7 +2,7 @@ package com.grim3212.assorted.locks.gametest;
 
 import com.google.gson.JsonParser;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
-import com.grim3212.assorted.locks.Family;
+import com.grim3212.assorted.locks.Constants;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import com.grim3212.assorted.locks.common.block.blockentity.LocksBlockEntityTypes;
 import com.mojang.serialization.JsonOps;
@@ -46,6 +46,6 @@ final class AliasTests {
     }
 
     private static Identifier old(Identifier id) {
-        return Identifier.fromNamespaceAndPath(Family.ID, id.getPath());
+        return Identifier.fromNamespaceAndPath(Constants.FAMILY_ID, id.getPath());
     }
 }

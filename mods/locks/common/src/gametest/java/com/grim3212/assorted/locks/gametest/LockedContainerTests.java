@@ -5,7 +5,7 @@ import com.grim3212.assorted.lib.core.inventory.locking.LockConversions;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.grim3212.assorted.lib.core.storage.shulker.LockedShulkerBoxBlockEntity;
-import com.grim3212.assorted.locks.Family;
+import com.grim3212.assorted.locks.Constants;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import com.grim3212.assorted.locks.common.block.blockentity.LockedEnderChestBlockEntity;
 import com.grim3212.assorted.locks.common.item.LocksItems;
@@ -222,12 +222,12 @@ final class LockedContainerTests {
             storage.setLockCode(CODE);
 
             CompoundTag saved = storage.saveWithFullMetadata(registries);
-            saved.putString("id", Family.ID + ":" + name(block));
+            saved.putString("id", Constants.FAMILY_ID + ":" + name(block));
             BlockEntity reloaded = BlockEntity.loadStatic(helper.absolutePos(pos), storage.getBlockState(), saved, registries);
 
-            helper.assertTrue(reloaded != null, "a " + Family.ID + ":" + name(block) + " block entity did not load");
-            helper.assertValueEqual(reloaded.getType(), storage.getType(), "the type " + Family.ID + ":" + name(block) + " loads as");
-            helper.assertValueEqual(((ILockable) reloaded).getLockCode(), CODE, "the lock of a " + Family.ID + ":" + name(block));
+            helper.assertTrue(reloaded != null, "a " + Constants.FAMILY_ID + ":" + name(block) + " block entity did not load");
+            helper.assertValueEqual(reloaded.getType(), storage.getType(), "the type " + Constants.FAMILY_ID + ":" + name(block) + " loads as");
+            helper.assertValueEqual(((ILockable) reloaded).getLockCode(), CODE, "the lock of a " + Constants.FAMILY_ID + ":" + name(block));
         }
 
         helper.succeed();

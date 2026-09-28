@@ -1,8 +1,8 @@
 package com.grim3212.assorted.barrels.gametest;
 
 import com.google.gson.JsonParser;
+import com.grim3212.assorted.barrels.Constants;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
-import com.grim3212.assorted.barrels.Family;
 import com.grim3212.assorted.barrels.common.block.BarrelsBlocks;
 import com.grim3212.assorted.barrels.common.block.blockentity.BarrelsBlockEntityTypes;
 import com.mojang.serialization.JsonOps;
@@ -45,6 +45,6 @@ final class AliasTests {
     }
 
     private static Identifier old(Identifier id) {
-        return Identifier.fromNamespaceAndPath(Family.ID, id.getPath());
+        return Identifier.fromNamespaceAndPath(Constants.FAMILY_ID, id.getPath());
     }
 }

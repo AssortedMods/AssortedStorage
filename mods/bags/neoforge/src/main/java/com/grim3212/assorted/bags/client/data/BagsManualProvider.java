@@ -1,12 +1,10 @@
 package com.grim3212.assorted.bags.client.data;
 
 import com.grim3212.assorted.bags.Constants;
-import com.grim3212.assorted.bags.Family;
 import com.grim3212.assorted.bags.common.item.BagsItems;
 import com.grim3212.assorted.lib.data.LibManualProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
@@ -19,13 +17,11 @@ import java.util.List;
 public class BagsManualProvider extends LibManualProvider {
 
     public BagsManualProvider(PackOutput output) {
-        super(output, Constants.MOD_ID, Family.ID);
+        super(output, Constants.MOD_ID, Constants.FAMILY_ID);
     }
 
     @Override
     protected void addChapters() {
-        this.section(Family.MANUAL_ORDER, Family.ICONS.toArray(Identifier[]::new));
-
         List<Item> bags = new ArrayList<>();
         bags.add(BagsItems.BAG.get());
         BagsItems.BAGS.values().stream().map(IRegistryObject::get).forEach(bags::add);

@@ -1,5 +1,17 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlocks"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlocks"
+    }
+  ],
   "key": {
     "K": "assortedlocks:locksmith_key",
     "X": "#c:ingots/iron"

@@ -1,7 +1,6 @@
 package com.grim3212.assorted.containers.common.block;
 
 import com.grim3212.assorted.containers.Constants;
-import com.grim3212.assorted.containers.Family;
 import com.grim3212.assorted.containers.api.Wood;
 import com.grim3212.assorted.containers.common.item.ContainersBlockItem;
 import com.grim3212.assorted.containers.common.item.LockerItem;
@@ -26,8 +25,8 @@ import java.util.stream.Stream;
 
 public class ContainersBlocks {
 
-    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
-    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
+    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     public static final IRegistryObject<WoodCabinetBlock> WOOD_CABINET = registerStorageItem("wood_cabinet", key -> new WoodCabinetBlock(Block.Properties.of().setId(key).mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD)));
     public static final IRegistryObject<GlassCabinetBlock> GLASS_CABINET = registerStorageItem("glass_cabinet", key -> new GlassCabinetBlock(Block.Properties.of().setId(key).mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).sound(SoundType.WOOD)));

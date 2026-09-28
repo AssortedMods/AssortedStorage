@@ -2,11 +2,9 @@ package com.grim3212.assorted.crates.client.data;
 
 import com.grim3212.assorted.lib.data.LibManualProvider;
 import com.grim3212.assorted.crates.Constants;
-import com.grim3212.assorted.crates.Family;
 import com.grim3212.assorted.crates.common.block.CratesBlocks;
 import com.grim3212.assorted.crates.common.item.CratesItems;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
@@ -19,13 +17,11 @@ import java.util.List;
 public class CratesManualProvider extends LibManualProvider {
 
     public CratesManualProvider(PackOutput output) {
-        super(output, Constants.MOD_ID, Family.ID);
+        super(output, Constants.MOD_ID, Constants.FAMILY_ID);
     }
 
     @Override
     protected void addChapters() {
-        this.section(Family.MANUAL_ORDER, Family.ICONS.toArray(Identifier[]::new));
-
         Block[] singles = CratesBlocks.CRATES.stream().map(group -> group.SINGLE.get()).toArray(Block[]::new);
         List<Block> bigger = new ArrayList<>();
         for (CratesBlocks.CrateGroup group : CratesBlocks.CRATES) {

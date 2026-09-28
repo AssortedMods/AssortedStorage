@@ -10,7 +10,9 @@ import com.grim3212.assorted.chests.common.inventory.ChestsContainerTypes;
 import com.grim3212.assorted.chests.common.item.ChestsDataComponents;
 import com.grim3212.assorted.chests.config.ChestsCommonConfig;
 import com.grim3212.assorted.lib.crafting.SyncedRecipes;
+import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class ChestsCommonMod {
@@ -19,6 +21,9 @@ public class ChestsCommonMod {
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
+        Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
+                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "chest_gold"), 50)
+                .manualOrder(80);
 
         ChestsDataComponents.init();
         ChestsBlocks.init();
@@ -32,6 +37,6 @@ public class ChestsCommonMod {
         ChestsCreativeItems.init();
 
         // Recipes unlocked when this was all one mod carry over to their new ids.
-        MovedIds.inherit(Family.ID, Constants.MOD_ID);
+        MovedIds.inherit(Constants.FAMILY_ID, Constants.MOD_ID);
     }
 }

@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:gems/topaz"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
     }
   ],
   "parent": "minecraft:recipes/root",
@@ -41,6 +45,10 @@
       "values": [
         "c:gems/topaz"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
     }
   ],
   "requirements": [

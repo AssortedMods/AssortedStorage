@@ -10,7 +10,9 @@ import com.grim3212.assorted.barrels.common.inventory.BarrelsContainerTypes;
 import com.grim3212.assorted.barrels.common.item.BarrelsDataComponents;
 import com.grim3212.assorted.barrels.config.BarrelsCommonConfig;
 import com.grim3212.assorted.lib.crafting.SyncedRecipes;
+import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class BarrelsCommonMod {
@@ -19,6 +21,9 @@ public class BarrelsCommonMod {
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
+        Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
+                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "barrel_gold"), 70)
+                .manualOrder(80);
 
         BarrelsDataComponents.init();
         BarrelsBlocks.init();
@@ -32,6 +37,6 @@ public class BarrelsCommonMod {
         BarrelsCreativeItems.init();
 
         // Recipes unlocked when this was all one mod carry over to their new ids.
-        MovedIds.inherit(Family.ID, Constants.MOD_ID);
+        MovedIds.inherit(Constants.FAMILY_ID, Constants.MOD_ID);
     }
 }

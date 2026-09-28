@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:gems/amethyst"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedchests"
     }
   ],
   "type": "assortedchests:locked_upgrading",
@@ -13,6 +17,10 @@
       "values": [
         "c:gems/amethyst"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedchests"
     }
   ],
   "key": {

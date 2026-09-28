@@ -9,7 +9,9 @@ import com.grim3212.assorted.crates.common.item.CratesDataComponents;
 import com.grim3212.assorted.crates.common.item.CratesItems;
 import com.grim3212.assorted.crates.common.network.CratesPackets;
 import com.grim3212.assorted.crates.config.CratesCommonConfig;
+import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
+import net.minecraft.resources.Identifier;
 
 public class CratesCommonMod {
 
@@ -17,6 +19,9 @@ public class CratesCommonMod {
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
+        Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
+                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "oak_crate"), 80)
+                .manualOrder(80);
 
         CratesDataComponents.init();
         CratesBlocks.init();
@@ -28,6 +33,6 @@ public class CratesCommonMod {
         CratesCreativeItems.init();
 
         // Recipes and advancements unlocked when this was all one mod carry over to their new ids.
-        MovedIds.inherit(Family.ID, Constants.MOD_ID);
+        MovedIds.inherit(Constants.FAMILY_ID, Constants.MOD_ID);
     }
 }

@@ -12,6 +12,10 @@
           "tag": "c:gems/topaz"
         }
       ]
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
     }
   ],
   "parent": "minecraft:recipes/root",
@@ -51,6 +55,10 @@
           ]
         }
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
     }
   ],
   "requirements": [

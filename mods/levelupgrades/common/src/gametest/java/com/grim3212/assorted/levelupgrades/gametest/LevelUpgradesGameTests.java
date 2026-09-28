@@ -20,5 +20,6 @@ public final class LevelUpgradesGameTests {
         AssetTests.register(out);
         AliasTests.register(out);
         CrossLoaderDataTests.register(out);
+        FamilyTests.register(out);
     }
 }

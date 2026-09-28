@@ -22,5 +22,6 @@ public final class ShulkersGameTests {
         MenuTests.register(out);
         TooltipTests.register(out);
         LockTests.register(out);
+        FamilyTests.register(out);
     }
 }

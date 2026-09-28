@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
   "pages": [
     {
       "type": "assortedlib:recipe",

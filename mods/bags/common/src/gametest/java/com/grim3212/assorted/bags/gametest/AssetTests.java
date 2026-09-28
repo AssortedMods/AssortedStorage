@@ -3,7 +3,6 @@ package com.grim3212.assorted.bags.gametest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.grim3212.assorted.bags.Constants;
-import com.grim3212.assorted.bags.Family;
 import com.grim3212.assorted.bags.common.handlers.BagsCreativeItems;
 import com.grim3212.assorted.lib.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,7 +59,7 @@ final class AssetTests {
         }
 
         helper.assertTrue(BuiltInRegistries.CREATIVE_MODE_TAB.containsKey(BagsCreativeItems.TAB), "the Assorted Storage creative tab is not registered");
-        helper.assertTrue(lang.has("itemGroup." + Family.ID), "the Assorted Storage creative tab has no name");
+        helper.assertTrue(lang.has("itemGroup." + Constants.FAMILY_ID), "the Assorted Storage creative tab has no name");
 
         helper.assertTrue(missing.isEmpty(), missing.size() + " missing assets: " + String.join(", ", missing));
         helper.succeed();

@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:ingots/platinum"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
     }
   ],
   "type": "assortedhoppers:locked_upgrading",
@@ -13,6 +17,10 @@
       "values": [
         "c:ingots/platinum"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
     }
   ],
   "key": {

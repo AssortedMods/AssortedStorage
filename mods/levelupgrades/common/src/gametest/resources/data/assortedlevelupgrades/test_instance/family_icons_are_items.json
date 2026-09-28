@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedlevelupgrades:family_icons_are_items",
+  "structure": "assortedlevelupgrades:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

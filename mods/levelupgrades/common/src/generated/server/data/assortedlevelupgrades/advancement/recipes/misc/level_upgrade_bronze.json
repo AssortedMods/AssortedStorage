@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:ingots/bronze"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
     }
   ],
   "parent": "minecraft:recipes/root",
@@ -41,6 +45,10 @@
       "values": [
         "c:ingots/bronze"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
     }
   ],
   "requirements": [

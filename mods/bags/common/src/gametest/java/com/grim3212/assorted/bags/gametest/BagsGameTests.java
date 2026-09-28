@@ -20,5 +20,6 @@ public final class BagsGameTests {
         CrossLoaderDataTests.register(out);
         BagTests.register(out);
         TooltipTests.register(out);
+        FamilyTests.register(out);
     }
 }

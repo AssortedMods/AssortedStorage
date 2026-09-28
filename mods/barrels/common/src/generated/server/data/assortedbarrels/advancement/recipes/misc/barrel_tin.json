@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:ingots/tin"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedbarrels"
     }
   ],
   "parent": "minecraft:recipes/root",
@@ -41,6 +45,10 @@
       "values": [
         "c:ingots/tin"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedbarrels"
     }
   ],
   "requirements": [

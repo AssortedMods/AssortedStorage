@@ -10,7 +10,9 @@ import com.grim3212.assorted.hoppers.common.inventory.HoppersContainerTypes;
 import com.grim3212.assorted.hoppers.common.item.HoppersDataComponents;
 import com.grim3212.assorted.hoppers.config.HoppersCommonConfig;
 import com.grim3212.assorted.lib.crafting.SyncedRecipes;
+import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeType;
 
 public class HoppersCommonMod {
@@ -19,6 +21,9 @@ public class HoppersCommonMod {
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
+        Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
+                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "hopper_gold"), 30)
+                .manualOrder(80);
 
         HoppersDataComponents.init();
         HoppersBlocks.init();
@@ -31,6 +36,6 @@ public class HoppersCommonMod {
         HoppersCreativeItems.init();
 
         // Recipes unlocked when this was all one mod carry over to their new ids.
-        MovedIds.inherit(Family.ID, Constants.MOD_ID);
+        MovedIds.inherit(Constants.FAMILY_ID, Constants.MOD_ID);
     }
 }

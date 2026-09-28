@@ -12,6 +12,10 @@
           "tag": "c:gems/emerald"
         }
       ]
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
     }
   ],
   "type": "minecraft:crafting_shaped",
@@ -33,6 +37,10 @@
           ]
         }
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
     }
   ],
   "key": {

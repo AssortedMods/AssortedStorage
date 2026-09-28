@@ -10,7 +10,6 @@ import com.grim3212.assorted.lib.platform.Services;
 import java.io.BufferedReader;
 import java.io.IOException;
 import com.grim3212.assorted.locks.Constants;
-import com.grim3212.assorted.locks.Family;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import com.grim3212.assorted.locks.common.handlers.LocksCreativeItems;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -156,7 +155,7 @@ final class AssetTests {
         }
 
         helper.assertTrue(BuiltInRegistries.CREATIVE_MODE_TAB.containsKey(LocksCreativeItems.TAB), "the Assorted Storage creative tab is not registered");
-        helper.assertTrue(lang.has("itemGroup." + Family.ID), "the Assorted Storage creative tab has no name");
+        helper.assertTrue(lang.has("itemGroup." + Constants.FAMILY_ID), "the Assorted Storage creative tab has no name");
 
         helper.assertTrue(missing.isEmpty(), missing.size() + " missing assets: " + String.join(", ", missing));
         helper.succeed();

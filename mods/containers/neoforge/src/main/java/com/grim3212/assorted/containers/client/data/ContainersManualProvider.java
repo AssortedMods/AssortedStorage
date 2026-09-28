@@ -1,12 +1,10 @@
 package com.grim3212.assorted.containers.client.data;
 
 import com.grim3212.assorted.containers.Constants;
-import com.grim3212.assorted.containers.Family;
 import com.grim3212.assorted.containers.common.block.ContainersBlocks;
 import com.grim3212.assorted.lib.data.LibManualProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 /**
@@ -16,13 +14,11 @@ import net.minecraft.world.level.block.Block;
 public class ContainersManualProvider extends LibManualProvider {
 
     public ContainersManualProvider(PackOutput output) {
-        super(output, Constants.MOD_ID, Family.ID);
+        super(output, Constants.MOD_ID, Constants.FAMILY_ID);
     }
 
     @Override
     protected void addChapters() {
-        this.section(Family.MANUAL_ORDER, Family.ICONS.toArray(Identifier[]::new));
-
         Block[] warehouse = ContainersBlocks.WAREHOUSE_CRATES.values().stream().map(IRegistryObject::get).toArray(Block[]::new);
         ChapterBuilder furniture = this.chapter("furniture", 8);
 

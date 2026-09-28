@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:ingots/iron"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedshulkers"
     }
   ],
   "type": "assortedshulkers:locked_upgrading",
@@ -13,6 +17,10 @@
       "values": [
         "c:ingots/iron"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedshulkers"
     }
   ],
   "key": {

@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:ingots/gold"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedbags"
     }
   ],
   "type": "assortedbags:locked_upgrading",
@@ -13,6 +17,10 @@
       "values": [
         "c:ingots/gold"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedbags"
     }
   ],
   "key": {

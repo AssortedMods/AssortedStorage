@@ -1,12 +1,10 @@
 package com.grim3212.assorted.levelupgrades.client.data;
 
 import com.grim3212.assorted.levelupgrades.Constants;
-import com.grim3212.assorted.levelupgrades.Family;
 import com.grim3212.assorted.levelupgrades.common.item.LevelUpgradesItems;
 import com.grim3212.assorted.lib.data.LibManualProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 /**
@@ -16,13 +14,11 @@ import net.minecraft.world.item.Item;
 public class LevelUpgradesManualProvider extends LibManualProvider {
 
     public LevelUpgradesManualProvider(PackOutput output) {
-        super(output, Constants.MOD_ID, Family.ID);
+        super(output, Constants.MOD_ID, Constants.FAMILY_ID);
     }
 
     @Override
     protected void addChapters() {
-        this.section(Family.MANUAL_ORDER, Family.ICONS.toArray(Identifier[]::new));
-
         Item[] upgrades = LevelUpgradesItems.LEVEL_UPGRADES.values().stream().map(IRegistryObject::get).toArray(Item[]::new);
         this.chapter("level_upgrades", 4).recipes("level_upgrades", upgrades).opens(upgrades);
     }

@@ -1,5 +1,17 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedbags"
+    }
+  ],
   "type": "assortedbags:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedbags"
+    }
+  ],
   "key": {
     "C": "#c:chests/wooden",
     "L": "#c:leathers",

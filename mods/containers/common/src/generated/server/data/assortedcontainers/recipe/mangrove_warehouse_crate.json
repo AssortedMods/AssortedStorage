@@ -1,5 +1,17 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
   "key": {
     "L": "#minecraft:mangrove_logs",
     "P": "minecraft:mangrove_planks"

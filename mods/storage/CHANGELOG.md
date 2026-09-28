@@ -5,7 +5,7 @@
 - Split into nine mods that can also be installed on their own. Assorted Chests, Assorted Barrels, Assorted Shulkers, Assorted Hoppers, Assorted Crates, Assorted Bags, Assorted Containers, Assorted Locks and Assorted Level Upgrades
 - Assorted Storage still includes all of them
 - Worlds from 11.x keep all your blocks, items, recipes and everything stored in them
-- Removed the config options for turning parts off. Install only the mods you want instead
+- Each part can be turned off again in config/assortedstorage-parts.toml
 - Each mod has its own config file now, so settings from assortedstorage-common.toml need setting again
 - Requires Assorted Lib 4.3.0
 

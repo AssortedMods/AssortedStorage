@@ -1,7 +1,6 @@
 package com.grim3212.assorted.hoppers.common.block.blockentity;
 
 import com.grim3212.assorted.hoppers.Constants;
-import com.grim3212.assorted.hoppers.Family;
 import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
 import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlockEntity;
 import com.grim3212.assorted.lib.platform.Services;
@@ -13,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 
 public class HoppersBlockEntityTypes {
-    public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistryProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistryProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     public static final IRegistryObject<BlockEntityType<LockedHopperBlockEntity>> LOCKED_HOPPER = BLOCK_ENTITIES.register("locked_hopper", () -> Services.PLATFORM.createBlockEntityType(LockedHopperBlockEntity::new, getHoppers()));
 

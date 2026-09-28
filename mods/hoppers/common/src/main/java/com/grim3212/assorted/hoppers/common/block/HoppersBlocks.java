@@ -1,7 +1,6 @@
 package com.grim3212.assorted.hoppers.common.block;
 
 import com.grim3212.assorted.hoppers.Constants;
-import com.grim3212.assorted.hoppers.Family;
 import com.grim3212.assorted.hoppers.common.item.HoppersBlockItem;
 import com.grim3212.assorted.hoppers.common.block.blockentity.HoppersBlockEntityTypes;
 import com.grim3212.assorted.hoppers.common.inventory.HoppersContainerTypes;
@@ -25,8 +24,8 @@ import java.util.stream.Stream;
 
 public class HoppersBlocks {
 
-    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
-    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
+    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     // Lambdas, as the types register after the blocks that name them.
     public static final StorageTypes<LockedHopperBlockEntity, LockedHopperContainer> TYPES = new StorageTypes<>(() -> HoppersBlockEntityTypes.LOCKED_HOPPER.get(), () -> HoppersContainerTypes.LOCKED_HOPPER.get());

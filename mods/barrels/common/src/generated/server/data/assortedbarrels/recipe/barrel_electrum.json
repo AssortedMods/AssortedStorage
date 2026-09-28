@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:ingots/electrum"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedbarrels"
     }
   ],
   "type": "assortedbarrels:locked_upgrading",
@@ -13,6 +17,10 @@
       "values": [
         "c:ingots/electrum"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedbarrels"
     }
   ],
   "key": {

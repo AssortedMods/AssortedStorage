@@ -1,3 +1,15 @@
 {
-  "type": "assortedshulkers:shulker_box_coloring"
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedshulkers"
+    }
+  ],
+  "type": "assortedshulkers:shulker_box_coloring",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedshulkers"
+    }
+  ]
 }

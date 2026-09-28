@@ -1,7 +1,7 @@
 package com.grim3212.assorted.bags.gametest;
 
 import com.google.gson.JsonParser;
-import com.grim3212.assorted.bags.Family;
+import com.grim3212.assorted.bags.Constants;
 import com.grim3212.assorted.bags.common.item.BagsItems;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.mojang.serialization.JsonOps;
@@ -33,6 +33,6 @@ final class AliasTests {
     }
 
     private static Identifier old(Identifier id) {
-        return Identifier.fromNamespaceAndPath(Family.ID, id.getPath());
+        return Identifier.fromNamespaceAndPath(Constants.FAMILY_ID, id.getPath());
     }
 }

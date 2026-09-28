@@ -16,7 +16,6 @@ import com.grim3212.assorted.lib.core.storage.shulker.ShulkerBoxBlockItem;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.locks.Constants;
-import com.grim3212.assorted.locks.Family;
 import com.grim3212.assorted.locks.api.Wood;
 import com.grim3212.assorted.locks.common.block.blockentity.LocksBlockEntityTypes;
 import com.grim3212.assorted.locks.common.inventory.LocksContainerTypes;
@@ -44,8 +43,8 @@ import java.util.stream.Stream;
 
 public class LocksBlocks {
 
-    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Family.ID);
-    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<Block> BLOCKS = RegistryProvider.create(Registries.BLOCK, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
+    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     /** Assorted Building Blocks' doors, by id since it may not be installed. They were Assorted Decor's. */
     public static final String BUILDING_BLOCKS_ID = "assortedbuildingblocks";

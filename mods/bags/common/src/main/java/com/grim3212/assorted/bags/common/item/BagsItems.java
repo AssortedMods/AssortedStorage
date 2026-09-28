@@ -2,7 +2,6 @@ package com.grim3212.assorted.bags.common.item;
 
 import com.google.common.collect.Maps;
 import com.grim3212.assorted.bags.Constants;
-import com.grim3212.assorted.bags.Family;
 import com.grim3212.assorted.lib.core.storage.StorageMaterial;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
@@ -17,7 +16,7 @@ import java.util.stream.Stream;
 
 public class BagsItems {
 
-    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<Item> ITEMS = RegistryProvider.create(Registries.ITEM, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     public static final IRegistryObject<EnderBagItem> ENDER_BAG = register("ender_bag", key -> new EnderBagItem(props(key)));
     public static final IRegistryObject<BagItem> BAG = register("bag", key -> new BagItem(props(key), null));

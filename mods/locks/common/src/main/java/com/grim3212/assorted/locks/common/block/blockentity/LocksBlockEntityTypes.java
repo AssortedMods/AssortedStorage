@@ -9,7 +9,6 @@ import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.locks.Constants;
-import com.grim3212.assorted.locks.Family;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import java.util.Map;
 
 public class LocksBlockEntityTypes {
-    public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistryProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistryProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     /**
      * Types whose old {@code assortedstorage} ids also covered a part's material containers. That part keeps the
@@ -48,7 +47,7 @@ public class LocksBlockEntityTypes {
     private static void aliasUnlessAPartHasIt() {
         SHARED_WITH.forEach((type, part) -> {
             if (!Services.PLATFORM.isModLoaded(part)) {
-                Services.REGISTRY_FACTORY.alias(Registries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(Family.ID, type.getId().getPath()), type.getId());
+                Services.REGISTRY_FACTORY.alias(Registries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(Constants.FAMILY_ID, type.getId().getPath()), type.getId());
             }
         });
     }

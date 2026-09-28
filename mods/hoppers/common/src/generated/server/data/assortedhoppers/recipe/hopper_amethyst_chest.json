@@ -3,6 +3,10 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "assortedchests"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
     }
   ],
   "type": "assortedhoppers:locked_upgrading",
@@ -12,6 +16,10 @@
       "values": [
         "assortedchests"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
     }
   ],
   "key": {

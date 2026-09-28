@@ -2,7 +2,6 @@ package com.grim3212.assorted.crates.client.data;
 
 import com.grim3212.assorted.lib.data.LibLanguageProvider;
 import com.grim3212.assorted.crates.Constants;
-import com.grim3212.assorted.crates.Family;
 import com.grim3212.assorted.crates.common.block.CratesBlocks;
 import com.grim3212.assorted.crates.common.block.CratesBlocks.CrateGroup;
 import net.minecraft.data.PackOutput;
@@ -22,7 +21,7 @@ public class CratesLanguageProvider extends LibLanguageProvider {
 
     @Override
     protected void addNames() {
-        this.add("itemGroup." + Family.ID, "Assorted Storage");
+        this.add("itemGroup." + Constants.FAMILY_ID, "Assorted Storage");
 
         this.add(Constants.MOD_ID + ".info.amount", "Amount %s");
         this.add(Constants.MOD_ID + ".info.upgrade.mode", "Mode: %s");
@@ -70,11 +69,11 @@ public class CratesLanguageProvider extends LibLanguageProvider {
 
     /** This part's chapter of the Assorted Storage section, and the section's own title, which every part writes the same. */
     private void addManual() {
-        this.add("manual." + Family.ID + ".title", "Assorted Storage");
-        this.add("manual." + Family.ID + ".description",
+        this.add("manual." + Constants.FAMILY_ID + ".title", "Assorted Storage");
+        this.add("manual." + Constants.FAMILY_ID + ".description",
                 "Bigger containers, crates, portable storage, and locks for all of it.");
 
-        String chapter = "manual." + Family.ID + ".chapter.crates";
+        String chapter = "manual." + Constants.FAMILY_ID + ".chapter.crates";
         this.add(chapter, "Crates");
 
         this.add(chapter + ".crates.title", "Crates");

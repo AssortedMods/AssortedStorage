@@ -3,10 +3,8 @@ package com.grim3212.assorted.shulkers.client.data;
 import com.grim3212.assorted.lib.data.LibManualProvider;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.shulkers.Constants;
-import com.grim3212.assorted.shulkers.Family;
 import com.grim3212.assorted.shulkers.common.block.ShulkersBlocks;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 /**
@@ -16,13 +14,11 @@ import net.minecraft.world.level.block.Block;
 public class ShulkersManualProvider extends LibManualProvider {
 
     public ShulkersManualProvider(PackOutput output) {
-        super(output, Constants.MOD_ID, Family.ID);
+        super(output, Constants.MOD_ID, Constants.FAMILY_ID);
     }
 
     @Override
     protected void addChapters() {
-        this.section(Family.MANUAL_ORDER, Family.ICONS.toArray(Identifier[]::new));
-
         Block[] shulkers = ShulkersBlocks.SHULKERS.values().stream().map(IRegistryObject::get).toArray(Block[]::new);
 
         ChapterBuilder chapter = this.chapter("shulker_boxes", 2);

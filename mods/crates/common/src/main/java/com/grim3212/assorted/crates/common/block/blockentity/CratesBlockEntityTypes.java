@@ -4,7 +4,6 @@ import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.crates.Constants;
-import com.grim3212.assorted.crates.Family;
 import com.grim3212.assorted.crates.common.block.CratesBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
@@ -14,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CratesBlockEntityTypes {
-    public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistryProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistryProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     public static final IRegistryObject<BlockEntityType<CrateBlockEntity>> CRATE = BLOCK_ENTITIES.register("crate", () -> Services.PLATFORM.createBlockEntityType(CrateBlockEntity::new, getCrates()));
     public static final IRegistryObject<BlockEntityType<CrateCompactingBlockEntity>> CRATE_COMPACTING = BLOCK_ENTITIES.register("crate_compacting", () -> Services.PLATFORM.createBlockEntityType(CrateCompactingBlockEntity::new, CratesBlocks.CRATE_COMPACTING.get()));

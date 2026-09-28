@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedshulkers"
+    }
+  ],
   "pages": [
     {
       "type": "assortedlib:text",

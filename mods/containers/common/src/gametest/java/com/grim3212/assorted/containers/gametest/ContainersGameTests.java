@@ -21,5 +21,6 @@ public final class ContainersGameTests {
         ContainersBlockTests.register(out);
         LockerTests.register(out);
         MenuTests.register(out);
+        FamilyTests.register(out);
     }
 }

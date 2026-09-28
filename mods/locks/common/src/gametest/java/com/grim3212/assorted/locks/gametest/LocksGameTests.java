@@ -22,5 +22,6 @@ public final class LocksGameTests {
         AssetTests.register(out);
         AliasTests.register(out);
         CrossLoaderDataTests.register(out);
+        FamilyTests.register(out);
     }
 }

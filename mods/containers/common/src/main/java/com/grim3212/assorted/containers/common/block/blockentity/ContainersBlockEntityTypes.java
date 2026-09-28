@@ -1,7 +1,6 @@
 package com.grim3212.assorted.containers.common.block.blockentity;
 
 import com.grim3212.assorted.containers.Constants;
-import com.grim3212.assorted.containers.Family;
 import com.grim3212.assorted.containers.common.block.ContainersBlocks;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
@@ -11,7 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class ContainersBlockEntityTypes {
-    public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistryProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).aliasFrom(Family.ID);
+    public static final RegistryProvider<BlockEntityType<?>> BLOCK_ENTITIES = RegistryProvider.create(Registries.BLOCK_ENTITY_TYPE, Constants.MOD_ID).aliasFrom(Constants.FAMILY_ID);
 
     public static final IRegistryObject<BlockEntityType<WoodCabinetBlockEntity>> WOOD_CABINET = BLOCK_ENTITIES.register("wood_cabinet", () -> Services.PLATFORM.createBlockEntityType(WoodCabinetBlockEntity::new, ContainersBlocks.WOOD_CABINET.get()));
     public static final IRegistryObject<BlockEntityType<GlassCabinetBlockEntity>> GLASS_CABINET = BLOCK_ENTITIES.register("glass_cabinet", () -> Services.PLATFORM.createBlockEntityType(GlassCabinetBlockEntity::new, ContainersBlocks.GLASS_CABINET.get()));

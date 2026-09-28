@@ -3,6 +3,10 @@
     {
       "type": "assortedlib:item_tag_populated",
       "tag": "c:gems/diamond"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedbarrels"
     }
   ],
   "type": "assortedbarrels:locked_upgrading",
@@ -13,6 +17,10 @@
       "values": [
         "c:gems/diamond"
       ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedbarrels"
     }
   ],
   "key": {

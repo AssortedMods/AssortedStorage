@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedbarrels"
+    }
+  ],
   "pages": [
     {
       "type": "assortedlib:text",

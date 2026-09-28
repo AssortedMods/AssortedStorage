@@ -1,7 +1,7 @@
 package com.grim3212.assorted.containers.gametest;
 
 import com.google.gson.JsonParser;
-import com.grim3212.assorted.containers.Family;
+import com.grim3212.assorted.containers.Constants;
 import com.grim3212.assorted.containers.common.block.ContainersBlocks;
 import com.grim3212.assorted.containers.common.block.blockentity.ContainersBlockEntityTypes;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
@@ -45,6 +45,6 @@ final class AliasTests {
     }
 
     private static Identifier old(Identifier id) {
-        return Identifier.fromNamespaceAndPath(Family.ID, id.getPath());
+        return Identifier.fromNamespaceAndPath(Constants.FAMILY_ID, id.getPath());
     }
 }
