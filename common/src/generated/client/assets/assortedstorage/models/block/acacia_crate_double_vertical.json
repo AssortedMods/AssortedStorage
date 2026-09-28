@@ -1,8 +1,0 @@
-{
-  "parent": "assortedstorage:block/base_crate_double_vertical",
-  "textures": {
-    "facing": "assortedstorage:block/crates/acacia_facing",
-    "facing_columns": "minecraft:block/acacia_log",
-    "sides": "minecraft:block/acacia_log"
-  }
-}

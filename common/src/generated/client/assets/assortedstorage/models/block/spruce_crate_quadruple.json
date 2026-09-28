@@ -1,8 +1,0 @@
-{
-  "parent": "assortedstorage:block/base_crate_quadruple",
-  "textures": {
-    "facing": "assortedstorage:block/crates/spruce_facing",
-    "facing_columns": "minecraft:block/spruce_log",
-    "sides": "minecraft:block/spruce_log"
-  }
-}

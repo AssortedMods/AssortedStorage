@@ -1,4 +1,0 @@
-accessWidener	v2	official
-# Entries are reintroduced as each area is ported to 26.2. The 1.20.1 list used the
-# `named` namespace, which is gone with intermediary, and targeted classes removed in
-# the 1.21.4-26.x model rewrite. Originals in porting-tools/*.bak
