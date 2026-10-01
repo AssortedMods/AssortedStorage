@@ -53,4 +53,4 @@ Generated resources are committed. The NeoForge datagen writes them for both loa
 
 ## License
 
-[LGPL-3.0-only](LICENSE).
+[GPL-3.0-only](LICENSE).
