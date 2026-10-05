@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/netherite"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedchests"
+    }
+  ],
+  "type": "assortedchests:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/netherite"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedchests"
+    }
+  ],
+  "key": {
+    "C": "#assortedchests:chests/level_4",
+    "M": "#c:ingots/netherite"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedchests:chest_netherite"
+  }
+}

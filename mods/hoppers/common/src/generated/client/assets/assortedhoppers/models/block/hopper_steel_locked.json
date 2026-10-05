@@ -1,0 +1,10 @@
+{
+  "parent": "assortedhoppers:block/template_hopper",
+  "textures": {
+    "inside": "assortedhoppers:block/hoppers/steel/hopper_inside",
+    "particle": "assortedhoppers:block/hoppers/steel/hopper_outside",
+    "side": "assortedhoppers:block/hoppers/steel/hopper_outside",
+    "top": "assortedhoppers:block/hoppers/steel/hopper_top",
+    "topsides": "assortedhoppers:block/hoppers/steel/locked_hopper_outside"
+  }
+}

@@ -1,0 +1,89 @@
+package com.grim3212.assorted.chests.data;
+
+import com.grim3212.assorted.lib.data.LibItemTagProvider;
+import com.grim3212.assorted.lib.registry.IRegistryObject;
+import com.grim3212.assorted.lib.util.LibCommonTags;
+import com.grim3212.assorted.lib.core.storage.StorageMaterial;
+import com.grim3212.assorted.chests.api.ChestsTags;
+import com.grim3212.assorted.chests.common.block.*;
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
+import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagAppender;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+
+import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
+public class ChestsItemTagProvider extends LibItemTagProvider {
+
+
+    public ChestsItemTagProvider(PackOutput output, CompletableFuture<Provider> lookup, CompletableFuture<TagLookup<Block>> blockTagsProvider) {
+        super(output, lookup, blockTagsProvider);
+    }
+
+    @Override
+    public void addCommonTags(Function<TagKey<Item>, TagAppender<Item>> rawTagger, BiConsumer<TagKey<Block>, TagKey<Item>> copier) {
+        // A TagAppender takes ResourceKeys rather than the objects themselves now, so the appenders
+        // are wrapped to keep the call sites reading in terms of Items.
+        Function<TagKey<Item>, ItemTagAppender> tagger = (tag) -> new ItemTagAppender(rawTagger.apply(tag));
+
+        tagger.apply(ItemTags.PIGLIN_LOVED).add(ChestsBlocks.CHESTS.get(StorageMaterial.GOLD).get().asItem());
+
+        tagger.apply(ChestsTags.Items.CAN_UPGRADE_LEVEL_0).addTag(LibCommonTags.Items.CHESTS_WOODEN);
+        for (Entry<StorageMaterial, IRegistryObject<LockedChestBlock>> chest : ChestsBlocks.CHESTS.entrySet()) {
+            Item item = chest.getValue().get().asItem();
+
+            switch (chest.getKey().getStorageLevel()) {
+                case 1:
+                    tagger.apply(ChestsTags.Items.CHESTS_LEVEL_1).add(item);
+                    tagger.apply(ChestsTags.Items.CAN_UPGRADE_LEVEL_2).add(item);
+                    break;
+                case 2:
+                    tagger.apply(ChestsTags.Items.CHESTS_LEVEL_2).add(item);
+                    tagger.apply(ChestsTags.Items.CAN_UPGRADE_LEVEL_3).add(item);
+                    break;
+                case 3:
+                    tagger.apply(ChestsTags.Items.CHESTS_LEVEL_3).add(item);
+                    tagger.apply(ChestsTags.Items.CAN_UPGRADE_LEVEL_4).add(item);
+                    break;
+                case 4:
+                    tagger.apply(ChestsTags.Items.CHESTS_LEVEL_4).add(item);
+                    tagger.apply(ChestsTags.Items.CAN_UPGRADE_LEVEL_5).add(item);
+                    break;
+                case 5:
+                    tagger.apply(ChestsTags.Items.CHESTS_LEVEL_5).add(item);
+                    break;
+                default:
+                    tagger.apply(ChestsTags.Items.CHESTS_LEVEL_0).add(item);
+                    tagger.apply(ChestsTags.Items.CAN_UPGRADE_LEVEL_1).add(item);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Adapts the vanilla {@link TagAppender}, which is keyed by {@link ResourceKey}, back to the
+     * ItemLike based calls this provider is written in terms of.
+     */
+    private record ItemTagAppender(TagAppender<Item> delegate) {
+
+        ItemTagAppender add(ItemLike item) {
+            this.delegate.add(BuiltInRegistries.ITEM.getResourceKey(item.asItem()).orElseThrow());
+            return this;
+        }
+
+        ItemTagAppender addTag(TagKey<Item> tag) {
+            this.delegate.addTag(tag);
+            return this;
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "assortedcrates:block/mangrove_crate_triple_vertical",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "assortedcrates:block/mangrove_crate_triple",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "assortedcrates:block/mangrove_crate_triple"
+    },
+    "facing=south": {
+      "model": "assortedcrates:block/mangrove_crate_triple",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "assortedcrates:block/mangrove_crate_triple_vertical"
+    },
+    "facing=west": {
+      "model": "assortedcrates:block/mangrove_crate_triple",
+      "y": 270
+    }
+  }
+}

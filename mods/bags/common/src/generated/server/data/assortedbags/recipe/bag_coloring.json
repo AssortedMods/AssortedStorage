@@ -1,0 +1,15 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedbags"
+    }
+  ],
+  "type": "assortedbags:bag_coloring",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedbags"
+    }
+  ]
+}

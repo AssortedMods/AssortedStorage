@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/template_chest",
+  "textures": {
+    "particle": "assortedchests:block/particle/silver_block"
+  }
+}

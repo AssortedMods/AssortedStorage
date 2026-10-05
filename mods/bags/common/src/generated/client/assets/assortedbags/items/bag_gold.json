@@ -1,0 +1,70 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:condition",
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "assortedbags:item/bag_gold",
+        "tints": [
+          {
+            "type": "assortedbags:bag",
+            "tag": "PrimaryColor"
+          },
+          {
+            "type": "assortedbags:bag",
+            "tag": "SecondaryColor"
+          }
+        ]
+      },
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "assortedbags:item/bag_gold_colored",
+        "tints": [
+          {
+            "type": "assortedbags:bag",
+            "tag": "PrimaryColor"
+          },
+          {
+            "type": "assortedbags:bag",
+            "tag": "SecondaryColor"
+          }
+        ]
+      },
+      "property": "assortedbags:dyed"
+    },
+    "on_true": {
+      "type": "minecraft:condition",
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "assortedbags:item/bag_gold_locked",
+        "tints": [
+          {
+            "type": "assortedbags:bag",
+            "tag": "PrimaryColor"
+          },
+          {
+            "type": "assortedbags:bag",
+            "tag": "SecondaryColor"
+          }
+        ]
+      },
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "assortedbags:item/bag_gold_locked_colored",
+        "tints": [
+          {
+            "type": "assortedbags:bag",
+            "tag": "PrimaryColor"
+          },
+          {
+            "type": "assortedbags:bag",
+            "tag": "SecondaryColor"
+          }
+        ]
+      },
+      "property": "assortedbags:dyed"
+    },
+    "property": "assortedbags:locked"
+  }
+}

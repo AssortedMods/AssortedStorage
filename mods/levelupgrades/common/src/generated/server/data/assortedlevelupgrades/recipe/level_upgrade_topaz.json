@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/topaz"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/topaz"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
+    }
+  ],
+  "key": {
+    "M": "#c:gems/topaz",
+    "P": "#c:paper"
+  },
+  "pattern": [
+    "MMM",
+    "MPM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedlevelupgrades:level_upgrade_topaz"
+  }
+}

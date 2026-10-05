@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "key": {
+    "C": "#assortedcrates:crates/triple",
+    "D": "#c:deepslate",
+    "I": "#c:ingots/iron",
+    "P": "#c:pistons"
+  },
+  "pattern": [
+    "DDD",
+    "PCP",
+    "DID"
+  ],
+  "result": {
+    "id": "assortedcrates:crate_compacting"
+  }
+}

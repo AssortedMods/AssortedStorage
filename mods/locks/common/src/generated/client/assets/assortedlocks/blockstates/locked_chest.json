@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "assortedlocks:block/locked_chest"
+    }
+  }
+}

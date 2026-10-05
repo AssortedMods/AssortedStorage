@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "assortedcontainers:oak_warehouse_crate"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "assortedcontainers:blocks/oak_warehouse_crate"
+}

@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
+  "key": {
+    "L": "#minecraft:jungle_logs",
+    "P": "minecraft:jungle_planks"
+  },
+  "pattern": [
+    "LLL",
+    "P P",
+    "PPP"
+  ],
+  "result": {
+    "id": "assortedcontainers:jungle_warehouse_crate"
+  }
+}

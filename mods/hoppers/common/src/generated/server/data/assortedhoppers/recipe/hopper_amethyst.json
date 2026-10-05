@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/amethyst"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
+    }
+  ],
+  "type": "assortedhoppers:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/amethyst"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
+    }
+  ],
+  "key": {
+    "C": "#assortedhoppers:hoppers/level_1",
+    "M": "#c:gems/amethyst"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedhoppers:hopper_amethyst"
+  }
+}

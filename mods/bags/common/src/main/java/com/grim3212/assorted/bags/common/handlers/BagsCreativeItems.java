@@ -1,0 +1,41 @@
+package com.grim3212.assorted.bags.common.handlers;
+
+import com.grim3212.assorted.bags.Constants;
+import com.grim3212.assorted.bags.common.item.BagItem;
+import com.grim3212.assorted.bags.common.item.BagsItems;
+import com.grim3212.assorted.lib.core.creative.CreativeTabItems;
+import com.grim3212.assorted.lib.core.creative.SharedCreativeTabs;
+import com.grim3212.assorted.lib.family.Families;
+import com.grim3212.assorted.lib.util.NBTHelper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
+
+/** This part's share of the Assorted Storage tab, which every part asks for and the first to load registers. */
+public class BagsCreativeItems {
+
+    public static final ResourceKey<CreativeModeTab> TAB = Families.tab(Constants.FAMILY_ID);
+
+    private static List<ItemStack> getCreativeItems() {
+        CreativeTabItems items = new CreativeTabItems();
+
+        items.add(BagsItems.ENDER_BAG.get());
+        items.add(BagsItems.BAG.get());
+
+        for (DyeColor color : DyeColor.values()) {
+            items.add(NBTHelper.putIntItemStack(new ItemStack(BagsItems.BAG.get()), BagItem.TAG_PRIMARY_COLOR, color.getId()));
+        }
+
+        BagsItems.BAGS.forEach((mat, bag) -> items.addIfObtainable(bag.get(), mat.getMaterial()));
+
+        return items.getItems();
+    }
+
+    public static void init() {
+        // After the crates and before the blank upgrade, as the tab was when this was all one mod.
+        SharedCreativeTabs.add(TAB, 300, BagsCreativeItems::getCreativeItems);
+    }
+}

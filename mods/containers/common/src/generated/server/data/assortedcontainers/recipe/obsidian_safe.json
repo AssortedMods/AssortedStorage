@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
+  "key": {
+    "G": "#c:chests/wooden",
+    "X": "#c:obsidians"
+  },
+  "pattern": [
+    " X ",
+    "XGX",
+    " X "
+  ],
+  "result": {
+    "id": "assortedcontainers:obsidian_safe"
+  }
+}

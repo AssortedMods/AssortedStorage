@@ -1,0 +1,8 @@
+{
+  "parent": "assortedcrates:block/base_crate_quadruple",
+  "textures": {
+    "facing": "assortedcrates:block/crates/crimson_facing",
+    "facing_columns": "minecraft:block/crimson_stem",
+    "sides": "minecraft:block/crimson_stem"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcrates:storage_tooltips_come_from_components",
+  "structure": "assortedcrates:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

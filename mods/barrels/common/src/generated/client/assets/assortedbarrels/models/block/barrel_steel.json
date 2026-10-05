@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/block",
+  "fabric:type": "assortedbarrels:locked",
+  "loader": "assortedbarrels:locked",
+  "locked": "assortedbarrels:block/barrel_steel_locked",
+  "textures": {
+    "particle": "assortedbarrels:block/barrels/steel/barrel_side"
+  },
+  "unlocked": "assortedbarrels:block/barrel_steel_unlocked"
+}

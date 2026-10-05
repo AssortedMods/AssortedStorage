@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/diamond"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedbags"
+    }
+  ],
+  "type": "assortedbags:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/diamond"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedbags"
+    }
+  ],
+  "key": {
+    "C": "#assortedbags:bags/level_3",
+    "M": "#c:gems/diamond"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedbags:bag_diamond"
+  }
+}

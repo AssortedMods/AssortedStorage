@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedlocks:locked_copper_doors_scrape_and_wax",
+  "structure": "assortedlocks:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

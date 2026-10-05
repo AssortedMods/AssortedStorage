@@ -1,0 +1,15 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlocks"
+    }
+  ],
+  "type": "assortedlocks:locked_barrel",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlocks"
+    }
+  ]
+}

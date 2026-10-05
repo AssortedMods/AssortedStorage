@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/block",
+  "fabric:type": "assortedcrates:locked",
+  "loader": "assortedcrates:locked",
+  "locked": "assortedcrates:block/crate_controller_locked",
+  "textures": {
+    "particle": "assortedcrates:block/crates/crate_controller_front"
+  },
+  "unlocked": "assortedcrates:block/crate_controller_unlocked"
+}

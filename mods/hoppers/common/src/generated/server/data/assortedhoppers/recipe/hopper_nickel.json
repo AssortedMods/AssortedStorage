@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/nickel"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
+    }
+  ],
+  "type": "assortedhoppers:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/nickel"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedhoppers"
+    }
+  ],
+  "key": {
+    "C": "#assortedhoppers:hoppers/level_1",
+    "M": "#c:ingots/nickel"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedhoppers:hopper_nickel"
+  }
+}

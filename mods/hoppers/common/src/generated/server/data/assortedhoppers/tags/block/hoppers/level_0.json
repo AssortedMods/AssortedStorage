@@ -1,0 +1,10 @@
+{
+  "values": [
+    "assortedhoppers:hopper_stone",
+    "minecraft:hopper",
+    {
+      "id": "assortedlocks:locked_hopper",
+      "required": false
+    }
+  ]
+}

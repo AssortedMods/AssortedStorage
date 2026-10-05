@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
+  "key": {
+    "C": "#c:chests/wooden",
+    "X": "#minecraft:planks"
+  },
+  "pattern": [
+    " X ",
+    "XCX",
+    " X "
+  ],
+  "result": {
+    "id": "assortedcontainers:wood_cabinet"
+  }
+}

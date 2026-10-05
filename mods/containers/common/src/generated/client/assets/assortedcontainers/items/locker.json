@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "assortedcontainers:item/locker",
+    "model": {
+      "type": "assortedcontainers:storage",
+      "model": "locker",
+      "texture": "assortedcontainers:textures/model/locker.png"
+    }
+  }
+}

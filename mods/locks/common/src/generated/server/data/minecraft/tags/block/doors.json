@@ -1,0 +1,29 @@
+{
+  "values": [
+    "assortedlocks:locked_iron_door",
+    "assortedlocks:locked_oak_door",
+    "assortedlocks:locked_spruce_door",
+    "assortedlocks:locked_birch_door",
+    "assortedlocks:locked_acacia_door",
+    "assortedlocks:locked_cherry_door",
+    "assortedlocks:locked_jungle_door",
+    "assortedlocks:locked_dark_oak_door",
+    "assortedlocks:locked_pale_oak_door",
+    "assortedlocks:locked_crimson_door",
+    "assortedlocks:locked_warped_door",
+    "assortedlocks:locked_mangrove_door",
+    "assortedlocks:locked_bamboo_door",
+    "assortedlocks:locked_copper_door",
+    "assortedlocks:locked_exposed_copper_door",
+    "assortedlocks:locked_weathered_copper_door",
+    "assortedlocks:locked_oxidized_copper_door",
+    "assortedlocks:locked_waxed_copper_door",
+    "assortedlocks:locked_waxed_exposed_copper_door",
+    "assortedlocks:locked_waxed_weathered_copper_door",
+    "assortedlocks:locked_waxed_oxidized_copper_door",
+    "assortedlocks:locked_quartz_door",
+    "assortedlocks:locked_glass_door",
+    "assortedlocks:locked_steel_door",
+    "assortedlocks:locked_chain_link_door"
+  ]
+}

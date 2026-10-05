@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "assortedcrates:block/crate_controller_unlocked"
+  }
+}

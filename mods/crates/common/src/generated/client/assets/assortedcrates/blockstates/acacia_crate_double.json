@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "assortedcrates:block/acacia_crate_double_vertical",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "assortedcrates:block/acacia_crate_double",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "assortedcrates:block/acacia_crate_double"
+    },
+    "facing=south": {
+      "model": "assortedcrates:block/acacia_crate_double",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "assortedcrates:block/acacia_crate_double_vertical"
+    },
+    "facing=west": {
+      "model": "assortedcrates:block/acacia_crate_double",
+      "y": 270
+    }
+  }
+}

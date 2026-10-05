@@ -1,0 +1,55 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_blank_upgrade": {
+      "conditions": {
+        "items": [
+          {
+            "items": "assortedcrates:blank_upgrade"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_glow_ink_sac": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:glow_ink_sac"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "assortedcrates:glow_upgrade"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_blank_upgrade",
+      "has_glow_ink_sac"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "assortedcrates:glow_upgrade"
+    ]
+  }
+}

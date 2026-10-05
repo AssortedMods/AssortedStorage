@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcrates:every_vanilla_wood_has_a_family",
+  "structure": "assortedcrates:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

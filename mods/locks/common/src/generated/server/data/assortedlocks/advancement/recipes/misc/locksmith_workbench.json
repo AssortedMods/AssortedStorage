@@ -1,0 +1,44 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlocks"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_lock": {
+      "conditions": {
+        "items": [
+          {
+            "items": "assortedlocks:locksmith_lock"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "assortedlocks:locksmith_workbench"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlocks"
+    }
+  ],
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_lock"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "assortedlocks:locksmith_workbench"
+    ]
+  }
+}

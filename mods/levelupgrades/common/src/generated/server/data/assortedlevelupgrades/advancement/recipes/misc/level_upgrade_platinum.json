@@ -1,0 +1,66 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:ingots/platinum"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_material": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/platinum"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_paper": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:paper"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "assortedlevelupgrades:level_upgrade_platinum"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:ingots/platinum"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
+    }
+  ],
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_paper",
+      "has_material"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "assortedlevelupgrades:level_upgrade_platinum"
+    ]
+  }
+}

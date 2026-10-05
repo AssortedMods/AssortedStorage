@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedlevelupgrades:level_upgrades_craft_around_paper",
+  "structure": "assortedlevelupgrades:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

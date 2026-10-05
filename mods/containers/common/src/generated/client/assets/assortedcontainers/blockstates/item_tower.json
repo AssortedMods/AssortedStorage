@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "assortedcontainers:block/item_tower"
+    }
+  }
+}

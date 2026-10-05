@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcrates:crates_join_through_a_bridge",
+  "structure": "assortedcrates:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

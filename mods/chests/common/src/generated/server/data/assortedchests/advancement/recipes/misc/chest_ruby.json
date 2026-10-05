@@ -1,0 +1,66 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/ruby"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedchests"
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chest": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#assortedchests:chests/level_2"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_material": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:gems/ruby"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "assortedchests:chest_ruby"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/ruby"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedchests"
+    }
+  ],
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_chest",
+      "has_material"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "assortedchests:chest_ruby"
+    ]
+  }
+}

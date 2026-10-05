@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedlocks:vanilla_containers_lock_into_their_locked_versions",
+  "structure": "assortedlocks:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

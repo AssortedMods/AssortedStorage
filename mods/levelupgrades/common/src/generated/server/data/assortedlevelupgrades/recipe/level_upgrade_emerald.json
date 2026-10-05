@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/emerald"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/emerald"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
+    }
+  ],
+  "key": {
+    "M": "#c:gems/emerald",
+    "P": "#c:paper"
+  },
+  "pattern": [
+    "MMM",
+    "MPM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedlevelupgrades:level_upgrade_emerald"
+  }
+}

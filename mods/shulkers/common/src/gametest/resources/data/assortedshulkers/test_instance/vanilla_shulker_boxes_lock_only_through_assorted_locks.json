@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedshulkers:vanilla_shulker_boxes_lock_only_through_assorted_locks",
+  "structure": "assortedshulkers:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

@@ -1,0 +1,41 @@
+{
+  "conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedlevelupgrades"
+    }
+  ],
+  "pages": [
+    {
+      "type": "assortedlib:recipe",
+      "id": "level_upgrades",
+      "recipes": [
+        "assortedlevelupgrades:level_upgrade_stone",
+        "assortedlevelupgrades:level_upgrade_copper",
+        "assortedlevelupgrades:level_upgrade_iron",
+        "assortedlevelupgrades:level_upgrade_amethyst",
+        "assortedlevelupgrades:level_upgrade_emerald",
+        "assortedlevelupgrades:level_upgrade_gold",
+        "assortedlevelupgrades:level_upgrade_diamond",
+        "assortedlevelupgrades:level_upgrade_netherite",
+        "assortedlevelupgrades:level_upgrade_aluminum",
+        "assortedlevelupgrades:level_upgrade_tin",
+        "assortedlevelupgrades:level_upgrade_topaz",
+        "assortedlevelupgrades:level_upgrade_peridot",
+        "assortedlevelupgrades:level_upgrade_lead",
+        "assortedlevelupgrades:level_upgrade_nickel",
+        "assortedlevelupgrades:level_upgrade_sapphire",
+        "assortedlevelupgrades:level_upgrade_bronze",
+        "assortedlevelupgrades:level_upgrade_ruby",
+        "assortedlevelupgrades:level_upgrade_invar",
+        "assortedlevelupgrades:level_upgrade_silver",
+        "assortedlevelupgrades:level_upgrade_electrum",
+        "assortedlevelupgrades:level_upgrade_steel",
+        "assortedlevelupgrades:level_upgrade_platinum"
+      ],
+      "text": "manual.assortedstorage.chapter.level_upgrades.level_upgrades",
+      "title": "manual.assortedstorage.chapter.level_upgrades.level_upgrades.title"
+    }
+  ],
+  "sort_order": 4
+}

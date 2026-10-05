@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/template_chest",
+  "textures": {
+    "particle": "assortedcontainers:block/cabinet_break"
+  }
+}

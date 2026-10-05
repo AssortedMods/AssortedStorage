@@ -1,0 +1,28 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "key": {
+    "C": "#c:chests/wooden",
+    "D": "#c:deepslate",
+    "L": "#minecraft:bamboo_blocks"
+  },
+  "pattern": [
+    " D ",
+    "LCL",
+    "CDC"
+  ],
+  "result": {
+    "id": "assortedcrates:bamboo_crate_triple"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "key": {
+    "O": "#c:obsidians",
+    "U": "assortedcrates:blank_upgrade"
+  },
+  "pattern": [
+    "OOO",
+    "OUO",
+    "OOO"
+  ],
+  "result": {
+    "id": "assortedcrates:void_upgrade"
+  }
+}

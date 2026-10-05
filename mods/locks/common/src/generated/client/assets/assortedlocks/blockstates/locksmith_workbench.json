@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "assortedlocks:block/locksmith_workbench"
+    }
+  }
+}

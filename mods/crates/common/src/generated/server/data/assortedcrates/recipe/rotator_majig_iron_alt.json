@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcrates"
+    }
+  ],
+  "key": {
+    "B": "#c:rods/blaze",
+    "I": "#c:ingots/iron",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I I",
+    " S ",
+    " B "
+  ],
+  "result": {
+    "id": "assortedcrates:rotator_majig"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "assortedlocks:item/locked_chest",
+    "model": {
+      "type": "assortedlocks:locked_chest",
+      "texture": "assortedlocks:model/chests/normal"
+    }
+  }
+}

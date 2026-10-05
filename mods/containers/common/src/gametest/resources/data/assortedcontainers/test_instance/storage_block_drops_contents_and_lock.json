@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcontainers:storage_block_drops_contents_and_lock",
+  "structure": "assortedcontainers:test_box",
+  "max_ticks": 40,
+  "setup_ticks": 0,
+  "required": true
+}

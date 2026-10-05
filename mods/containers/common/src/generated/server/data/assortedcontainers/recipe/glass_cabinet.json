@@ -1,0 +1,28 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "fabric:load_conditions": [
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedcontainers"
+    }
+  ],
+  "key": {
+    "C": "#c:chests/wooden",
+    "G": "#c:glass_blocks",
+    "X": "#minecraft:planks"
+  },
+  "pattern": [
+    " X ",
+    "GCG",
+    " X "
+  ],
+  "result": {
+    "id": "assortedcontainers:glass_cabinet"
+  }
+}

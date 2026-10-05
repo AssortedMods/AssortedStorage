@@ -1,0 +1,27 @@
+{
+  "values": [
+    "assortedhoppers:hopper_stone",
+    "assortedhoppers:hopper_copper",
+    "assortedhoppers:hopper_iron",
+    "assortedhoppers:hopper_amethyst",
+    "assortedhoppers:hopper_emerald",
+    "assortedhoppers:hopper_gold",
+    "assortedhoppers:hopper_diamond",
+    "assortedhoppers:hopper_netherite",
+    "assortedhoppers:hopper_aluminum",
+    "assortedhoppers:hopper_tin",
+    "assortedhoppers:hopper_topaz",
+    "assortedhoppers:hopper_peridot",
+    "assortedhoppers:hopper_lead",
+    "assortedhoppers:hopper_nickel",
+    "assortedhoppers:hopper_sapphire",
+    "assortedhoppers:hopper_bronze",
+    "assortedhoppers:hopper_ruby",
+    "assortedhoppers:hopper_invar",
+    "assortedhoppers:hopper_silver",
+    "assortedhoppers:hopper_electrum",
+    "assortedhoppers:hopper_steel",
+    "assortedhoppers:hopper_platinum",
+    "minecraft:hopper"
+  ]
+}

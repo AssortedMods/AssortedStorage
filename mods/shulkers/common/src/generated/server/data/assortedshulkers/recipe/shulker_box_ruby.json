@@ -1,0 +1,38 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "assortedlib:item_tag_populated",
+      "tag": "c:gems/ruby"
+    },
+    {
+      "type": "assortedlib:part_enabled",
+      "part": "assortedshulkers"
+    }
+  ],
+  "type": "assortedshulkers:locked_upgrading",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:gems/ruby"
+      ]
+    },
+    {
+      "condition": "assortedlib:part_enabled",
+      "part": "assortedshulkers"
+    }
+  ],
+  "key": {
+    "C": "#assortedshulkers:shulkers/level_2",
+    "M": "#c:gems/ruby"
+  },
+  "pattern": [
+    "MMM",
+    "MCM",
+    "MMM"
+  ],
+  "result": {
+    "id": "assortedshulkers:shulker_box_ruby"
+  }
+}
