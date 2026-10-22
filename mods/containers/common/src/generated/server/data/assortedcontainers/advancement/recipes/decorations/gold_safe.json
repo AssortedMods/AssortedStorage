@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcontainers:gold_safe"
+        "recipes": "assortedcontainers:gold_safe"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbarrels:barrel_topaz"
+        "recipes": "assortedbarrels:barrel_topaz"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

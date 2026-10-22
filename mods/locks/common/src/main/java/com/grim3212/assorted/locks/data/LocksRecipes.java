@@ -11,26 +11,19 @@ import com.grim3212.assorted.locks.common.crafting.LockedHopperRecipe;
 import com.grim3212.assorted.locks.common.crafting.LockedShulkerBoxColoring;
 import com.grim3212.assorted.locks.common.crafting.LockedShulkerBoxRecipe;
 import com.grim3212.assorted.locks.common.item.LocksItems;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.concurrent.CompletableFuture;
-
 public class LocksRecipes extends ConditionalRecipeProvider {
 
-    private final HolderGetter<Item> items;
-
-    public LocksRecipes(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output, Constants.MOD_ID);
-        this.items = registries.lookupOrThrow(Registries.ITEM);
+    public LocksRecipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+        super(recipes, advancements, Constants.MOD_ID);
     }
 
     @Override
@@ -60,26 +53,5 @@ public class LocksRecipes extends ConditionalRecipeProvider {
      */
     private static ResourceKey<Recipe<?>> key(Identifier id) {
         return ResourceKey.create(Registries.RECIPE, id);
-    }
-
-    /**
-     * Recipe providers are not data providers any more - a {@link RecipeProvider.Runner} owns the
-     * file writing and builds a fresh provider around the {@link RecipeOutput} it hands out.
-     */
-    public static class Runner extends ConditionalRecipeProvider.Runner {
-
-        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-            super(output, registries, Constants.MOD_ID);
-        }
-
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-            return new LocksRecipes(registries, output);
-        }
-
-        @Override
-        public String getName() {
-            return "Recipes: " + Constants.MOD_ID;
-        }
     }
 }

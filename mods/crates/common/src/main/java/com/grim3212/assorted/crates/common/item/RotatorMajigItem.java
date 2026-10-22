@@ -5,6 +5,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -36,7 +37,7 @@ public class RotatorMajigItem extends Item {
         BlockState state = level.getBlockState(pos);
 
         level.setBlock(pos, state.rotate(player.isShiftKeyDown() ? Rotation.COUNTERCLOCKWISE_90 : Rotation.CLOCKWISE_90), Block.UPDATE_ALL);
-        player.swing(hand);
+        player.swing(hand, SwingAnimation.DEFAULT, false);
         return InteractionResult.SUCCESS;
     }
 }

@@ -30,7 +30,7 @@ public class ItemTowerSpecialRenderer implements NoDataSpecialModelRenderer {
 
     @Override
     public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
-        submitNodeCollector.submitModel(this.model, ItemTowerModel.State.INVENTORY, poseStack, TEXTURE, lightCoords, overlayCoords, outlineColor, null);
+        submitNodeCollector.submitModel(this.model, ItemTowerModel.State.INVENTORY, poseStack, TEXTURE, lightCoords, overlayCoords, outlineColor);
     }
 
     @Override

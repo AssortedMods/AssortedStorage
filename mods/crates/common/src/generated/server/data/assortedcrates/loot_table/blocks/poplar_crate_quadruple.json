@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "assortedcrates:poplar_crate_quadruple"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "assortedcrates:blocks/poplar_crate_quadruple"
+}

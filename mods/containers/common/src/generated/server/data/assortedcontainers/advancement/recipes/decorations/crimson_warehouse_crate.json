@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcontainers:crimson_warehouse_crate"
+        "recipes": "assortedcontainers:crimson_warehouse_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcontainers:item_tower"
+        "recipes": "assortedcontainers:item_tower"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

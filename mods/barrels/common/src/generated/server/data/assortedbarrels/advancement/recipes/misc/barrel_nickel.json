@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbarrels:barrel_nickel"
+        "recipes": "assortedbarrels:barrel_nickel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

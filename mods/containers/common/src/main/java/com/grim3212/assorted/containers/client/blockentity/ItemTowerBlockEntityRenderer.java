@@ -7,6 +7,7 @@ import com.grim3212.assorted.containers.client.model.ItemTowerModel;
 import com.grim3212.assorted.containers.client.model.ContainersModelLayers;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.containers.common.block.blockentity.ItemTowerBlockEntity;
+import com.grim3212.assorted.lib.client.util.SubmitHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -70,11 +71,11 @@ public class ItemTowerBlockEntityRenderer<T extends BlockEntity & IStorage> impl
 
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-state.facing.toYRot()));
+        poseStack.rotate(Axis.YP.rotationDegrees(-state.facing.toYRot()));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
 
         ItemTowerModel towerModel = state.animatedModel != null ? state.animatedModel : this.model;
-        submitNodeCollector.submitModel(towerModel, state.model, poseStack, ITEM_TOWER_TEXTURE, state.lightCoords, OverlayTexture.NO_OVERLAY, 0, state.breakProgress);
+        SubmitHelper.submitModel(submitNodeCollector, towerModel, state.model, poseStack, ITEM_TOWER_TEXTURE, state.lightCoords, OverlayTexture.NO_OVERLAY, 0, state.breakProgress);
 
         poseStack.popPose();
     }

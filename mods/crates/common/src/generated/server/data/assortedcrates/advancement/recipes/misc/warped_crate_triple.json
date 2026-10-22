@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:warped_crate_triple"
+        "recipes": "assortedcrates:warped_crate_triple"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

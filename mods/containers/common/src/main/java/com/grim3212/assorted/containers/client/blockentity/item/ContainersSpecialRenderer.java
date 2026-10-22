@@ -36,7 +36,7 @@ public class ContainersSpecialRenderer implements SpecialModelRenderer<Boolean> 
     @Override
     public void submit(@Nullable Boolean locked, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, int overlayCoords, boolean hasFoil, int outlineColor) {
         ContainersModelState state = Boolean.TRUE.equals(locked) ? ContainersModelState.CLOSED_LOCKED : ContainersModelState.CLOSED_UNLOCKED;
-        submitNodeCollector.submitModel(this.model, state, poseStack, this.texture, lightCoords, overlayCoords, outlineColor, null);
+        submitNodeCollector.submitModel(this.model, state, poseStack, this.texture, lightCoords, overlayCoords, outlineColor);
     }
 
     @Override

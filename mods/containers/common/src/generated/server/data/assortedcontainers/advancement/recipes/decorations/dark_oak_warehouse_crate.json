@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcontainers:dark_oak_warehouse_crate"
+        "recipes": "assortedcontainers:dark_oak_warehouse_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

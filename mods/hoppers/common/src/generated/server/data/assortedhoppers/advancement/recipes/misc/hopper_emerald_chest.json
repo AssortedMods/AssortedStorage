@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedhoppers:hopper_emerald_chest"
+        "recipes": "assortedhoppers:hopper_emerald_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

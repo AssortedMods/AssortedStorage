@@ -5,8 +5,8 @@ import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import com.grim3212.assorted.locks.common.loot.ModLoadedLootCondition;
 import com.grim3212.assorted.locks.common.loot.OptionalLootItem;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,16 +19,16 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.predicates.MatchBlock;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class LocksBlockLoot extends LibBlockLootProvider {
 
-    public LocksBlockLoot(HolderLookup.Provider registries) {
-        super(registries, () -> LocksBlocks.BLOCKS.getEntries().stream().map(Supplier::get).collect(Collectors.toList()));
+    public LocksBlockLoot(LootTableSubProvider.Context context) {
+        super(context, () -> LocksBlocks.BLOCKS.getEntries().stream().map(Supplier::get).collect(Collectors.toList()));
     }
 
     @Override
@@ -54,22 +54,22 @@ public class LocksBlockLoot extends LibBlockLootProvider {
     /** Keeps the combination on the dropped item, which is what picks the ender storage it opens. */
     private LootTable.Builder createInventoryCodeTable(Block b) {
         LootPoolEntryContainer.Builder<?> entry = LootItem.lootTableItem(b).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(DataComponents.CUSTOM_DATA));
-        LootPool.Builder pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(entry).when(ExplosionCondition.survivesExplosion());
+        LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(entry).when(ExplosionCondition.survivesExplosion());
         return LootTable.lootTable().withPool(pool);
     }
 
     /** Drops the box with its contents, name and lock carried over as data components, as vanilla's does. */
     private LootTable.Builder createLockedShulkerTable(Block b) {
         LootPoolEntryContainer.Builder<?> entry = LootItem.lootTableItem(b).apply(CopyComponentsFunction.copyComponentsFromBlockEntity(LootContextParams.BLOCK_ENTITY).include(DataComponents.CUSTOM_NAME).include(DataComponents.CONTAINER).include(DataComponents.CUSTOM_DATA));
-        LootPool.Builder pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(entry).when(ExplosionCondition.survivesExplosion());
+        LootPool.Builder pool = LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(entry).when(ExplosionCondition.survivesExplosion());
         return LootTable.lootTable().withPool(pool);
     }
 
     private LootTable.Builder createLockedDoorTable(Block b, Block out) {
-        return LootTable.lootTable().withPool(applyExplosionCondition(b, LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(out).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(b).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER))))));
+        return LootTable.lootTable().withPool(applyExplosionCondition(b, LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(LootItem.lootTableItem(out).when(MatchBlock.blockMatches(this.blocks, b, StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER))))));
     }
 
     private LootTable.Builder createBuildingBlocksTable(Block b, Identifier door) {
-        return LootTable.lootTable().withPool(applyExplosionCondition(b, LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).when(ModLoadedLootCondition.isModLoaded(LocksBlocks.BUILDING_BLOCKS_ID)).add(OptionalLootItem.optionalLootTableItem(door).when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(b).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER))))));
+        return LootTable.lootTable().withPool(applyExplosionCondition(b, LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).when(ModLoadedLootCondition.isModLoaded(LocksBlocks.BUILDING_BLOCKS_ID)).add(OptionalLootItem.optionalLootTableItem(door).when(MatchBlock.blockMatches(this.blocks, b, StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER))))));
     }
 }

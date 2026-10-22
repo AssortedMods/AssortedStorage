@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:dark_oak_crate"
+        "recipes": "assortedcrates:dark_oak_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

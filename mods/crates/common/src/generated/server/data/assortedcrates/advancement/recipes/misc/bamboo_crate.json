@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:bamboo_crate"
+        "recipes": "assortedcrates:bamboo_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

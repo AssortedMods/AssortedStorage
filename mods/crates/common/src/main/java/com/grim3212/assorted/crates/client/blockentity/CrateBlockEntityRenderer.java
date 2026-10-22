@@ -145,7 +145,7 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
 
         poseStack.pushPose();
         poseStack.translate(x, y, 0.0D);
-        poseStack.mulPose(Axis.ZP.rotationDegrees(-state.itemRotations[slot] * 360.0F / 16.0F));
+        poseStack.rotate(Axis.ZP.rotationDegrees(-state.itemRotations[slot] * 360.0F / 16.0F));
         itemState.submit(poseStack, submitNodeCollector, state.itemLightCoords, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
     }
@@ -216,9 +216,9 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
     public static void faceCrate(Direction facing, PoseStack poseStack) {
         poseStack.translate(0.5D, 0.5D, 0.5D);
         if (facing.getAxis().isHorizontal()) {
-            poseStack.mulPose(Axis.YP.rotationDegrees(-facing.toYRot()));
+            poseStack.rotate(Axis.YP.rotationDegrees(-facing.toYRot()));
         } else {
-            poseStack.mulPose(Axis.XP.rotationDegrees(facing == Direction.DOWN ? 90F : 270F));
+            poseStack.rotate(Axis.XP.rotationDegrees(facing == Direction.DOWN ? 90F : 270F));
         }
     }
 }

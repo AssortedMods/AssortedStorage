@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcontainers:glass_cabinet"
+        "recipes": "assortedcontainers:glass_cabinet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedchests:chest_sapphire"
+        "recipes": "assortedchests:chest_sapphire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

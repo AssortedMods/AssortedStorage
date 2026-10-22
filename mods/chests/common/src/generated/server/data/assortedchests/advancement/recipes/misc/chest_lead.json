@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedchests:chest_lead"
+        "recipes": "assortedchests:chest_lead"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

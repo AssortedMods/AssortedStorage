@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedlocks:key_ring"
+        "recipes": "assortedlocks:key_ring"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

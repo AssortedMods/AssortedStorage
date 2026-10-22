@@ -9,11 +9,10 @@ import com.grim3212.assorted.chests.api.ChestsTags;
 import com.grim3212.assorted.chests.common.block.ChestsBlocks;
 import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
 import com.grim3212.assorted.chests.common.crafting.LockedUpgradingRecipeBuilder;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -21,15 +20,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 public class ChestsRecipes extends ConditionalRecipeProvider {
 
-    private final HolderGetter<Item> items;
-
-    public ChestsRecipes(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output, Constants.MOD_ID);
-        this.items = registries.lookupOrThrow(Registries.ITEM);
+    public ChestsRecipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+        super(recipes, advancements, Constants.MOD_ID);
     }
 
     // Each chest names its own condition as it is built.
@@ -73,26 +68,5 @@ public class ChestsRecipes extends ConditionalRecipeProvider {
      */
     private static ResourceKey<Recipe<?>> key(Identifier id) {
         return ResourceKey.create(Registries.RECIPE, id);
-    }
-
-    /**
-     * Recipe providers are not data providers any more - a {@link RecipeProvider.Runner} owns the
-     * file writing and builds a fresh provider around the {@link RecipeOutput} it hands out.
-     */
-    public static class Runner extends ConditionalRecipeProvider.Runner {
-
-        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-            super(output, registries, Constants.MOD_ID);
-        }
-
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-            return new ChestsRecipes(registries, output);
-        }
-
-        @Override
-        public String getName() {
-            return "Recipes: " + Constants.MOD_ID;
-        }
     }
 }

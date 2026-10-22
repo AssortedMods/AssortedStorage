@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:cherry_crate_double"
+        "recipes": "assortedcrates:cherry_crate_double"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

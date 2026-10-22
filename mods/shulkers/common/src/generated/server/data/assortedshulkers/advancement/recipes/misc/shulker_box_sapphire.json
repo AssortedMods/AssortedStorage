@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedshulkers:shulker_box_sapphire"
+        "recipes": "assortedshulkers:shulker_box_sapphire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

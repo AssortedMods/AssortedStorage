@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:jungle_crate"
+        "recipes": "assortedcrates:jungle_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

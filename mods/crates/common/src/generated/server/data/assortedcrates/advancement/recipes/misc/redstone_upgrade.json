@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:redstone_upgrade"
+        "recipes": "assortedcrates:redstone_upgrade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

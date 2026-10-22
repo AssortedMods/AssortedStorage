@@ -12,6 +12,7 @@ import com.grim3212.assorted.containers.client.model.ContainersModelState;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.containers.common.block.LockerBlock;
 import com.grim3212.assorted.containers.common.block.blockentity.LockerBlockEntity;
+import com.grim3212.assorted.lib.client.util.SubmitHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -75,11 +76,11 @@ public class LockerBlockEntityRenderer<T extends BlockEntity & IStorage> impleme
 
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-state.facing.toYRot()));
+        poseStack.rotate(Axis.YP.rotationDegrees(-state.facing.toYRot()));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
 
         BaseStorageModel model = state.dual ? this.dualModel : this.model;
-        submitNodeCollector.submitModel(model, state.model, poseStack, LOCKER_TEXTURE, state.lightCoords, OverlayTexture.NO_OVERLAY, 0, state.breakProgress);
+        SubmitHelper.submitModel(submitNodeCollector, model, state.model, poseStack, LOCKER_TEXTURE, state.lightCoords, OverlayTexture.NO_OVERLAY, 0, state.breakProgress);
 
         poseStack.popPose();
     }

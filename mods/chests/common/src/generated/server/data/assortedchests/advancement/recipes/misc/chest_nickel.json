@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedchests:chest_nickel"
+        "recipes": "assortedchests:chest_nickel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbags:bag_netherite"
+        "recipes": "assortedbags:bag_netherite"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

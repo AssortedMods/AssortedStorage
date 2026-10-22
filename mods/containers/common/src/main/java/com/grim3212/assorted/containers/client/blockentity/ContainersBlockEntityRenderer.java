@@ -4,6 +4,7 @@ import com.grim3212.assorted.lib.core.storage.IStorage;
 import com.grim3212.assorted.containers.client.blockentity.state.ContainersBlockRenderState;
 import com.grim3212.assorted.containers.client.model.BaseStorageModel;
 import com.grim3212.assorted.containers.client.model.ContainersModelState;
+import com.grim3212.assorted.lib.client.util.SubmitHelper;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -66,10 +67,10 @@ public class ContainersBlockEntityRenderer<T extends BlockEntity & IStorage> imp
 
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-state.facing.toYRot()));
+        poseStack.rotate(Axis.YP.rotationDegrees(-state.facing.toYRot()));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
 
-        submitNodeCollector.submitModel(this.model, state.model, poseStack, this.textureLocation, state.lightCoords, OverlayTexture.NO_OVERLAY, 0, state.breakProgress);
+        SubmitHelper.submitModel(submitNodeCollector, this.model, state.model, poseStack, this.textureLocation, state.lightCoords, OverlayTexture.NO_OVERLAY, 0, state.breakProgress);
 
         poseStack.popPose();
     }

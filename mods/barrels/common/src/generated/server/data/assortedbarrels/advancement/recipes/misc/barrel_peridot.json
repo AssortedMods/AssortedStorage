@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbarrels:barrel_peridot"
+        "recipes": "assortedbarrels:barrel_peridot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

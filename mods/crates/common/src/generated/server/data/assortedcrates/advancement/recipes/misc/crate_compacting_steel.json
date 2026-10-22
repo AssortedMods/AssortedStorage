@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:crate_compacting_steel"
+        "recipes": "assortedcrates:crate_compacting_steel"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

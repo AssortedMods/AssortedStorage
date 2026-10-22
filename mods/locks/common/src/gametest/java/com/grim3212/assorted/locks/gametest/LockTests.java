@@ -336,14 +336,13 @@ final class LockTests {
         Block[] doors = LocksBlocks.lockedDoors();
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 
-        // spread() lays out a 5x5 grid, and each door is two blocks tall, so 25 is all the 9x9x9
-        // test box holds. A 26th would be written outside it and silently fail to place.
-        helper.assertTrue(doors.length <= 25, doors.length + " locked doors no longer fit the test box; give this test its own layout");
-
         for (int i = 0; i < doors.length; i++) {
             Block door = doors[i];
-            BlockPos lower = spread(i);
+            // spread() has 25 places in the 9x9x9 box; a door is done with before the next, so later ones reuse them.
+            BlockPos lower = spread(i % 25);
             BlockPos upper = lower.above();
+            helper.setBlock(upper, Blocks.AIR);
+            helper.setBlock(lower, Blocks.AIR);
 
             helper.setBlock(lower, door.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
             helper.setBlock(upper, door.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));

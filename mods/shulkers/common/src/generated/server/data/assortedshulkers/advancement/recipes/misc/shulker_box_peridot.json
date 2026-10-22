@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedshulkers:shulker_box_peridot"
+        "recipes": "assortedshulkers:shulker_box_peridot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:crate_bridge_bronze"
+        "recipes": "assortedcrates:crate_bridge_bronze"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

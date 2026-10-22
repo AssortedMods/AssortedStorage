@@ -10,6 +10,7 @@ import com.grim3212.assorted.bags.data.BagsRecipes;
 import com.grim3212.assorted.lib.core.inventory.IInventoryItem;
 import com.grim3212.assorted.lib.data.ForgeBlockTagProvider;
 import com.grim3212.assorted.lib.data.ForgeItemTagProvider;
+import com.grim3212.assorted.lib.data.ForgeRegistryEntries;
 import com.grim3212.assorted.lib.inventory.ForgePlatformInventoryStorageHandlerUnsided;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import net.minecraft.core.HolderLookup;
@@ -45,10 +46,9 @@ public class AssortedBagsNeoForge {
      */
     private void gatherServerData(final GatherDataEvent.Server event) {
         PackOutput packOutput = event.getGenerator().getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getWorldLookupProvider();
 
-        // Recipe providers are not data providers any more - the Runner owns the output.
-        event.addProvider(new BagsRecipes.Runner(packOutput, lookupProvider));
+        ForgeRegistryEntries.of(Constants.MOD_ID).recipes(BagsRecipes::new).addTo(event);
         ForgeBlockTagProvider blockTagProvider = event.addProvider(new ForgeBlockTagProvider(packOutput, lookupProvider, Constants.MOD_ID, new BagsBlockTagProvider(packOutput, lookupProvider)));
         event.addProvider(new ForgeItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), Constants.MOD_ID, new BagsItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter())));
     }

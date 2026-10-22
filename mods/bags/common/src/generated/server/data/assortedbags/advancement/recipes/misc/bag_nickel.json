@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbags:bag_nickel"
+        "recipes": "assortedbags:bag_nickel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

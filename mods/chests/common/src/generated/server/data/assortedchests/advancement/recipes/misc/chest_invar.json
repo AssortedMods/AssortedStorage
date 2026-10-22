@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedchests:chest_invar"
+        "recipes": "assortedchests:chest_invar"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

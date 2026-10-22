@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:crate_controller"
+        "recipes": "assortedcrates:crate_controller"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

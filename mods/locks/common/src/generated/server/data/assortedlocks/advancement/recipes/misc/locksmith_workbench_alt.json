@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedlocks:locksmith_workbench_alt"
+        "recipes": "assortedlocks:locksmith_workbench_alt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

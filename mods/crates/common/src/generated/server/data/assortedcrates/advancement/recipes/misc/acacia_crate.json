@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:acacia_crate"
+        "recipes": "assortedcrates:acacia_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:crate_bridge_gold"
+        "recipes": "assortedcrates:crate_bridge_gold"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

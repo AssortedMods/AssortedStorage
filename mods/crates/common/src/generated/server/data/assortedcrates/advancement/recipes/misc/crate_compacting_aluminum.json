@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:crate_compacting_aluminum"
+        "recipes": "assortedcrates:crate_compacting_aluminum"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

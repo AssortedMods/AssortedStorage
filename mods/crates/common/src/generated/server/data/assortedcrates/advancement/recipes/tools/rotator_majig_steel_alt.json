@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:rotator_majig_steel_alt"
+        "recipes": "assortedcrates:rotator_majig_steel_alt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

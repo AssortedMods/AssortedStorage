@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcontainers:mangrove_warehouse_crate"
+        "recipes": "assortedcontainers:mangrove_warehouse_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

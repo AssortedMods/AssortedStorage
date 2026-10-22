@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedshulkers:shulker_box_netherite"
+        "recipes": "assortedshulkers:shulker_box_netherite"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedlocks:locksmith_lock"
+        "recipes": "assortedlocks:locksmith_lock"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

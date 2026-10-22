@@ -10,6 +10,7 @@ import com.grim3212.assorted.containers.client.model.WarehouseCrateModel;
 import com.grim3212.assorted.lib.core.storage.BaseStorageBlock;
 import com.grim3212.assorted.containers.common.block.WarehouseCrateBlock;
 import com.grim3212.assorted.containers.common.block.blockentity.WarehouseCrateBlockEntity;
+import com.grim3212.assorted.lib.client.util.SubmitHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -84,10 +85,10 @@ public class WarehouseCrateBlockEntityRenderer<T extends BlockEntity & IStorage>
 
         poseStack.pushPose();
         poseStack.translate(0.5D, 0.5D, 0.5D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-state.facing.toYRot()));
+        poseStack.rotate(Axis.YP.rotationDegrees(-state.facing.toYRot()));
         poseStack.translate(-0.5D, -0.5D, -0.5D);
 
-        submitNodeCollector.submitModel(this.model, state.model, poseStack, state.texture, state.lightCoords, OverlayTexture.NO_OVERLAY, 0, state.breakProgress);
+        SubmitHelper.submitModel(submitNodeCollector, this.model, state.model, poseStack, state.texture, state.lightCoords, OverlayTexture.NO_OVERLAY, 0, state.breakProgress);
 
         poseStack.popPose();
     }

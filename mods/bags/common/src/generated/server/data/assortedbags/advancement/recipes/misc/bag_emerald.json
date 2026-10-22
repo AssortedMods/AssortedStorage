@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbags:bag_emerald"
+        "recipes": "assortedbags:bag_emerald"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

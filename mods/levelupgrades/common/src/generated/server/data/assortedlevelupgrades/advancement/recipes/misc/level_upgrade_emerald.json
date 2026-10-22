@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedlevelupgrades:level_upgrade_emerald"
+        "recipes": "assortedlevelupgrades:level_upgrade_emerald"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

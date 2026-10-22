@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:crimson_crate_double"
+        "recipes": "assortedcrates:crimson_crate_double"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcrates:crate_bridge_copper"
+        "recipes": "assortedcrates:crate_bridge_copper"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

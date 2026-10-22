@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedhoppers:hopper_sapphire"
+        "recipes": "assortedhoppers:hopper_sapphire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

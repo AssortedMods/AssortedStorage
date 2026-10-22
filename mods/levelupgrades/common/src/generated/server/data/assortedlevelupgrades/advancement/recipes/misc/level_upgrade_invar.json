@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedlevelupgrades:level_upgrade_invar"
+        "recipes": "assortedlevelupgrades:level_upgrade_invar"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

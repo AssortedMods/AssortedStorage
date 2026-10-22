@@ -4,26 +4,18 @@ import com.grim3212.assorted.containers.Constants;
 import com.grim3212.assorted.containers.common.block.ContainersBlocks;
 import com.grim3212.assorted.lib.core.conditions.ConditionalRecipeProvider;
 import com.grim3212.assorted.lib.util.LibCommonTags;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.PackOutput;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
-
-import java.util.concurrent.CompletableFuture;
+import net.minecraft.world.item.crafting.Recipe;
 
 public class ContainersRecipes extends ConditionalRecipeProvider {
 
-    private final HolderGetter<Item> items;
-
-    public ContainersRecipes(HolderLookup.Provider registries, RecipeOutput output) {
-        super(registries, output, Constants.MOD_ID);
-        this.items = registries.lookupOrThrow(Registries.ITEM);
+    public ContainersRecipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+        super(recipes, advancements, Constants.MOD_ID);
     }
 
     @Override
@@ -45,26 +37,5 @@ public class ContainersRecipes extends ConditionalRecipeProvider {
             Item planks = wood.getPlanks().asItem();
             ShapedRecipeBuilder.shaped(this.items, RecipeCategory.DECORATIONS, crate.get()).define('P', planks).define('L', wood.getLogTag()).pattern("LLL").pattern("P P").pattern("PPP").unlockedBy("has_" + wood + "_planks", has(planks)).save(this.output);
         });
-    }
-
-    /**
-     * Recipe providers are not data providers any more - a {@link RecipeProvider.Runner} owns the
-     * file writing and builds a fresh provider around the {@link RecipeOutput} it hands out.
-     */
-    public static class Runner extends ConditionalRecipeProvider.Runner {
-
-        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
-            super(output, registries, Constants.MOD_ID);
-        }
-
-        @Override
-        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
-            return new ContainersRecipes(registries, output);
-        }
-
-        @Override
-        public String getName() {
-            return "Recipes: " + Constants.MOD_ID;
-        }
     }
 }

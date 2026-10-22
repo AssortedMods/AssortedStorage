@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbags:ender_bag"
+        "recipes": "assortedbags:ender_bag"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

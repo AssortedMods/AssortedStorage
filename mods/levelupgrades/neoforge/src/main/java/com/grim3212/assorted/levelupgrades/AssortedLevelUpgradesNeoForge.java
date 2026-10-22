@@ -6,6 +6,7 @@ import com.grim3212.assorted.levelupgrades.client.data.LevelUpgradesManualProvid
 import com.grim3212.assorted.levelupgrades.data.LevelUpgradesItemTagProvider;
 import com.grim3212.assorted.levelupgrades.data.LevelUpgradesRecipes;
 import com.grim3212.assorted.lib.data.ForgeItemTagProvider;
+import com.grim3212.assorted.lib.data.ForgeRegistryEntries;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
@@ -37,10 +38,9 @@ public class AssortedLevelUpgradesNeoForge {
      */
     private void gatherServerData(final GatherDataEvent.Server event) {
         PackOutput packOutput = event.getGenerator().getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getWorldLookupProvider();
 
-        // Recipe providers are not data providers any more - the Runner owns the output.
-        event.addProvider(new LevelUpgradesRecipes.Runner(packOutput, lookupProvider));
+        ForgeRegistryEntries.of(Constants.MOD_ID).recipes(LevelUpgradesRecipes::new).addTo(event);
         // This mod has no blocks, so no block tags for the item tags to copy from.
         CompletableFuture<TagsProvider.TagLookup<Block>> noBlockTags = CompletableFuture.completedFuture(TagsProvider.TagLookup.empty());
         event.addProvider(new ForgeItemTagProvider(packOutput, lookupProvider, noBlockTags, Constants.MOD_ID, new LevelUpgradesItemTagProvider(packOutput, lookupProvider, noBlockTags)));

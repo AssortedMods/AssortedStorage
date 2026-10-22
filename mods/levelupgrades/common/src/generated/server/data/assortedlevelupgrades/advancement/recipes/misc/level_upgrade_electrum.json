@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedlevelupgrades:level_upgrade_electrum"
+        "recipes": "assortedlevelupgrades:level_upgrade_electrum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

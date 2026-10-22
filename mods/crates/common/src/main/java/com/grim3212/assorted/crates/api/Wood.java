@@ -23,6 +23,7 @@ public enum Wood {
 	JUNGLE(WoodType.JUNGLE, Blocks.JUNGLE_LOG, () -> ItemTags.JUNGLE_LOGS),
 	DARK_OAK(WoodType.DARK_OAK, Blocks.DARK_OAK_LOG, () -> ItemTags.DARK_OAK_LOGS),
 	PALE_OAK(WoodType.PALE_OAK, Blocks.PALE_OAK_LOG, () -> ItemTags.PALE_OAK_LOGS),
+	POPLAR(WoodType.POPLAR, Blocks.POPLAR_LOG, () -> ItemTags.POPLAR_LOGS),
 	CRIMSON(WoodType.CRIMSON, Blocks.CRIMSON_STEM, () -> ItemTags.CRIMSON_STEMS),
 	WARPED(WoodType.WARPED, Blocks.WARPED_STEM, () -> ItemTags.WARPED_STEMS),
 	MANGROVE(WoodType.MANGROVE, Blocks.MANGROVE_LOG, () -> ItemTags.MANGROVE_LOGS),

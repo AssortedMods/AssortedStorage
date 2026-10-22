@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedcontainers:spruce_warehouse_crate"
+        "recipes": "assortedcontainers:spruce_warehouse_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

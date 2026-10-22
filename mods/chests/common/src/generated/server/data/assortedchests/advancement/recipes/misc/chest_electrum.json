@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedchests:chest_electrum"
+        "recipes": "assortedchests:chest_electrum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

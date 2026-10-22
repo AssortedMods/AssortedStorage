@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbarrels:barrel_sapphire"
+        "recipes": "assortedbarrels:barrel_sapphire"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

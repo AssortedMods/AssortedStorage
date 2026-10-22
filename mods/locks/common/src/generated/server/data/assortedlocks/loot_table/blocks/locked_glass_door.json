@@ -2,31 +2,32 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "assortedlocks:mod_loaded",
-          "modId": "assortedbuildingblocks"
-        },
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "assortedlocks:mod_loaded",
+            "modId": "assortedbuildingblocks"
+          },
+          {
+            "type": "minecraft:survives_explosion"
+          }
+        ]
+      },
       "entries": [
         {
           "type": "assortedlocks:optional_item",
-          "conditions": [
-            {
-              "block": "assortedlocks:locked_glass_door",
-              "condition": "minecraft:block_state_property",
-              "properties": {
-                "half": "lower"
-              }
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "assortedlocks:locked_glass_door",
+            "state": {
+              "half": "lower"
             }
-          ],
+          },
           "name": "assortedbuildingblocks:glass_door"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "assortedlocks:blocks/locked_glass_door"

@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "assortedbarrels:barrel_electrum"
+        "recipes": "assortedbarrels:barrel_electrum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
