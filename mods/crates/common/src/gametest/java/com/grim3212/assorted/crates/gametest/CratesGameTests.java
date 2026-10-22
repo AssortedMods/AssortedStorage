@@ -1,5 +1,7 @@
 package com.grim3212.assorted.crates.gametest;
 
+import com.grim3212.assorted.crates.Constants;
+import com.grim3212.assorted.lib.test.CommonTests;
 import net.minecraft.gametest.framework.GameTestHelper;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -23,5 +25,7 @@ public final class CratesGameTests {
         AliasTests.register(out);
         CrossLoaderDataTests.register(out);
         FamilyTests.register(out);
+        ClickTests.register(out);
+        CommonTests.register(out, Constants.MOD_ID);
     }
 }

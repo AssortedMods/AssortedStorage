@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedlocks:locked_door_ignores_redstone",
+  "structure": "assortedlocks:test_box",
+  "max_ticks": 30,
+  "setup_ticks": 0,
+  "required": true
+}

@@ -1,5 +1,7 @@
 package com.grim3212.assorted.hoppers.gametest;
 
+import com.grim3212.assorted.hoppers.Constants;
+import com.grim3212.assorted.lib.test.CommonTests;
 import net.minecraft.gametest.framework.GameTestHelper;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -22,5 +24,8 @@ public final class HoppersGameTests {
         MenuTests.register(out);
         TooltipTests.register(out);
         FamilyTests.register(out);
+        UpgradeRecipeTests.register(out);
+        SpeedTests.register(out);
+        CommonTests.register(out, Constants.MOD_ID);
     }
 }

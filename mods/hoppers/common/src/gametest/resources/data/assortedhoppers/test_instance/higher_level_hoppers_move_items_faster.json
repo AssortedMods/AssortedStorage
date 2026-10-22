@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedhoppers:higher_level_hoppers_move_items_faster",
+  "structure": "assortedhoppers:test_box",
+  "max_ticks": 40,
+  "setup_ticks": 0,
+  "required": true
+}

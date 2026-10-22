@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedlevelupgrades:level_upgrade_raises_a_chest_keeping_its_items",
+  "structure": "assortedlevelupgrades:test_box",
+  "max_ticks": 40,
+  "setup_ticks": 0,
+  "required": true
+}

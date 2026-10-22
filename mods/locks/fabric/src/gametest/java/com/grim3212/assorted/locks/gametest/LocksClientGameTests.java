@@ -1,5 +1,7 @@
 package com.grim3212.assorted.locks.gametest;
 
+import com.grim3212.assorted.locks.Constants;
+import com.grim3212.assorted.lib.test.ClientChecks;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
@@ -47,6 +49,7 @@ public class LocksClientGameTests implements FabricClientGameTest {
         // Inside a world: an ItemStack cannot be made on the title screen, because an item's default
         // components are only bound once a world's registries have loaded.
         try (TestSingleplayerContext world = context.worldBuilder().create()) {
+            ClientChecks.assertDrawsRight(context, Constants.MOD_ID);
             tooltipsShowTheCode(context);
             workbenchOpensOnTheClient(context, world);
             lockedDoorsReachOtherClientsWhole(context, world);

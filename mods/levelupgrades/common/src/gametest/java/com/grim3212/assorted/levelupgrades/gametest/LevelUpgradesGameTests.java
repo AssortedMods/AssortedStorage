@@ -1,5 +1,7 @@
 package com.grim3212.assorted.levelupgrades.gametest;
 
+import com.grim3212.assorted.levelupgrades.Constants;
+import com.grim3212.assorted.lib.test.CommonTests;
 import net.minecraft.gametest.framework.GameTestHelper;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -21,5 +23,7 @@ public final class LevelUpgradesGameTests {
         AliasTests.register(out);
         CrossLoaderDataTests.register(out);
         FamilyTests.register(out);
+        InPlaceTests.register(out);
+        CommonTests.register(out, Constants.MOD_ID);
     }
 }

@@ -12,6 +12,9 @@
   "entrypoints": {
     "main": [
       "com.grim3212.assorted.barrels.gametest.BarrelsFabricGameTests"
+    ],
+    "fabric-client-gametest": [
+      "com.grim3212.assorted.barrels.gametest.BarrelsClientGameTests"
     ]
   },
   "depends": {

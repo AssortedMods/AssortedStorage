@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcrates:crate_clicks_put_in_and_take_out",
+  "structure": "assortedcrates:test_box",
+  "max_ticks": 40,
+  "setup_ticks": 0,
+  "required": true
+}

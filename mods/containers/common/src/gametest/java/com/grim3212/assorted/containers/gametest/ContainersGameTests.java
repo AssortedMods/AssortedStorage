@@ -1,5 +1,7 @@
 package com.grim3212.assorted.containers.gametest;
 
+import com.grim3212.assorted.containers.Constants;
+import com.grim3212.assorted.lib.test.CommonTests;
 import net.minecraft.gametest.framework.GameTestHelper;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -22,5 +24,7 @@ public final class ContainersGameTests {
         LockerTests.register(out);
         MenuTests.register(out);
         FamilyTests.register(out);
+        SafeAndTowerTests.register(out);
+        CommonTests.register(out, Constants.MOD_ID);
     }
 }

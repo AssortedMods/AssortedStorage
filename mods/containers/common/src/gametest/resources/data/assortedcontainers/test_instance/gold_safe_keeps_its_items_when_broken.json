@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcontainers:gold_safe_keeps_its_items_when_broken",
+  "structure": "assortedcontainers:test_box",
+  "max_ticks": 40,
+  "setup_ticks": 0,
+  "required": true
+}

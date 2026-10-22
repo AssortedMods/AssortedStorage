@@ -1,5 +1,7 @@
 package com.grim3212.assorted.bags.gametest;
 
+import com.grim3212.assorted.bags.Constants;
+import com.grim3212.assorted.lib.test.ClientChecks;
 import com.grim3212.assorted.bags.common.item.BagsItems;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
@@ -24,6 +26,7 @@ public class BagsClientGameTests implements FabricClientGameTest {
         // Inside a world: an ItemStack cannot be made on the title screen, because an item's default
         // components are only bound once a world's registries have loaded.
         try (TestSingleplayerContext world = context.worldBuilder().create()) {
+            ClientChecks.assertDrawsRight(context, Constants.MOD_ID);
             tooltipsShowStorageInfo(context);
         }
     }

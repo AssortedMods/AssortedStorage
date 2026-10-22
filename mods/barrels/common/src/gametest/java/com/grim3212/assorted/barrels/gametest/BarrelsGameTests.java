@@ -1,5 +1,7 @@
 package com.grim3212.assorted.barrels.gametest;
 
+import com.grim3212.assorted.barrels.Constants;
+import com.grim3212.assorted.lib.test.CommonTests;
 import net.minecraft.gametest.framework.GameTestHelper;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -22,5 +24,7 @@ public final class BarrelsGameTests {
         MenuTests.register(out);
         TooltipTests.register(out);
         FamilyTests.register(out);
+        UpgradeRecipeTests.register(out);
+        CommonTests.register(out, Constants.MOD_ID);
     }
 }

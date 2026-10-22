@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcontainers:stacked_item_towers_share_their_slots",
+  "structure": "assortedcontainers:test_box",
+  "max_ticks": 40,
+  "setup_ticks": 0,
+  "required": true
+}
