@@ -13,7 +13,7 @@ public class KeyRingSlot extends SlotStorageHandler {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.getItem() == LocksItems.LOCKSMITH_KEY.get() && !StorageUtil.getCode(stack).isEmpty();
+        return stack.isEmpty() || (stack.getItem() == LocksItems.LOCKSMITH_KEY.get() && !StorageUtil.getCode(stack).isEmpty());
     }
 
     @Override

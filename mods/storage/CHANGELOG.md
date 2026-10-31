@@ -1,5 +1,12 @@
 # Changelog
 
+## 13.0.1
+
+- Includes Assorted Bags 2.0.1, Assorted Crates 2.0.1 and Assorted Locks 2.0.1, so sorting mods such as
+  ClientSort sort bags and ender bags, and leave crates and locks alone. A lock put in or taken out of
+  an open ender bag switches its inventory straight away
+- Requires Assorted Lib 5.0.2, which fixes sorting chests and bags without moving their locks
+
 ## 13.0.0
 
 Updated to Minecraft 26.3, for NeoForge and Fabric.

@@ -1,14 +1,16 @@
 package com.grim3212.assorted.crates.common.inventory.crates;
 
 import com.grim3212.assorted.lib.core.inventory.IItemStorageHandler;
+import com.grim3212.assorted.lib.core.inventory.impl.StorageHandlerContainer;
 import com.grim3212.assorted.lib.core.inventory.slot.SlotStorageHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
+/** A crate's stack, bigger than a stack can be. It has a container of its own so sorting mods leave it alone. */
 public class LargeItemStackSlot extends SlotStorageHandler {
 
     public LargeItemStackSlot(IItemStorageHandler itemHandler, int slot, int x, int y) {
-        super(itemHandler, slot, x, y);
+        super(StorageHandlerContainer.separate(itemHandler), itemHandler, slot, x, y);
     }
 
     @Override
