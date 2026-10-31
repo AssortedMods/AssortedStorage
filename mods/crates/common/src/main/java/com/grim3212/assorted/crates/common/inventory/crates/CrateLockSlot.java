@@ -17,6 +17,6 @@ public class CrateLockSlot extends EnhancementSlot {
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return LockItems.isCodedLock(stack);
+        return stack.isEmpty() || LockItems.isCodedLock(stack);
     }
 }

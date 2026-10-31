@@ -1,6 +1,7 @@
 package com.grim3212.assorted.bags.gametest;
 
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
+import com.grim3212.assorted.lib.core.storage.ender.EnderSavedData;
 import com.grim3212.assorted.lib.util.NBTHelper;
 import com.grim3212.assorted.bags.common.crafting.BagColoringRecipe;
 import com.grim3212.assorted.bags.common.inventory.bag.BagItemHandler;
@@ -36,6 +37,7 @@ final class BagTests {
         out.accept("bag_dyes_and_reads_back_colour", BagTests::bagDyesAndReadsBackColour);
         out.accept("bag_holds_items_across_save_load", BagTests::bagHoldsItemsAcrossSaveLoad);
         out.accept("ender_bag_opens_the_players_ender_chest", BagTests::enderBagOpensThePlayersEnderChest);
+        out.accept("ender_bag_follows_its_lock", BagTests::enderBagFollowsItsLock);
     }
 
     /**
@@ -111,9 +113,34 @@ final class BagTests {
 
         // One padlock slot, the 27 chest slots, then the player's own 36.
         helper.assertValueEqual(menu.slots.size(), 1 + 27 + 36, "the ender bag menu's slot count");
-        helper.assertTrue(menu.getSlot(1).container == ownChest, "an uncoded ender bag did not resolve to the player's own ender chest");
         helper.assertTrue(menu.getSlot(1).getItem().is(Items.DIAMOND), "the ender bag did not show what was in the player's ender chest");
         helper.assertValueEqual(menu.getSlot(1).getItem().getCount(), 3, "the stack the ender bag showed from the player's ender chest");
+        helper.succeed();
+    }
+
+    /**
+     * Putting a lock in an open ender bag shows that code's shared inventory, and taking it out shows
+     * the player's own ender chest again, without reopening the bag. Every chest slot shares one
+     * container, which sorting mods need.
+     */
+    private static void enderBagFollowsItsLock(GameTestHelper helper) {
+        ServerPlayer player = survivalPlayer(helper, new ItemStack(BagsItems.ENDER_BAG.get()));
+        player.getEnderChestInventory().setItem(0, new ItemStack(Items.DIAMOND, 3));
+        EnderSavedData.get(helper.getLevel()).getInventory("ender_bag_follows_its_lock").setStackInSlot(0, new ItemStack(Items.EMERALD, 5));
+
+        EnderBagContainer menu = new EnderBagContainer(1, helper.getLevel(), player.blockPosition(), player.getInventory(), player);
+        helper.runBeforeTestEnd(() -> menu.removed(player));
+        helper.assertTrue(menu.getSlot(1).container == menu.getSlot(27).container, "two ender bag slots have different containers");
+        helper.assertTrue(menu.getSlot(1).getItem().is(Items.DIAMOND), "an unlocked ender bag did not show the player's ender chest");
+
+        // Set straight in the slot, which skips the lock item check; only the code picks the inventory.
+        menu.getSlot(0).set(StorageUtil.setCodeOnStack("ender_bag_follows_its_lock", new ItemStack(Items.STICK)));
+        menu.broadcastChanges();
+        helper.assertTrue(menu.getSlot(1).getItem().is(Items.EMERALD), "a lock put in the open ender bag did not switch it to the code's inventory");
+
+        menu.getSlot(0).set(ItemStack.EMPTY);
+        menu.broadcastChanges();
+        helper.assertTrue(menu.getSlot(1).getItem().is(Items.DIAMOND), "taking the lock out did not switch back to the player's ender chest");
         helper.succeed();
     }
 }

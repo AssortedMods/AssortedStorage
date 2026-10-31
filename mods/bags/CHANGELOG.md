@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1
+
+- Sorting mods such as ClientSort sort bags and ender bags, locked ones too, and leave the lock where it is
+- Putting a lock in an open ender bag or taking it out switches it to that inventory straight away
+- Requires Assorted Lib 5.0.2
+
 ## 2.0.0
 
 Updated to Minecraft 26.3, for NeoForge and Fabric.

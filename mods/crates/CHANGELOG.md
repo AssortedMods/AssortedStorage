@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1
+
+- Sorting mods such as ClientSort leave crate stacks, upgrades and locks alone
+- Requires Assorted Lib 5.0.2
+
 ## 2.0.0
 
 Updated to Minecraft 26.3, for NeoForge and Fabric.

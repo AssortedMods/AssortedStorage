@@ -1,21 +1,23 @@
 package com.grim3212.assorted.crates.common.inventory.crates;
 
 import com.grim3212.assorted.lib.core.inventory.IItemStorageHandler;
+import com.grim3212.assorted.lib.core.inventory.impl.StorageHandlerContainer;
 import com.grim3212.assorted.lib.core.inventory.slot.SlotStorageHandler;
 import com.grim3212.assorted.lib.core.storage.ICrateUpgrade;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/** A crate upgrade slot, or the lock slot. It has a container of its own so sorting mods never move the upgrade. */
 public class EnhancementSlot extends SlotStorageHandler {
 
     public EnhancementSlot(IItemStorageHandler itemHandler, int slot, int x, int y) {
-        super(itemHandler, slot, x, y);
+        super(StorageHandlerContainer.separate(itemHandler), itemHandler, slot, x, y);
     }
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-        return stack.getItem() instanceof ICrateUpgrade;
+        return stack.isEmpty() || stack.getItem() instanceof ICrateUpgrade;
     }
 
     @Override

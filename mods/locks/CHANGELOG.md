@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1
+
+- Key ring slots can be emptied like vanilla slots, which sorting mods check before moving items
+- Requires Assorted Lib 5.0.2
+
 ## 2.0.0
 
 Updated to Minecraft 26.3, for NeoForge and Fabric.

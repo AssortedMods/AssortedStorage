@@ -1,6 +1,7 @@
 package com.grim3212.assorted.bags.common.inventory.enderbag;
 
 import com.grim3212.assorted.lib.core.inventory.IItemStorageHandler;
+import com.grim3212.assorted.lib.core.inventory.impl.StorageHandlerContainer;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.core.inventory.locking.LockSlot;
@@ -10,6 +11,8 @@ import com.grim3212.assorted.bags.common.item.EnderBagItem;
 import com.grim3212.assorted.lib.core.storage.ender.EnderSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,10 +24,15 @@ import net.minecraft.world.level.Level;
 
 public class EnderBagContainer extends AbstractContainerMenu {
 
+    private static final int ENDER_SLOTS = 27;
+
     private int bagSlotId;
     public EnderBagItemHandler handler;
-    private final PlayerEnderChestContainer playerEnderChest;
-    private final LockedEnderChestInventory lockedEnderChestInv;
+    private final Player player;
+    // The client only mirrors what the server sends; it never sees the shared inventories.
+    private final Container clientInventory = new SimpleContainer(ENDER_SLOTS);
+    // The inventory the bag counts as open, to move it along when the lock changes.
+    private Object openInventory;
 
     public EnderBagContainer(final int windowId, final Inventory playerInventory) {
         this(windowId, playerInventory.player.level(), playerInventory.player.blockPosition(), playerInventory, playerInventory.player);
@@ -36,18 +44,12 @@ public class EnderBagContainer extends AbstractContainerMenu {
 
     public EnderBagContainer(int windowId, Level world, BlockPos pos, Inventory playerInventory, Player playerEntity) {
         super(BagsContainerTypes.ENDER_BAG.get(), windowId);
+        this.player = playerEntity;
 
         ItemStack stack = findBag(playerEntity);
+        IItemStorageHandler storageHandler = stack.isEmpty() ? null : Services.INVENTORY.getItemStorageHandler(stack).orElse(null);
 
-        if (world != null && StorageUtil.hasCode(stack)) {
-            lockedEnderChestInv = EnderSavedData.get(world).getInventory(StorageUtil.getCode(stack));
-            playerEnderChest = null;
-        } else {
-            playerEnderChest = playerEntity.getEnderChestInventory();
-            lockedEnderChestInv = null;
-        }
-
-        if (stack == null || stack.isEmpty()) {
+        if (!(storageHandler instanceof EnderBagItemHandler)) {
             // closeContainer() is protected on Player now; only the server side can close a menu.
             if (playerEntity instanceof ServerPlayer serverPlayer) {
                 serverPlayer.closeContainer();
@@ -55,73 +57,99 @@ public class EnderBagContainer extends AbstractContainerMenu {
             return;
         }
 
-        if (playerEnderChest != null) {
-            playerEnderChest.startOpen(playerEntity);
-        }
-        if (lockedEnderChestInv != null) {
-            lockedEnderChestInv.startOpen(playerEntity);
-        }
+        handler = (EnderBagItemHandler) storageHandler;
+        handler.load();
 
-        IItemStorageHandler storageHandler = Services.INVENTORY.getItemStorageHandler(stack).orElse(null);
+        int xRows = 3;
+        int yCols = 9;
 
-        if (storageHandler instanceof EnderBagItemHandler) {
-            handler = (EnderBagItemHandler) storageHandler;
-            handler.load();
+        this.addSlot(new LockSlot(handler, 0, 18 + yCols * 18, 18));
 
-            int xRows = 3;
-            int yCols = 9;
-
-            this.addSlot(new LockSlot(handler, 0, 18 + yCols * 18, 18));
-
-            for (int chestRow = 0; chestRow < xRows; chestRow++) {
-                for (int chestCol = 0; chestCol < yCols; chestCol++) {
-                    if (playerEnderChest != null) {
-                        this.addSlot(new Slot(playerEnderChest, chestCol + chestRow * yCols, 8 + chestCol * 18, 18 + chestRow * 18));
-                    } else {
-                        this.addSlot(new EnderBagSlot(lockedEnderChestInv, chestCol + chestRow * yCols, 8 + chestCol * 18, 18 + chestRow * 18, StorageUtil.getCode(stack)));
-                    }
-
-                }
-            }
-
-            int leftOffset = Math.max(yCols - 9, 0) * 9;
-            int leftCol = ((184 - 168) / 2) + leftOffset;
-            int heighOffset = 113 + xRows * 18;
-
-            for (int playerInvRow = 0; playerInvRow < 3; playerInvRow++) {
-                for (int playerInvCol = 0; playerInvCol < 9; playerInvCol++) {
-                    this.addSlot(new Slot(playerInventory, playerInvCol + playerInvRow * 9 + 9, leftCol + playerInvCol * 18, heighOffset - (4 - playerInvRow) * 18 - 10));
-                }
-
-            }
-
-            for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
-                this.addSlot(new Slot(playerInventory, hotbarSlot, leftCol + hotbarSlot * 18, heighOffset - 24));
-            }
-
-        } else {
-            // closeContainer() is protected on Player now; only the server side can close a menu.
-            if (playerEntity instanceof ServerPlayer serverPlayer) {
-                serverPlayer.closeContainer();
-            }
-            if (playerEnderChest != null) {
-                playerEnderChest.stopOpen(playerEntity);
-            }
-            if (lockedEnderChestInv != null) {
-                lockedEnderChestInv.stopOpen(playerEntity);
+        EnderBagInventory enderInventory = new EnderBagInventory(this::currentContainer);
+        for (int chestRow = 0; chestRow < xRows; chestRow++) {
+            for (int chestCol = 0; chestCol < yCols; chestCol++) {
+                this.addSlot(new EnderBagSlot(enderInventory, chestCol + chestRow * yCols, 8 + chestCol * 18, 18 + chestRow * 18));
             }
         }
+
+        int leftOffset = Math.max(yCols - 9, 0) * 9;
+        int leftCol = ((184 - 168) / 2) + leftOffset;
+        int heighOffset = 113 + xRows * 18;
+
+        for (int playerInvRow = 0; playerInvRow < 3; playerInvRow++) {
+            for (int playerInvCol = 0; playerInvCol < 9; playerInvCol++) {
+                this.addSlot(new Slot(playerInventory, playerInvCol + playerInvRow * 9 + 9, leftCol + playerInvCol * 18, heighOffset - (4 - playerInvRow) * 18 - 10));
+            }
+
+        }
+
+        for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
+            this.addSlot(new Slot(playerInventory, hotbarSlot, leftCol + hotbarSlot * 18, heighOffset - 24));
+        }
+
+        this.openInventory = this.currentInventory();
+        this.startOpen(this.openInventory);
+    }
+
+    /**
+     * The inventory the lock in the bag picks right now: the code's shared one, or the player's own
+     * ender chest with no lock. Read from the lock slot every time, so the slots follow the lock.
+     */
+    private Object currentInventory() {
+        if (this.player.level().isClientSide()) {
+            return this.clientInventory;
+        }
+
+        String code = StorageUtil.getCode(this.handler.getStackInSlot(0));
+        if (code.isEmpty()) {
+            return this.player.getEnderChestInventory();
+        }
+        return EnderSavedData.get(this.player.level()).getInventory(code);
+    }
+
+    private Container currentContainer() {
+        Object inventory = this.currentInventory();
+        if (inventory instanceof LockedEnderChestInventory locked) {
+            return StorageHandlerContainer.of(locked);
+        }
+        return (Container) inventory;
+    }
+
+    private void startOpen(Object inventory) {
+        if (inventory instanceof PlayerEnderChestContainer enderChest) {
+            enderChest.startOpen(this.player);
+        } else if (inventory instanceof LockedEnderChestInventory locked) {
+            locked.startOpen(this.player);
+        }
+    }
+
+    private void stopOpen(Object inventory) {
+        if (inventory instanceof PlayerEnderChestContainer enderChest) {
+            enderChest.stopOpen(this.player);
+        } else if (inventory instanceof LockedEnderChestInventory locked) {
+            locked.stopOpen(this.player);
+        }
+    }
+
+    @Override
+    public void broadcastChanges() {
+        // A lock put in or taken out switches the inventory; the slots already show the new one.
+        if (this.handler != null) {
+            Object current = this.currentInventory();
+            if (current != this.openInventory) {
+                this.stopOpen(this.openInventory);
+                this.startOpen(current);
+                this.openInventory = current;
+            }
+        }
+        super.broadcastChanges();
     }
 
     @Override
     public void removed(Player player) {
         super.removed(player);
-        if (playerEnderChest != null) {
-            playerEnderChest.stopOpen(player);
-        }
-        if (lockedEnderChestInv != null) {
-            lockedEnderChestInv.stopOpen(player);
-        }
+        this.stopOpen(this.openInventory);
+        this.openInventory = null;
     }
 
     @Override
