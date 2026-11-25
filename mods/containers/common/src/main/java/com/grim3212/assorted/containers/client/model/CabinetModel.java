@@ -6,7 +6,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.RenderType;
 
 public class CabinetModel extends BaseStorageModel {
 
@@ -17,7 +17,7 @@ public class CabinetModel extends BaseStorageModel {
 	private final ModelPart lock;
 
 	public CabinetModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutCull);
+		super(root, RenderType::entityCutout);
 
 		this.door1 = root.getChild("door1");
 		this.door2 = root.getChild("door2");
@@ -46,8 +46,6 @@ public class CabinetModel extends BaseStorageModel {
 
 	@Override
 	public void setupAnim(ContainersModelState state) {
-		super.setupAnim(state);
-
 		float angle = state.doorAngle();
 		this.door1.yRot = (angle / 90.0F * -1.25F);
 		this.door2.yRot = (angle / 90.0F * 1.25F);

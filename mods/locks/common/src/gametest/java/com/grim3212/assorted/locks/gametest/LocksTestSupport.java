@@ -9,14 +9,17 @@ import com.grim3212.assorted.locks.common.network.SetLockPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -71,12 +74,19 @@ final class LocksTestSupport {
         helper.assertTrue(LockConversions.tryLock(helper.getLevel(), helper.absolutePos(lower), code), "an oak door refused a coded padlock");
     }
 
-    /** Right clicks the north face of a door with whatever the player is carrying. */
+    /**
+     * Right clicks the north face of a door with whatever the player is carrying, as the server does:
+     * the held item first, then the empty hand interaction when the item passes it on.
+     */
     static InteractionResult knock(GameTestHelper helper, Player player, BlockPos door) {
         BlockPos pos = helper.absolutePos(door);
         BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(pos), Direction.NORTH, pos, false);
         BlockState state = helper.getLevel().getBlockState(pos);
-        return state.useItemOn(player.getItemInHand(InteractionHand.MAIN_HAND), helper.getLevel(), player, InteractionHand.MAIN_HAND, hit);
+        ItemInteractionResult withItem = state.useItemOn(player.getItemInHand(InteractionHand.MAIN_HAND), helper.getLevel(), player, InteractionHand.MAIN_HAND, hit);
+        if (withItem == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION) {
+            return state.useWithoutItem(helper.getLevel(), player, hit);
+        }
+        return withItem.result();
     }
 
     /** The result of the one crafting recipe that matches {@code input}. */
@@ -103,8 +113,17 @@ final class LocksTestSupport {
             helper.assertTrue(in != null, "this mod ships no en_us.json");
             return JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
         } catch (Exception e) {
-            throw helper.assertionException("could not read en_us.json: " + e);
+            throw new GameTestAssertException("could not read en_us.json: " + e);
         }
+    }
+
+    /** The block entity at a test position, failing the test if it is missing or of another type. */
+    static <T extends BlockEntity> T blockEntity(GameTestHelper helper, BlockPos pos, Class<T> type) {
+        BlockEntity found = helper.getBlockEntity(pos);
+        if (!type.isInstance(found)) {
+            throw new GameTestAssertException("expected a " + type.getSimpleName() + " at " + pos + " but found " + found);
+        }
+        return type.cast(found);
     }
 
     static boolean resourceExists(String path) {

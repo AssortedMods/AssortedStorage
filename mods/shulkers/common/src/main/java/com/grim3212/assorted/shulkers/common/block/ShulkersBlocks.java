@@ -14,8 +14,6 @@ import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.shulkers.Constants;
 import net.minecraft.core.dispenser.ShulkerBoxDispenseBehavior;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -23,6 +21,7 @@ import net.minecraft.world.level.block.DispenserBlock;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class ShulkersBlocks {
@@ -36,9 +35,7 @@ public class ShulkersBlocks {
     public static final Map<StorageMaterial, IRegistryObject<LockedShulkerBoxBlock>> SHULKERS = new EnumMap<>(StorageMaterial.class);
 
     static {
-        Stream.of(StorageMaterial.values()).forEach((type) -> {
-            SHULKERS.put(type, registerShulker("shulker_box_" + type.toString(), key -> new LockedShulkerBoxBlock(type, TYPES, type.getProps().setId(key)), itemProperties(type)));
-        });
+        Stream.of(StorageMaterial.values()).forEach((type) -> SHULKERS.put(type, register("shulker_box_" + type.toString(), () -> new LockedShulkerBoxBlock(type, TYPES, type.getProps()), block -> new ShulkerBoxBlockItem(block, itemProperties(type), ShulkersDataComponents.STORAGE_INFO))));
     }
 
     public static void initDispenserHandlers() {
@@ -47,27 +44,15 @@ public class ShulkersBlocks {
         }
     }
 
-    /**
-     * Netherite storage keeps its fire resistance; everything else takes plain item properties.
-     * Item properties carry a registry id since 1.21.2, so they have to be built per registration
-     * rather than shared, which is why this is a factory.
-     */
-    private static Item.Properties itemProperties(ResourceKey<Item> key) {
-        return new Item.Properties().useBlockDescriptionPrefix().setId(key);
+    /** Netherite storage keeps its fire resistance; everything else takes plain item properties. */
+    private static Item.Properties itemProperties(StorageMaterial type) {
+        Item.Properties props = new Item.Properties();
+        return type == StorageMaterial.NETHERITE ? props.fireResistant() : props;
     }
 
-    private static Function<ResourceKey<Item>, Item.Properties> itemProperties(StorageMaterial type) {
-        return type == StorageMaterial.NETHERITE ? (key) -> itemProperties(key).fireResistant() : ShulkersBlocks::itemProperties;
-    }
-
-    // Since 1.21.2 a block has to know its own registry id before it is constructed, so the
-    // registration name is turned into a ResourceKey here and handed to the factory to put on the
-    // properties. The same is true of items.
-    private static <T extends LockedShulkerBoxBlock> IRegistryObject<T> registerShulker(String name, Function<ResourceKey<Block>, ? extends T> factory, Function<ResourceKey<Item>, Item.Properties> itemProperties) {
-        final ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
-        IRegistryObject<T> ret = BLOCKS.register(name, () -> factory.apply(key));
-        final ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
-        ITEMS.register(name, () -> new ShulkerBoxBlockItem(ret.get(), itemProperties.apply(itemKey), ShulkersDataComponents.STORAGE_INFO));
+    private static <T extends Block> IRegistryObject<T> register(String name, Supplier<? extends T> block, Function<T, ? extends Item> item) {
+        IRegistryObject<T> ret = BLOCKS.register(name, block);
+        ITEMS.register(name, () -> item.apply(ret.get()));
         return ret;
     }
 

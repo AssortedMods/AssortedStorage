@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -36,7 +36,7 @@ final class LockTests {
         boolean locks = Services.PLATFORM.isModLoaded("assortedlocks");
         Map<Block, String> vanilla = new LinkedHashMap<>();
         vanilla.put(Blocks.SHULKER_BOX, "locked_shulker_box");
-        vanilla.put(Blocks.DYED_SHULKER_BOX.pick(DyeColor.RED), "locked_shulker_box");
+        vanilla.put(Blocks.RED_SHULKER_BOX, "locked_shulker_box");
 
         int i = 0;
         for (Map.Entry<Block, String> entry : vanilla.entrySet()) {
@@ -45,7 +45,7 @@ final class LockTests {
             String name = BuiltInRegistries.BLOCK.getKey(entry.getKey()).toString();
 
             helper.assertValueEqual(LockConversions.tryLock(helper.getLevel(), helper.absolutePos(pos), CODE), locks, "whether a padlock locked a " + name);
-            Identifier expected = locks ? Identifier.fromNamespaceAndPath("assortedlocks", entry.getValue()) : BuiltInRegistries.BLOCK.getKey(entry.getKey());
+            ResourceLocation expected = locks ? ResourceLocation.fromNamespaceAndPath("assortedlocks", entry.getValue()) : BuiltInRegistries.BLOCK.getKey(entry.getKey());
             helper.assertValueEqual(BuiltInRegistries.BLOCK.getKey(helper.getBlockState(pos).getBlock()), expected, "what a padlock left of a " + name);
         }
         helper.succeed();

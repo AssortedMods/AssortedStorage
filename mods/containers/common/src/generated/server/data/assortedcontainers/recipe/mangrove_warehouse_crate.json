@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,8 +14,12 @@
     }
   ],
   "key": {
-    "L": "#minecraft:mangrove_logs",
-    "P": "minecraft:mangrove_planks"
+    "L": {
+      "tag": "minecraft:mangrove_logs"
+    },
+    "P": {
+      "item": "minecraft:mangrove_planks"
+    }
   },
   "pattern": [
     "LLL",
@@ -22,6 +27,7 @@
     "PPP"
   ],
   "result": {
+    "count": 1,
     "id": "assortedcontainers:mangrove_warehouse_crate"
   }
 }

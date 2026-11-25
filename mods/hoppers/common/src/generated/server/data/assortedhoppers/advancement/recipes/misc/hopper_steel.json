@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedhoppers:hopper_steel"
+        "recipe": "assortedhoppers:hopper_steel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

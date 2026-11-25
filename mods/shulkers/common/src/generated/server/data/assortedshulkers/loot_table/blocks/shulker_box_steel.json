@@ -2,25 +2,30 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      },
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
-          "modifier": {
-            "type": "minecraft:copy_components",
-            "include": [
-              "minecraft:custom_name",
-              "minecraft:container",
-              "minecraft:custom_data"
-            ],
-            "source": "block_entity"
-          },
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "minecraft:custom_name",
+                "minecraft:container",
+                "minecraft:custom_data"
+              ],
+              "source": "block_entity"
+            }
+          ],
           "name": "assortedshulkers:shulker_box_steel"
         }
       ],
-      "rolls": 1
+      "rolls": 1.0
     }
   ],
   "random_sequence": "assortedshulkers:blocks/shulker_box_steel"

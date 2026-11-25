@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class CrateCompactingBlockEntity extends CrateBlockEntity {
@@ -36,8 +37,8 @@ public class CrateCompactingBlockEntity extends CrateBlockEntity {
      * list rather than every slot.
      */
     @Override
-    protected void dropContents(BlockPos pos) {
-        Containers.dropContents(this.level, pos, ((CompactingCrateInventory) this.getItemStackStorageHandler()).asItemStacks());
+    protected void dropContents(Level level, BlockPos pos) {
+        Containers.dropContents(level, pos, ((CompactingCrateInventory) this.getItemStackStorageHandler()).asItemStacks());
     }
 
 }

@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static com.grim3212.assorted.crates.gametest.CratesTestSupport.blockEntity;
 import static com.grim3212.assorted.crates.gametest.CratesTestSupport.oakCrate;
 
 /**
@@ -45,7 +46,7 @@ final class CrateTransferTests {
         BlockPos cratePos = controllerPos.east();
 
         helper.setBlock(controllerPos, CratesBlocks.CRATE_CONTROLLER.get());
-        CrateControllerBlockEntity controller = helper.getBlockEntity(controllerPos, CrateControllerBlockEntity.class);
+        CrateControllerBlockEntity controller = blockEntity(helper, controllerPos, CrateControllerBlockEntity.class);
 
         // Looked up before the controller has ticked.
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(helper.getLevel(), helper.absolutePos(controllerPos), null);
@@ -55,7 +56,7 @@ final class CrateTransferTests {
 
         // Now give it a crate and let it find one.
         helper.setBlock(cratePos, oakCrate());
-        CrateSidedInv crate = helper.getBlockEntity(cratePos, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, cratePos, CrateBlockEntity.class).getItemStackStorageHandler();
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.COBBLESTONE), 300));
         controller.tick();
 
@@ -73,7 +74,7 @@ final class CrateTransferTests {
         final BlockPos pos = new BlockPos(4, 1, 4);
         helper.setBlock(pos, oakCrate());
 
-        CrateSidedInv crate = helper.getBlockEntity(pos, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, pos, CrateBlockEntity.class).getItemStackStorageHandler();
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.COBBLESTONE), 2000));
 
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(helper.getLevel(), helper.absolutePos(pos), null);

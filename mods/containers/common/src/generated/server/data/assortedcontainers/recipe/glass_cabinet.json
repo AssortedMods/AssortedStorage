@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,9 +14,15 @@
     }
   ],
   "key": {
-    "C": "#c:chests/wooden",
-    "G": "#c:glass_blocks",
-    "X": "#minecraft:planks"
+    "C": {
+      "tag": "c:chests/wooden"
+    },
+    "G": {
+      "tag": "c:glass_blocks"
+    },
+    "X": {
+      "tag": "minecraft:planks"
+    }
   },
   "pattern": [
     " X ",
@@ -23,6 +30,7 @@
     " X "
   ],
   "result": {
+    "count": 1,
     "id": "assortedcontainers:glass_cabinet"
   }
 }

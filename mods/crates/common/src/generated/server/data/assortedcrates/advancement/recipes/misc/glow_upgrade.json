@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcrates:glow_upgrade"
+        "recipe": "assortedcrates:glow_upgrade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

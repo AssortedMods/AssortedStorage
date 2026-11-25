@@ -1,51 +1,42 @@
 package com.grim3212.assorted.hoppers.client.data;
 
 import com.grim3212.assorted.hoppers.Constants;
-import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
 import com.grim3212.assorted.hoppers.client.HoppersClient;
+import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
 import com.grim3212.assorted.lib.client.data.LockedModelBuilder;
 import com.grim3212.assorted.lib.core.storage.hopper.LockedHopperBlock;
-import com.grim3212.assorted.lib.client.data.SpecificationBlockStateModelBuilder;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
-import net.minecraft.client.data.models.BlockModelGenerators;
-import net.minecraft.client.data.models.ItemModelGenerators;
-import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.MultiVariant;
-import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.data.models.model.ItemModelUtils;
-import net.minecraft.client.data.models.model.ModelInstance;
-import net.minecraft.client.data.models.model.ModelLocationUtils;
-import net.minecraft.client.data.models.model.ModelTemplate;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.client.data.models.model.TextureMapping;
-import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
-
-import java.util.function.BiConsumer;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 /**
  * Block states, block models and the hopper items' models. Every hopper switches between its
  * unlocked and locked model through the {@code assortedhoppers:locked} loader.
  */
-public class HoppersBlockstateProvider extends ModelProvider {
+public class HoppersBlockstateProvider extends BlockStateProvider {
 
-    // Vanilla has no constant for this slot, and TextureSlot has no equals, so it is made once and shared.
-    private static final TextureSlot TOPSIDES = TextureSlot.create("topsides");
+    private static final ResourceLocation VANILLA_HOPPER = ResourceLocation.withDefaultNamespace("block/hopper");
+    private static final ResourceLocation VANILLA_HOPPER_SIDE = ResourceLocation.withDefaultNamespace("block/hopper_side");
+    private static final ModelFile TEMPLATE_HOPPER = new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "block/template_hopper"));
+    private static final ModelFile TEMPLATE_HOPPER_SIDE = new ModelFile.UncheckedModelFile(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "block/template_hopper_side"));
+    private static final ModelFile BLOCK = new ModelFile.UncheckedModelFile(ResourceLocation.withDefaultNamespace("block/block"));
 
-    private static final Identifier VANILLA_HOPPER = Identifier.withDefaultNamespace("block/hopper");
-    private static final Identifier VANILLA_HOPPER_SIDE = Identifier.withDefaultNamespace("block/hopper_side");
-    private static final Identifier TEMPLATE_HOPPER = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "block/template_hopper");
-    private static final Identifier TEMPLATE_HOPPER_SIDE = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "block/template_hopper_side");
+    /**
+     * A hopper's rim has see-through pixels, which 1.21.1 only cuts out when the model names the layer; vanilla's
+     * own hopper draws in this one.
+     */
+    private static final String RENDER_TYPE = "cutout_mipped";
 
-    public HoppersBlockstateProvider(PackOutput output) {
-        super(output, Constants.MOD_ID);
+    public HoppersBlockstateProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, Constants.MOD_ID, existingFileHelper);
     }
 
     @Override
@@ -54,89 +45,55 @@ public class HoppersBlockstateProvider extends ModelProvider {
     }
 
     @Override
-    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+    protected void registerStatesAndModels() {
         for (IRegistryObject<LockedHopperBlock> b : HoppersBlocks.HOPPERS.values()) {
-            materialHopper(blockModels, b.get());
+            materialHopper(b.get());
         }
     }
 
-    private void materialHopper(BlockModelGenerators blockModels, LockedHopperBlock b) {
+    private void materialHopper(LockedHopperBlock b) {
+        String name = BuiltInRegistries.BLOCK.getKey(b).getPath();
         String material = b.getStorageMaterial().toString();
-        Material outside = texture("block/hoppers/" + material + "/hopper_outside");
-        Material top = texture("block/hoppers/" + material + "/hopper_top");
-        Material inside = texture("block/hoppers/" + material + "/hopper_inside");
-        Material lockedOutside = texture("block/hoppers/" + material + "/locked_hopper_outside");
+        ResourceLocation outside = texture("block/hoppers/" + material + "/hopper_outside");
+        ResourceLocation top = texture("block/hoppers/" + material + "/hopper_top");
+        ResourceLocation inside = texture("block/hoppers/" + material + "/hopper_inside");
+        ResourceLocation lockedOutside = texture("block/hoppers/" + material + "/locked_hopper_outside");
 
-        TextureMapping unlockedTextures = new TextureMapping()
-                .put(TextureSlot.PARTICLE, outside)
-                .put(TextureSlot.TOP, top)
-                .put(TextureSlot.SIDE, outside)
-                .put(TextureSlot.INSIDE, inside);
-        TextureMapping lockedTextures = unlockedTextures.copyAndUpdate(TOPSIDES, lockedOutside);
+        BlockModelBuilder unlocked = textured(this.models().withExistingParent(name + "_unlocked", VANILLA_HOPPER), outside, top, inside);
+        BlockModelBuilder locked = textured(this.models().getBuilder(name + "_locked").parent(TEMPLATE_HOPPER), outside, top, inside).texture("topsides", lockedOutside);
+        BlockModelBuilder unlockedSide = textured(this.models().withExistingParent(name + "_unlocked_side", VANILLA_HOPPER_SIDE), outside, top, inside);
+        BlockModelBuilder lockedSide = textured(this.models().getBuilder(name + "_locked_side").parent(TEMPLATE_HOPPER_SIDE), outside, top, inside).texture("topsides", lockedOutside);
 
-        Identifier unlocked = HOPPER_TEXTURED.create(ModelLocationUtils.getModelLocation(b, "_unlocked"), unlockedTextures, blockModels.modelOutput);
-        Identifier locked = LOCKED_HOPPER_TEXTURED.create(ModelLocationUtils.getModelLocation(b, "_locked"), lockedTextures, blockModels.modelOutput);
-        Identifier unlockedSide = HOPPER_SIDE_TEXTURED.create(ModelLocationUtils.getModelLocation(b, "_unlocked_side"), unlockedTextures, blockModels.modelOutput);
-        Identifier lockedSide = LOCKED_HOPPER_SIDE_TEXTURED.create(ModelLocationUtils.getModelLocation(b, "_locked_side"), lockedTextures, blockModels.modelOutput);
+        ModelFile down = lockedModel(name, unlocked, locked, outside);
+        ModelFile side = lockedModel(name + "_side", unlockedSide, lockedSide, outside);
 
-        hopperState(blockModels, b, unlocked, locked, unlockedSide, lockedSide, outside);
+        // ENABLED is not dispatched on; the rotations are vanilla's own hopper dispatch.
+        this.getVariantBuilder(b).forAllStatesExcept(state -> {
+            Direction facing = state.getValue(BlockStateProperties.FACING_HOPPER);
+            if (facing == Direction.DOWN) {
+                return ConfiguredModel.builder().modelFile(down).build();
+            }
+            return ConfiguredModel.builder().modelFile(side).rotationY(((int) facing.toYRot() + 180) % 360).build();
+        }, LockedHopperBlock.ENABLED);
+
+        // A hopper's item is a flat sprite, not its block model, as it always was.
+        this.itemModels().basicItem(b.asItem());
     }
 
-    private static final ModelTemplate HOPPER_TEXTURED = ExtendedModelTemplateBuilder.builder().parent(VANILLA_HOPPER)
-            .requiredTextureSlot(TextureSlot.PARTICLE).requiredTextureSlot(TextureSlot.TOP).requiredTextureSlot(TextureSlot.SIDE).requiredTextureSlot(TextureSlot.INSIDE).build();
-    private static final ModelTemplate HOPPER_SIDE_TEXTURED = ExtendedModelTemplateBuilder.builder().parent(VANILLA_HOPPER_SIDE)
-            .requiredTextureSlot(TextureSlot.PARTICLE).requiredTextureSlot(TextureSlot.TOP).requiredTextureSlot(TextureSlot.SIDE).requiredTextureSlot(TextureSlot.INSIDE).build();
-    private static final ModelTemplate LOCKED_HOPPER_TEXTURED = ExtendedModelTemplateBuilder.builder().parent(TEMPLATE_HOPPER)
-            .requiredTextureSlot(TextureSlot.PARTICLE).requiredTextureSlot(TextureSlot.TOP).requiredTextureSlot(TextureSlot.SIDE).requiredTextureSlot(TextureSlot.INSIDE).requiredTextureSlot(TOPSIDES).build();
-    private static final ModelTemplate LOCKED_HOPPER_SIDE_TEXTURED = ExtendedModelTemplateBuilder.builder().parent(TEMPLATE_HOPPER_SIDE)
-            .requiredTextureSlot(TextureSlot.PARTICLE).requiredTextureSlot(TextureSlot.TOP).requiredTextureSlot(TextureSlot.SIDE).requiredTextureSlot(TextureSlot.INSIDE).requiredTextureSlot(TOPSIDES).build();
-
-    /**
-     * {@code ENABLED} is not dispatched on, which is how the 1.20.1 {@code forAllStatesExcept} call
-     * expressed the same thing: a property nothing selects on simply does not appear in the
-     * blockstate key. The rotations are vanilla's own hopper dispatch.
-     */
-    private void hopperState(BlockModelGenerators blockModels, LockedHopperBlock b, Identifier unlocked, Identifier locked, Identifier unlockedSide, Identifier lockedSide, Material particle) {
-        MultiVariant down = SpecificationBlockStateModelBuilder.specificationVariant(lockedModel(blockModels.modelOutput, ModelLocationUtils.getModelLocation(b), unlocked, locked, particle));
-        MultiVariant side = SpecificationBlockStateModelBuilder.specificationVariant(lockedModel(blockModels.modelOutput, ModelLocationUtils.getModelLocation(b, "_side"), unlockedSide, lockedSide, particle));
-
-        blockModels.blockStateOutput.accept(MultiVariantGenerator.dispatch(b)
-                .with(PropertyDispatch.initial(BlockStateProperties.FACING_HOPPER)
-                        .select(Direction.DOWN, down)
-                        .select(Direction.NORTH, side)
-                        .select(Direction.EAST, side.with(BlockModelGenerators.Y_ROT_90))
-                        .select(Direction.SOUTH, side.with(BlockModelGenerators.Y_ROT_180))
-                        .select(Direction.WEST, side.with(BlockModelGenerators.Y_ROT_270))));
-
-        // A hopper's item is a flat sprite, not its block model - the default BlockItem fallback
-        // would point it at the locked-loader model instead, which is not what 1.20.1 shipped.
-        Item item = b.asItem();
-        Identifier itemModel = ModelTemplates.FLAT_ITEM.create(ModelLocationUtils.getModelLocation(item), TextureMapping.layer0(item), blockModels.modelOutput);
-        blockModels.itemModelOutput.accept(item, ItemModelUtils.plainModel(itemModel));
+    private static BlockModelBuilder textured(BlockModelBuilder model, ResourceLocation outside, ResourceLocation top, ResourceLocation inside) {
+        return model.texture("particle", outside).texture("top", top).texture("side", outside).texture("inside", inside).renderType(RENDER_TYPE);
     }
 
     /**
-     * Writes a model whose whole body is the {@code assortedhoppers:locked} loader block. The loader
-     * replaces the geometry outright, so the template declares no slots and no elements.
+     * A model whose whole body is the {@code assortedhoppers:locked} loader block, which picks one of the two
+     * children. {@code block/block} gives it the standard block display transforms and no geometry.
      */
-    private static Identifier lockedModel(BiConsumer<Identifier, ModelInstance> output, Identifier target, Identifier unlocked, Identifier locked, Material particle) {
-        return ExtendedModelTemplateBuilder.builder()
-                // A block item reads its transforms from the block model's parent chain
-                // (ResolvedModel#getTopTransforms); parenting to nothing yields ItemTransforms.NO_TRANSFORMS.
-                // block/block supplies the standard display block and gui_light, and no geometry.
-                .parent(Identifier.withDefaultNamespace("block/block"))
-                .customLoader(() -> LockedModelBuilder.begin(HoppersClient.LOCKED_MODEL_LOADER), b -> b.unlockedModel(unlocked).lockedModel(locked))
-                .requiredTextureSlot(TextureSlot.PARTICLE)
-                .build()
-                .create(target, new TextureMapping().put(TextureSlot.PARTICLE, particle), output);
+    private ModelFile lockedModel(String name, ModelFile unlocked, ModelFile locked, ResourceLocation particle) {
+        return this.models().getBuilder(name).parent(BLOCK).texture("particle", particle)
+                .customLoader(LockedModelBuilder.begin(HoppersClient.LOCKED_MODEL_LOADER)).unlockedModel(unlocked.getLocation()).lockedModel(locked.getLocation()).end();
     }
 
-    /** A model that is nothing but a parent reference, which is what {@code withExistingParent} was. */
-    private static Identifier parented(BiConsumer<Identifier, ModelInstance> output, Identifier target, Identifier parent) {
-        return ExtendedModelTemplateBuilder.builder().parent(parent).build().create(target, new TextureMapping(), output);
-    }
-
-    private static Material texture(String path) {
-        return new Material(Identifier.fromNamespaceAndPath(Constants.MOD_ID, path));
+    private static ResourceLocation texture(String path) {
+        return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, path);
     }
 }

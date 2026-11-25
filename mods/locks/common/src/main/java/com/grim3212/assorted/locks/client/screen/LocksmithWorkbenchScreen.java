@@ -5,23 +5,25 @@ import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.locks.Constants;
 import com.grim3212.assorted.locks.common.inventory.LocksmithWorkbenchContainer;
 import com.grim3212.assorted.locks.common.network.SetLockPacket;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.item.ItemStack;
+import org.lwjgl.glfw.GLFW;
 
 /** The locksmith workbench screen. The code field is a widget, so the base screen draws it. */
 public class LocksmithWorkbenchScreen extends AbstractContainerScreen<LocksmithWorkbenchContainer> implements ContainerListener {
 
-    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/locksmith_workbench.png");
+    private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/locksmith_workbench.png");
     private EditBox lockField;
+    /** Set while the field is filled in from the slot, so only a typed code is sent to the server. */
+    private boolean showingSlot;
 
     public LocksmithWorkbenchScreen(LocksmithWorkbenchContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
@@ -38,11 +40,28 @@ public class LocksmithWorkbenchScreen extends AbstractContainerScreen<LocksmithW
         this.lockField.setBordered(false);
         this.lockField.setMaxLength(10);
         this.lockField.setResponder(this::onNameChanged);
+        // Nothing to code until a key or lock is in the slot; slotChanged keeps this up to date.
+        this.lockField.setEditable(this.menu.getSlot(0).hasItem());
         this.addRenderableWidget(this.lockField);
         this.setInitialFocus(this.lockField);
+
+        // As vanilla's ItemCombinerScreen does: without this slotChanged is never called.
+        this.menu.addSlotListener(this);
+    }
+
+    @Override
+    public void removed() {
+        super.removed();
+        this.menu.removeSlotListener(this);
     }
 
     private void onNameChanged(String lock) {
+        // The server already works from the item's own code when the slot changes. Sent from here, an emptied
+        // field would reach it ahead of the click that took the coded item, and clear that item first.
+        if (this.showingSlot) {
+            return;
+        }
+
         this.menu.updateLock(lock);
         Services.NETWORK.sendToServer(new SetLockPacket(lock));
     }
@@ -56,34 +75,40 @@ public class LocksmithWorkbenchScreen extends AbstractContainerScreen<LocksmithW
         if (slotInd == 0) {
             // Stacks have no free-form tag any more; the lock code lives in the CUSTOM_DATA component,
             // which StorageUtil already reads.
+            this.showingSlot = true;
             this.lockField.setValue(stack.isEmpty() ? "" : StorageUtil.getCode(stack));
+            this.showingSlot = false;
             this.lockField.setEditable(!stack.isEmpty());
             this.setFocused(this.lockField);
         }
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(Minecraft minecraft, int width, int height) {
         String s = this.lockField.getValue();
-        this.init(width, height);
+        this.init(minecraft, width, height);
         this.lockField.setValue(s);
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
-        if (event.isEscape()) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
             this.minecraft.player.closeContainer();
             return true;
         }
 
-        return !this.lockField.keyPressed(event) && !this.lockField.canConsumeInput() ? super.keyPressed(event) : true;
+        return !this.lockField.keyPressed(keyCode, scanCode, modifiers) && !this.lockField.canConsumeInput() ? super.keyPressed(keyCode, scanCode, modifiers) : true;
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
+        this.renderTooltip(graphics, mouseX, mouseY);
+    }
 
-        graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_TEXTURE, this.leftPos, this.topPos, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 256);
+    @Override
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+        graphics.blit(GUI_TEXTURE, this.leftPos, this.topPos, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 256);
     }
 
     @Override

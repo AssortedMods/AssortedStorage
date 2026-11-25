@@ -17,6 +17,7 @@ import com.grim3212.assorted.shulkers.data.ShulkersBlockTagProvider;
 import com.grim3212.assorted.shulkers.data.ShulkersItemTagProvider;
 import com.grim3212.assorted.shulkers.data.ShulkersRecipes;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -26,6 +27,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
@@ -39,8 +41,7 @@ public class AssortedShulkersNeoForge {
      */
     public AssortedShulkersNeoForge(IEventBus modBus, ModContainer modContainer) {
         modBus.addListener(this::setup);
-        modBus.addListener(this::gatherServerData);
-        modBus.addListener(this::gatherClientData);
+        modBus.addListener(this::gatherData);
         modBus.addListener(this::registerCapabilities);
 
         ShulkersCommonMod.init();
@@ -50,35 +51,25 @@ public class AssortedShulkersNeoForge {
         event.enqueueWork(ShulkersBlocks::initDispenserHandlers);
     }
 
-    /**
-     * Server datagen. The server and client halves are separate events; if the wrong one runs, the
-     * build still succeeds, with "All providers took: 0 ms".
-     */
-    private void gatherServerData(final GatherDataEvent.Server event) {
-        PackOutput packOutput = event.getGenerator().getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getWorldLookupProvider();
+    /** One event for both halves; each provider is added for the half its output belongs to. */
+    private void gatherData(final GatherDataEvent event) {
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
         ForgeRegistryEntries.of(Constants.MOD_ID).recipes(ShulkersRecipes::new).blockLoot(ShulkersBlockLoot::new).addTo(event);
-        ForgeBlockTagProvider blockTagProvider = event.addProvider(new ForgeBlockTagProvider(packOutput, lookupProvider, Constants.MOD_ID, new ShulkersBlockTagProvider(packOutput, lookupProvider)));
-        event.addProvider(new ForgeItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), Constants.MOD_ID, new ShulkersItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter())));
+        ForgeBlockTagProvider blockTagProvider = generator.addProvider(event.includeServer(), new ForgeBlockTagProvider(packOutput, lookupProvider, Constants.MOD_ID, fileHelper, new ShulkersBlockTagProvider(packOutput, lookupProvider)));
+        generator.addProvider(event.includeServer(), new ForgeItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), Constants.MOD_ID, fileHelper, new ShulkersItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter())));
+
+        generator.addProvider(event.includeClient(), new ShulkersBlockstateProvider(packOutput, fileHelper));
+        generator.addProvider(event.includeClient(), new ShulkersSpriteSourceProvider(packOutput, lookupProvider, fileHelper));
+        generator.addProvider(event.includeClient(), new ShulkersLanguageProvider(packOutput));
+        generator.addProvider(event.includeClient(), new ShulkersManualProvider(packOutput));
     }
 
     /**
-     * Client datagen: block states, models and item models, sprite sources, the lang file and the
-     * manual.
-     */
-    private void gatherClientData(final GatherDataEvent.Client event) {
-        PackOutput packOutput = event.getGenerator().getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getWorldLookupProvider();
-
-        event.addProvider(new ShulkersBlockstateProvider(packOutput));
-        event.addProvider(new ShulkersSpriteSourceProvider(packOutput, lookupProvider));
-        event.addProvider(new ShulkersLanguageProvider(packOutput));
-        event.addProvider(new ShulkersManualProvider(packOutput));
-    }
-
-    /**
-     * Exposes the shulker boxes as item handlers ({@code Capabilities.Item.BLOCK}), the NeoForge
+     * Exposes the shulker boxes as item handlers ({@code Capabilities.ItemHandler.BLOCK}), the NeoForge
      * side of Fabric's {@code ItemStorage.SIDED}.
      */
     private void registerCapabilities(final RegisterCapabilitiesEvent event) {
@@ -86,7 +77,7 @@ public class AssortedShulkersNeoForge {
     }
 
     private static <BE extends BlockEntity> void registerBlockEntity(RegisterCapabilitiesEvent event, IRegistryObject<BlockEntityType<BE>> type) {
-        event.registerBlockEntity(Capabilities.Item.BLOCK, type.get(), (blockEntity, side) -> {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, type.get(), (blockEntity, side) -> {
             if (blockEntity.isRemoved() || !(blockEntity instanceof IInventoryBlockEntity inv)) {
                 return null;
             }

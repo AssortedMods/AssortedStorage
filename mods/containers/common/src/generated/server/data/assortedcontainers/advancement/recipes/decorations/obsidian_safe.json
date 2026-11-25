@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcontainers:obsidian_safe"
+        "recipe": "assortedcontainers:obsidian_safe"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

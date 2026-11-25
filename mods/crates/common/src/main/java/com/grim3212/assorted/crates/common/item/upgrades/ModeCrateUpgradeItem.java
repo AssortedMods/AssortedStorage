@@ -4,7 +4,7 @@ import com.grim3212.assorted.lib.util.NBTHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -26,12 +26,12 @@ public abstract class ModeCrateUpgradeItem extends BasicCrateUpgradeItem {
     protected abstract int startingMode();
 
     @Override
-    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stackInHand = player.getItemInHand(hand);
         if (stackInHand.getItem() == this) {
             this.cycleMode(stackInHand);
             this.sendMessage(player, modeDisplay(stackInHand));
-            return InteractionResult.SUCCESS;
+            return InteractionResultHolder.sidedSuccess(stackInHand, level.isClientSide());
         }
 
         return super.use(level, player, hand);
@@ -44,7 +44,7 @@ public abstract class ModeCrateUpgradeItem extends BasicCrateUpgradeItem {
     }
 
     @Override
-    public void onCraftedBy(ItemStack stack, Player player) {
+    public void onCraftedBy(ItemStack stack, Level level, Player player) {
         NBTHelper.putInt(stack, "Mode", this.startingMode());
     }
 

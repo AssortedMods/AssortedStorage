@@ -1,8 +1,6 @@
 {
   "variants": {
     "facing=down,open=false": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
       "model": "assortedbarrels:block/barrel_ruby",
       "x": 180
     },
@@ -11,8 +9,6 @@
       "x": 180
     },
     "facing=east,open=false": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
       "model": "assortedbarrels:block/barrel_ruby",
       "x": 90,
       "y": 90
@@ -23,8 +19,6 @@
       "y": 90
     },
     "facing=north,open=false": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
       "model": "assortedbarrels:block/barrel_ruby",
       "x": 90
     },
@@ -33,8 +27,6 @@
       "x": 90
     },
     "facing=south,open=false": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
       "model": "assortedbarrels:block/barrel_ruby",
       "x": 90,
       "y": 180
@@ -45,16 +37,12 @@
       "y": 180
     },
     "facing=up,open=false": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
       "model": "assortedbarrels:block/barrel_ruby"
     },
     "facing=up,open=true": {
       "model": "assortedbarrels:block/barrel_ruby_open"
     },
     "facing=west,open=false": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
       "model": "assortedbarrels:block/barrel_ruby",
       "x": 90,
       "y": 270

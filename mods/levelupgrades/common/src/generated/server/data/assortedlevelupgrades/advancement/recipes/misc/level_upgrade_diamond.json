@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedlevelupgrades:level_upgrade_diamond"
+        "recipe": "assortedlevelupgrades:level_upgrade_diamond"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

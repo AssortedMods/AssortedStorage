@@ -7,14 +7,14 @@ import com.grim3212.assorted.containers.common.inventory.ContainersContainerType
 import com.grim3212.assorted.containers.common.item.ContainersDataComponents;
 import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class ContainersCommonMod {
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
         Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
-                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "wood_cabinet"), 90)
+                .icon(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "wood_cabinet"), 90)
                 .manualOrder(80);
 
         ContainersDataComponents.init();

@@ -11,13 +11,16 @@ import com.grim3212.assorted.crates.common.block.blockentity.CrateBlockEntity;
 import com.grim3212.assorted.crates.common.block.blockentity.CrateCompactingBlockEntity;
 import com.grim3212.assorted.crates.common.item.CratesItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.stream.IntStream;
@@ -238,9 +241,8 @@ public class CrateSidedInv implements IItemStorageHandler, LockedStorageHandler,
             if (stackInSlot.getAmount() < amount) {
                 return stackInSlot.getStack().copyWithCount(stackInSlot.getAmount());
             } else {
-                ItemStack copy = stackInSlot.getStack();
-                copy.setCount(amount);
-                return copy;
+                // A copy: the slot's own stack is shared with the slot and must not be resized.
+                return stackInSlot.getStack().copyWithCount(amount);
             }
         } else {
             int m = Math.min(stackInSlot.getAmount(), amount);
@@ -399,9 +401,9 @@ public class CrateSidedInv implements IItemStorageHandler, LockedStorageHandler,
 
     /**
      * A slot holds a number of stacks of whatever item is in it. An empty slot has no item to size
-     * against, and an empty ItemStack answers 1 to getMaxStackSize in 26.2 (the component default;
-     * air used to answer 64), so an empty slot would only accept its stack count in items. Fall
-     * back to the normal stack size until the slot knows what it holds.
+     * against, and an empty ItemStack answers 1 to getMaxStackSize (the component default), so an
+     * empty slot would only accept its stack count in items. Fall back to the normal stack size
+     * until the slot knows what it holds.
      */
     public int getBaseStackSize(int slot) {
         int slotBase = this.inv.getLayout().getSlotsBaseStacks()[slot];
@@ -539,55 +541,75 @@ public class CrateSidedInv implements IItemStorageHandler, LockedStorageHandler,
         return -1;
     }
 
+    /**
+     * One slot's item on its own: the slot's real count is {@code SlotAmount}, and an item stack
+     * refuses to encode a count past 99, so the item goes down as a single item.
+     */
+    protected static Tag saveItem(ItemStack stack, HolderLookup.Provider registries) {
+        return stack.copyWithCount(1).save(registries);
+    }
+
+    protected static ItemStack loadItem(CompoundTag tag, String key, HolderLookup.Provider registries) {
+        return tag.contains(key, Tag.TAG_COMPOUND) ? ItemStack.parse(registries, tag.getCompound(key)).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
+    }
+
     @Override
-    public void serialize(ValueOutput output) {
-        // ItemStack.CODEC refuses an empty stack, so a slot with no item is left out entirely and
+    public void serialize(CompoundTag tag, HolderLookup.Provider registries) {
+        // ItemStack#save refuses an empty stack, so a slot with no item is left out entirely and
         // deserialize's fresh empty list covers it. A locked slot still has its item.
-        ValueOutput.ValueOutputList items = output.childrenList("Items");
+        ListTag items = new ListTag();
         for (int i = 0; i < this.slotContents.size(); i++) {
             LargeItemStack stack = this.slotContents.get(i);
             if (stack.getStack().isEmpty()) {
                 continue;
             }
 
-            ValueOutput slot = items.addChild();
+            CompoundTag slot = new CompoundTag();
             slot.putByte("Slot", (byte) i);
             slot.putInt("SlotAmount", stack.getAmount());
             slot.putInt("SlotRotation", stack.getRotation());
             slot.putBoolean("SlotLocked", stack.isLocked());
-            slot.store("Item", ItemStack.CODEC, stack.getStack());
+            slot.put("Item", saveItem(stack.getStack(), registries));
+            items.add(slot);
         }
+        tag.put("Items", items);
 
-        ValueOutput.ValueOutputList enhancementItems = output.childrenList("Enhancements");
+        ListTag enhancementItems = new ListTag();
         for (int i = 0; i < this.enhancements.size(); ++i) {
             ItemStack itemstack = this.enhancements.get(i);
             if (!itemstack.isEmpty()) {
-                ValueOutput slot = enhancementItems.addChild();
+                CompoundTag slot = new CompoundTag();
                 slot.putByte("Slot", (byte) i);
-                slot.store("Item", ItemStack.CODEC, itemstack);
+                slot.put("Item", itemstack.save(registries));
+                enhancementItems.add(slot);
             }
         }
+        tag.put("Enhancements", enhancementItems);
     }
 
     @Override
-    public void deserialize(ValueInput input) {
+    public void deserialize(CompoundTag tag, HolderLookup.Provider registries) {
         this.slotContents = NonNullList.withSize(this.getSlots(), LargeItemStack.empty());
 
-        for (ValueInput slot : input.childrenListOrEmpty("Items")) {
-            int slotIdx = slot.getByteOr("Slot", (byte) -1) & 255;
+        ListTag items = tag.getList("Items", Tag.TAG_COMPOUND);
+        for (int i = 0; i < items.size(); i++) {
+            CompoundTag slot = items.getCompound(i);
+            int slotIdx = (slot.contains("Slot", Tag.TAG_BYTE) ? slot.getByte("Slot") : -1) & 255;
             if (slotIdx < this.slotContents.size()) {
-                int amount = slot.getIntOr("SlotAmount", 0);
-                int rotation = slot.getIntOr("SlotRotation", 0);
-                boolean locked = slot.getBooleanOr("SlotLocked", false);
-                ItemStack stack = slot.read("Item", ItemStack.CODEC).orElse(ItemStack.EMPTY);
+                int amount = slot.getInt("SlotAmount");
+                int rotation = slot.getInt("SlotRotation");
+                boolean locked = slot.getBoolean("SlotLocked");
+                ItemStack stack = loadItem(slot, "Item", registries);
                 this.slotContents.set(slotIdx, new LargeItemStack(stack, amount, rotation, locked));
             }
         }
 
-        for (ValueInput slot : input.childrenListOrEmpty("Enhancements")) {
-            int slotIdx = slot.getByteOr("Slot", (byte) -1) & 255;
+        ListTag enhancementItems = tag.getList("Enhancements", Tag.TAG_COMPOUND);
+        for (int i = 0; i < enhancementItems.size(); i++) {
+            CompoundTag slot = enhancementItems.getCompound(i);
+            int slotIdx = (slot.contains("Slot", Tag.TAG_BYTE) ? slot.getByte("Slot") : -1) & 255;
             if (slotIdx < this.enhancements.size()) {
-                this.enhancements.set(slotIdx, slot.read("Item", ItemStack.CODEC).orElse(ItemStack.EMPTY));
+                this.enhancements.set(slotIdx, loadItem(slot, "Item", registries));
             }
         }
     }

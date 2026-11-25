@@ -2,32 +2,32 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "condition": {
-        "type": "minecraft:all_of",
-        "terms": [
-          {
-            "type": "assortedlocks:mod_loaded",
-            "modId": "assortedbuildingblocks"
-          },
-          {
-            "type": "minecraft:survives_explosion"
-          }
-        ]
-      },
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "assortedlocks:mod_loaded",
+          "modId": "assortedbuildingblocks"
+        },
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "assortedlocks:optional_item",
-          "condition": {
-            "type": "minecraft:match_block",
-            "blocks": "assortedlocks:locked_steel_door",
-            "state": {
-              "half": "lower"
+          "conditions": [
+            {
+              "block": "assortedlocks:locked_steel_door",
+              "condition": "minecraft:block_state_property",
+              "properties": {
+                "half": "lower"
+              }
             }
-          },
+          ],
           "name": "assortedbuildingblocks:steel_door"
         }
       ],
-      "rolls": 1
+      "rolls": 1.0
     }
   ],
   "random_sequence": "assortedlocks:blocks/locked_steel_door"

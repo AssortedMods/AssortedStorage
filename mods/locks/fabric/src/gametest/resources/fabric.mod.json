@@ -10,11 +10,8 @@
   "license": "${license}",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "fabric-gametest": [
       "com.grim3212.assorted.locks.gametest.LocksFabricGameTests"
-    ],
-    "fabric-client-gametest": [
-      "com.grim3212.assorted.locks.gametest.LocksClientGameTests"
     ]
   },
   "depends": {

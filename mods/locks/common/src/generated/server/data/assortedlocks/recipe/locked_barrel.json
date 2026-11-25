@@ -6,6 +6,7 @@
     }
   ],
   "type": "assortedlocks:locked_barrel",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",

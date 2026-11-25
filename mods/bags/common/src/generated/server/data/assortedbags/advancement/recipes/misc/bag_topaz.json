@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbags:bag_topaz"
+        "recipe": "assortedbags:bag_topaz"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

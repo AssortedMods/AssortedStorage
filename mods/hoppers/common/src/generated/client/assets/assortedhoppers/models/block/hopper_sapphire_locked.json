@@ -1,5 +1,6 @@
 {
   "parent": "assortedhoppers:block/template_hopper",
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "inside": "assortedhoppers:block/hoppers/sapphire/hopper_inside",
     "particle": "assortedhoppers:block/hoppers/sapphire/hopper_outside",

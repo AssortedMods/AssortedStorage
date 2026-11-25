@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcontainers:wood_cabinet"
+        "recipe": "assortedcontainers:wood_cabinet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

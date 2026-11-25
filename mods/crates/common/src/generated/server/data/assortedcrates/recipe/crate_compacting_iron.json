@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,10 +14,18 @@
     }
   ],
   "key": {
-    "C": "#assortedcrates:crates/triple",
-    "D": "#c:deepslate",
-    "I": "#c:ingots/iron",
-    "P": "#c:pistons"
+    "C": {
+      "tag": "assortedcrates:crates/triple"
+    },
+    "D": {
+      "tag": "c:deepslate"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "P": {
+      "tag": "c:pistons"
+    }
   },
   "pattern": [
     "DDD",
@@ -24,6 +33,7 @@
     "DID"
   ],
   "result": {
+    "count": 1,
     "id": "assortedcrates:crate_compacting"
   }
 }

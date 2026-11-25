@@ -50,7 +50,7 @@ final class MenuTests {
             String name = BuiltInRegistries.BLOCK.getKey(block).toString();
             BlockPos rel = new BlockPos(1 + (i % 4) * 2, 1, 2 + (i / 4) * 3);
             helper.setBlock(rel, block);
-            if (!(helper.getBlockEntity(rel, BlockEntity.class) instanceof IMenuDataProvider<?> provider)) {
+            if (!(helper.getBlockEntity(rel) instanceof IMenuDataProvider<?> provider)) {
                 helper.fail(name + " does not provide menu data");
                 return;
             }

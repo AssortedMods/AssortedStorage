@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedhoppers:hopper_netherite_chest"
+        "recipe": "assortedhoppers:hopper_netherite_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

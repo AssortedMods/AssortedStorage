@@ -6,6 +6,8 @@ import com.grim3212.assorted.chests.Constants;
 import com.grim3212.assorted.chests.common.block.ChestsBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.gametest.framework.GameTestAssertException;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -60,7 +62,7 @@ final class ChestsTestSupport {
             helper.assertTrue(in != null, "this mod ships no en_us.json");
             return JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
         } catch (Exception e) {
-            throw helper.assertionException("could not read en_us.json: " + e);
+            throw new GameTestAssertException("could not read en_us.json: " + e);
         }
     }
 
@@ -70,5 +72,14 @@ final class ChestsTestSupport {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    /** The block entity at {@code pos}, which must be a {@code type}. */
+    static <T extends BlockEntity> T blockEntity(GameTestHelper helper, BlockPos pos, Class<T> type) {
+        BlockEntity found = helper.getBlockEntity(pos);
+        if (!type.isInstance(found)) {
+            throw new GameTestAssertException("expected a " + type.getSimpleName() + " at " + pos + " but found " + found);
+        }
+        return type.cast(found);
     }
 }

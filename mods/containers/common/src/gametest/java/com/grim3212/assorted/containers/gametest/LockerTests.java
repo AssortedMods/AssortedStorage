@@ -31,8 +31,8 @@ final class LockerTests {
     private static LockerBlockEntity lockerWithPlayerNearby(GameTestHelper helper, ServerPlayer player) {
         helper.setBlock(BLOCK, ContainersBlocks.LOCKER.get());
         Vec3 beside = Vec3.atCenterOf(helper.absolutePos(BLOCK)).add(1.0D, 0.0D, 0.0D);
-        player.teleportTo(helper.getLevel(), beside.x, beside.y, beside.z, java.util.Set.of(), player.getYRot(), player.getXRot(), false);
-        return helper.getBlockEntity(BLOCK, LockerBlockEntity.class);
+        player.teleportTo(helper.getLevel(), beside.x, beside.y, beside.z, java.util.Set.of(), player.getYRot(), player.getXRot());
+        return blockEntity(helper, BLOCK, LockerBlockEntity.class);
     }
 
     /**

@@ -14,8 +14,12 @@ import com.grim3212.assorted.lib.platform.ClientServices;
 import com.grim3212.assorted.locks.client.model.LocksStorageModels;
 import com.grim3212.assorted.locks.client.screen.KeyRingScreen;
 import com.grim3212.assorted.locks.client.screen.LocksmithWorkbenchScreen;
+import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import com.grim3212.assorted.locks.common.block.blockentity.LocksBlockEntityTypes;
 import com.grim3212.assorted.locks.common.inventory.LocksContainerTypes;
+import net.minecraft.client.renderer.RenderType;
+
+import java.util.List;
 
 public class LocksClient {
 
@@ -42,11 +46,18 @@ public class LocksClient {
 
         // The barrel and hopper are block models that pick their locked half from the block entity's model data.
         ClientServices.CLIENT.registerModelLoader(LocksStorageModels.LOCKED_MODEL_LOADER, LockedModel.Loader.INSTANCE);
-        ClientServices.CLIENT.registerConditionalItemModelProperty(LocksStorageModels.LOCKED_PROPERTY_ID, LocksStorageModels.LOCKED_PROPERTY.type());
+        // The barrel item has no block entity for that model data, so its item model's overrides branch on the stack's lock instead.
+        ClientServices.CLIENT.registerItemProperty(() -> LocksBlocks.LOCKED_BARREL.get().asItem(), LocksStorageModels.LOCKED_PROPERTY_ID, LocksStorageModels.LOCKED_PROPERTY);
 
+        // The chests and the shulker box are builtin/entity items, each drawn by its own renderer with the sprite its block entity renderer uses.
         ClientServices.CLIENT.registerSpecialModelRenderers((register) -> {
-            register.registerSpecialModelRenderer(LocksStorageModels.CHEST_ITEM_RENDERER, LockedChestSpecialRenderer.Unbaked.codec(LocksStorageModels.CHEST_LAYER));
-            register.registerSpecialModelRenderer(LocksStorageModels.SHULKER_BOX_ITEM_RENDERER, LockedShulkerBoxSpecialRenderer.Unbaked.codec(LocksStorageModels.SHULKER_BOX_LAYER));
+            register.registerItemRenderer(() -> LocksBlocks.LOCKED_CHEST.get().asItem(), () -> new LockedChestSpecialRenderer(LocksStorageModels.CHEST_SPRITE, LocksStorageModels.CHEST_LAYER));
+            register.registerItemRenderer(() -> LocksBlocks.LOCKED_ENDER_CHEST.get().asItem(), () -> new LockedChestSpecialRenderer(LocksStorageModels.ENDER_CHEST_SPRITE, LocksStorageModels.CHEST_LAYER));
+            register.registerItemRenderer(() -> LocksBlocks.LOCKED_SHULKER_BOX.get().asItem(), () -> new LockedShulkerBoxSpecialRenderer(LocksStorageModels.SHULKER_BOX_SPRITE, LocksStorageModels.SHULKER_BOX_LAYER));
         });
+
+        // 1.21.1 picks a block's chunk layer from code, not its textures; NeoForge reads the same from the models' render_type.
+        ClientServices.CLIENT.registerBlockRenderType(RenderType.cutout(), () -> List.of(LocksBlocks.lockedDoors()));
+        ClientServices.CLIENT.registerBlockRenderType(RenderType.cutoutMipped(), () -> List.of(LocksBlocks.LOCKED_HOPPER.get()));
     }
 }

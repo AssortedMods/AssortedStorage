@@ -1,6 +1,7 @@
 package com.grim3212.assorted.barrels.gametest;
 
 import net.minecraft.locale.Language;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.core.registries.Registries;
@@ -14,7 +15,7 @@ import com.grim3212.assorted.barrels.common.block.BarrelsBlocks;
 import com.grim3212.assorted.barrels.common.handlers.BarrelsCreativeItems;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -49,7 +50,7 @@ final class AssetTests {
         List<String> missing = new ArrayList<>();
 
         for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
-            Identifier id = entry.getKey().identifier();
+            ResourceLocation id = entry.getKey().location();
             if (!Constants.MOD_ID.equals(id.getNamespace())) {
                 continue;
             }
@@ -63,12 +64,12 @@ final class AssetTests {
         }
 
         for (Map.Entry<ResourceKey<Item>, Item> entry : BuiltInRegistries.ITEM.entrySet()) {
-            Identifier id = entry.getKey().identifier();
+            ResourceLocation id = entry.getKey().location();
             if (!Constants.MOD_ID.equals(id.getNamespace())) {
                 continue;
             }
 
-            if (!resourceExists("/assets/" + Constants.MOD_ID + "/items/" + id.getPath() + ".json")) {
+            if (!resourceExists("/assets/" + Constants.MOD_ID + "/models/item/" + id.getPath() + ".json")) {
                 missing.add("item model " + id.getPath());
             }
             if (!lang.has(entry.getValue().getDescriptionId())) {
@@ -84,8 +85,8 @@ final class AssetTests {
     }
 
     /**
-     * Every material barrel's item shows its padlock when locked. An item bakes the locked loader model to its
-     * unlocked child, so the item json has to choose between the two models on the stack's lock.
+     * Every material barrel's item shows its padlock when locked. An item has no block entity for the locked loader
+     * model to read, so the item json has to choose between the two models on the stack's lock.
      */
     private static void barrelItemsShowTheirPadlock(GameTestHelper helper) {
         List<Block> barrels = new ArrayList<>();
@@ -95,20 +96,30 @@ final class AssetTests {
         List<String> wrong = new ArrayList<>();
         for (Block barrel : barrels) {
             String path = name(barrel);
-            JsonObject item = json("/assets/" + Constants.MOD_ID + "/items/" + path + ".json");
-            JsonObject model = item == null ? null : item.getAsJsonObject("model");
-            if (model == null || !"minecraft:condition".equals(string(model, "type")) || !(Constants.MOD_ID + ":locked").equals(string(model, "property"))) {
-                wrong.add(path + " does not choose its model on " + Constants.MOD_ID + ":locked");
-                continue;
-            }
-
+            // 1.21.1 item models choose a child through "overrides" on a registered item property.
             String locked = Constants.MOD_ID + ":block/" + path + "_locked";
             String unlocked = Constants.MOD_ID + ":block/" + path + "_unlocked";
-            if (!locked.equals(string(model.getAsJsonObject("on_true"), "model"))) {
-                wrong.add(path + " does not draw " + locked + " when locked");
+            JsonObject item = json("/assets/" + Constants.MOD_ID + "/models/item/" + path + ".json");
+            if (item == null) {
+                wrong.add(path + " has no item model");
+                continue;
             }
-            if (!unlocked.equals(string(model.getAsJsonObject("on_false"), "model"))) {
-                wrong.add(path + " does not draw " + unlocked + " when unlocked");
+            if (!unlocked.equals(string(item, "parent"))) {
+                wrong.add(path + " does not draw " + unlocked + " when unlocked, got " + string(item, "parent"));
+            }
+
+            boolean drawsLocked = false;
+            if (item.has("overrides")) {
+                for (JsonElement element : item.getAsJsonArray("overrides")) {
+                    JsonObject override = element.getAsJsonObject();
+                    JsonObject predicate = override.getAsJsonObject("predicate");
+                    if (predicate != null && predicate.has(Constants.MOD_ID + ":locked") && predicate.get(Constants.MOD_ID + ":locked").getAsFloat() == 1.0F && locked.equals(string(override, "model"))) {
+                        drawsLocked = true;
+                    }
+                }
+            }
+            if (!drawsLocked) {
+                wrong.add(path + " does not draw " + locked + " when " + Constants.MOD_ID + ":locked is 1");
             }
 
             JsonObject lockedModel = json("/assets/" + Constants.MOD_ID + "/models/block/" + path + "_locked.json");
@@ -123,17 +134,20 @@ final class AssetTests {
     }
 
     /**
-     * Every custom blockstate model and loader model carries both loaders' keys: NeoForge reads
-     * {@code "type"} and {@code "loader"}, Fabric only {@code "fabric:type"}. With only NeoForge's
-     * key, Fabric loads a plain static model and nothing warns.
+     * Every loader model a blockstate names is read on both loaders. On 1.21.1 both read NeoForge's
+     * {@code "loader"} key (AssortedLib's Fabric side looks it up too), so each one names the loader
+     * this mod registers and children that exist; a 26.x {@code "fabric:type"} or variant
+     * {@code "type"} key would be read by neither, and the barrel would draw as a static model.
      */
     private static void loaderModelsAreReadOnBothLoaders(GameTestHelper helper) {
+        // BarrelsClient names it, but is a client class the test server cannot load.
+        String loader = Constants.MOD_ID + ":locked";
         List<String> wrong = new ArrayList<>();
         List<String> checkedModels = new ArrayList<>();
-        int customVariants = 0;
+        int loaderModels = 0;
 
         for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
-            Identifier id = entry.getKey().identifier();
+            ResourceLocation id = entry.getKey().location();
             if (!Constants.MOD_ID.equals(id.getNamespace())) {
                 continue;
             }
@@ -143,11 +157,8 @@ final class AssetTests {
             }
 
             for (JsonObject variant : blockstateVariants(blockstate)) {
-                if (variant.has("type")) {
-                    customVariants++;
-                    if (!variant.get("type").equals(variant.get("fabric:type"))) {
-                        wrong.add("blockstate " + id.getPath() + " has type " + variant.get("type") + " but fabric:type " + variant.get("fabric:type"));
-                    }
+                if (variant.has("type") || variant.has("fabric:type")) {
+                    wrong.add("blockstate " + id.getPath() + " has a 26.x custom variant " + variant);
                 }
 
                 String model = variant.has("model") ? variant.get("model").getAsString() : null;
@@ -156,15 +167,34 @@ final class AssetTests {
                 }
                 checkedModels.add(model);
 
-                Identifier modelId = Identifier.parse(model);
+                ResourceLocation modelId = ResourceLocation.parse(model);
                 JsonObject modelJson = json("/assets/" + modelId.getNamespace() + "/models/" + modelId.getPath() + ".json");
-                if (modelJson != null && modelJson.has("loader") && !modelJson.get("loader").equals(modelJson.get("fabric:type"))) {
-                    wrong.add("model " + model + " has loader " + modelJson.get("loader") + " but fabric:type " + modelJson.get("fabric:type"));
+                if (modelJson == null) {
+                    wrong.add("model " + model + " does not exist");
+                    continue;
+                }
+                if (modelJson.has("fabric:type")) {
+                    wrong.add("model " + model + " has a 26.x fabric:type key");
+                }
+                if (!modelJson.has("loader")) {
+                    continue;
+                }
+
+                loaderModels++;
+                if (!loader.equals(string(modelJson, "loader"))) {
+                    wrong.add("model " + model + " has loader " + modelJson.get("loader") + " but this mod registers " + loader);
+                }
+                for (String child : List.of("unlocked", "locked")) {
+                    String childModel = string(modelJson, child);
+                    ResourceLocation childId = childModel == null ? null : ResourceLocation.tryParse(childModel);
+                    if (childId == null || json("/assets/" + childId.getNamespace() + "/models/" + childId.getPath() + ".json") == null) {
+                        wrong.add("model " + model + " names no existing " + child + " child, got " + childModel);
+                    }
                 }
             }
         }
 
-        helper.assertTrue(customVariants > 0, "no custom blockstate variants were found to check");
+        helper.assertTrue(loaderModels > 0, "no loader models were found to check");
         helper.assertTrue(wrong.isEmpty(), wrong.size() + " json(s) Fabric would read as static: " + String.join("; ", wrong));
         helper.succeed();
     }
@@ -180,8 +210,8 @@ final class AssetTests {
         List<String> failed = new ArrayList<>();
 
         recipes.listMatchingResources(server.getResourceManager()).forEach((file, resource) -> {
-            Identifier id = recipes.fileToId(file);
-            if (!id.getNamespace().equals(Constants.MOD_ID) || server.getRecipeManager().byKey(ResourceKey.create(Registries.RECIPE, id)).isPresent()) {
+            ResourceLocation id = recipes.fileToId(file);
+            if (!id.getNamespace().equals(Constants.MOD_ID) || server.getRecipeManager().byKey(id).isPresent()) {
                 return;
             }
 
@@ -206,7 +236,7 @@ final class AssetTests {
      */
     private static void everyItemTagHasAName(GameTestHelper helper) {
         Language language = Language.getInstance();
-        List<String> missing = helper.getLevel().registryAccess().lookupOrThrow(Registries.ITEM).getTags()
+        List<String> missing = helper.getLevel().registryAccess().lookupOrThrow(Registries.ITEM).listTags()
                 .map(tag -> tag.key().location())
                 .filter(id -> !"minecraft".equals(id.getNamespace()))
                 .map(id -> "tag.item." + id.getNamespace() + "." + id.getPath().replace('/', '.'))

@@ -1,30 +1,27 @@
 package com.grim3212.assorted.crates.client.screen.buttons;
 
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
 /**
- * A button drawn as a checkbox that stays ticked while it is on. The widget textures are sprites in
- * 26.2 - the {@code textures/gui/checkbox.png} sheet this used to slice up is gone - so the four
- * states are four sprite ids rather than offsets into one image.
+ * A button drawn as a checkbox that stays ticked while it is on. The widget textures are sprites,
+ * so the four states are four sprite ids rather than offsets into one image.
  */
 public class ImageToggleButton extends Button {
 
-    public static final Identifier CHECKBOX = Identifier.withDefaultNamespace("widget/checkbox");
-    public static final Identifier CHECKBOX_HIGHLIGHTED = Identifier.withDefaultNamespace("widget/checkbox_highlighted");
-    public static final Identifier CHECKBOX_SELECTED = Identifier.withDefaultNamespace("widget/checkbox_selected");
-    public static final Identifier CHECKBOX_SELECTED_HIGHLIGHTED = Identifier.withDefaultNamespace("widget/checkbox_selected_highlighted");
+    public static final ResourceLocation CHECKBOX = ResourceLocation.withDefaultNamespace("widget/checkbox");
+    public static final ResourceLocation CHECKBOX_HIGHLIGHTED = ResourceLocation.withDefaultNamespace("widget/checkbox_highlighted");
+    public static final ResourceLocation CHECKBOX_SELECTED = ResourceLocation.withDefaultNamespace("widget/checkbox_selected");
+    public static final ResourceLocation CHECKBOX_SELECTED_HIGHLIGHTED = ResourceLocation.withDefaultNamespace("widget/checkbox_selected_highlighted");
 
-    /** Every sprite this button can draw, for the client gametest that checks they are all in the atlas. */
-    public static final List<Identifier> SPRITES = List.of(CHECKBOX, CHECKBOX_HIGHLIGHTED, CHECKBOX_SELECTED, CHECKBOX_SELECTED_HIGHLIGHTED);
+    /** Every sprite this button can draw. */
+    public static final List<ResourceLocation> SPRITES = List.of(CHECKBOX, CHECKBOX_HIGHLIGHTED, CHECKBOX_SELECTED, CHECKBOX_SELECTED_HIGHLIGHTED);
 
     private boolean buttonClicked;
 
@@ -52,21 +49,21 @@ public class ImageToggleButton extends Button {
     }
 
     @Override
-    public void onClick(MouseButtonEvent event, boolean doubleClick) {
-        super.onClick(event, doubleClick);
+    public void onClick(double mouseX, double mouseY) {
+        super.onClick(mouseX, mouseY);
         this.toggleButtonClicked();
     }
 
     @Override
-    protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         boolean highlighted = this.isActive() && this.isHoveredOrFocused();
-        Identifier sprite;
+        ResourceLocation sprite;
         if (this.isButtonClicked()) {
             sprite = highlighted ? CHECKBOX_SELECTED_HIGHLIGHTED : CHECKBOX_SELECTED;
         } else {
             sprite = highlighted ? CHECKBOX_HIGHLIGHTED : CHECKBOX;
         }
 
-        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, this.getX(), this.getY(), this.width, this.height);
+        graphics.blitSprite(sprite, this.getX(), this.getY(), this.width, this.height);
     }
 }

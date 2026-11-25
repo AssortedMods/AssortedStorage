@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedchests:chest_aluminum"
+        "recipe": "assortedchests:chest_aluminum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

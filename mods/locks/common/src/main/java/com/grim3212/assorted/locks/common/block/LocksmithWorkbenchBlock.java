@@ -28,7 +28,7 @@ public class LocksmithWorkbenchBlock extends Block {
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack heldStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    protected InteractionResult useWithoutItem(BlockState state, Level worldIn, BlockPos pos, Player player, BlockHitResult hit) {
         if (worldIn.isClientSide()) {
             return InteractionResult.SUCCESS;
         } else {

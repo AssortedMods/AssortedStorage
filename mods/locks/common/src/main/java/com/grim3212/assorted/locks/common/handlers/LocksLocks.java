@@ -12,6 +12,7 @@ import com.grim3212.assorted.locks.common.block.blockentity.LockedEnderChestBloc
 import com.grim3212.assorted.locks.common.item.LocksItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -46,7 +47,9 @@ public class LocksLocks {
         LockConversions.register(Blocks.ENDER_CHEST, LocksLocks::enderChest);
 
         LockConversions.register(Blocks.SHULKER_BOX, LocksLocks::shulkerBox);
-        Blocks.DYED_SHULKER_BOX.forEach(dyed -> LockConversions.register(dyed, LocksLocks::shulkerBox));
+        for (DyeColor color : DyeColor.values()) {
+            LockConversions.register(ShulkerBoxBlock.getBlockByColor(color), LocksLocks::shulkerBox);
+        }
     }
 
     /** An ender chest holds nothing of its own, so only the lock moves across. */

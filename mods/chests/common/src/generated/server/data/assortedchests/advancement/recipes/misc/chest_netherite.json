@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedchests:chest_netherite"
+        "recipe": "assortedchests:chest_netherite"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -3,6 +3,7 @@ package com.grim3212.assorted.bags.gametest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.grim3212.assorted.bags.Constants;
+import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -35,7 +36,7 @@ final class BagsTestSupport {
             helper.assertTrue(in != null, "this mod ships no en_us.json");
             return JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
         } catch (Exception e) {
-            throw helper.assertionException("could not read en_us.json: " + e);
+            throw new GameTestAssertException("could not read en_us.json: " + e);
         }
     }
 

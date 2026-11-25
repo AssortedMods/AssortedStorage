@@ -5,11 +5,14 @@ import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.crates.api.CompactingHelper;
 import com.grim3212.assorted.crates.api.LargeItemStack;
 import com.grim3212.assorted.crates.common.block.blockentity.CrateBlockEntity;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -35,35 +38,40 @@ public class CompactingCrateInventory extends CrateSidedInv {
     }
 
     @Override
-    public void serialize(ValueOutput output) {
-        super.serialize(output);
+    public void serialize(CompoundTag tag, HolderLookup.Provider registries) {
+        super.serialize(tag, registries);
 
-        // ItemStack.CODEC refuses an empty stack and the tier list is padded with empty matches, so
+        // ItemStack#save refuses an empty stack and the tier list is padded with empty matches, so
         // an empty tier is skipped and the index written out rather than implied by position.
-        ValueOutput.ValueOutputList matchList = output.childrenList("Matches");
+        ListTag matchList = new ListTag();
         for (int i = 0; i < this.matches.size(); i++) {
             CompactingHelper.Match m = this.matches.get(i);
             if (m.getItem().isEmpty()) {
                 continue;
             }
 
-            ValueOutput match = matchList.addChild();
+            CompoundTag match = new CompoundTag();
             match.putByte("Slot", (byte) i);
-            match.store("Item", ItemStack.CODEC, m.getItem());
+            match.put("Item", m.getItem().save(registries));
             match.putInt("MatchRequired", m.getNumRequired());
+            matchList.add(match);
         }
-        output.putInt("MatchCount", this.matches.size());
+        tag.put("Matches", matchList);
+        tag.putInt("MatchCount", this.matches.size());
     }
 
     @Override
-    public void deserialize(ValueInput input) {
-        super.deserialize(input);
+    public void deserialize(CompoundTag tag, HolderLookup.Provider registries) {
+        super.deserialize(tag, registries);
 
-        this.matches = emptyMatches(input.getIntOr("MatchCount", TIERS));
-        for (ValueInput match : input.childrenListOrEmpty("Matches")) {
-            int slotIdx = match.getByteOr("Slot", (byte) -1) & 255;
+        this.matches = emptyMatches(tag.contains("MatchCount", Tag.TAG_INT) ? tag.getInt("MatchCount") : TIERS);
+        ListTag matchList = tag.getList("Matches", Tag.TAG_COMPOUND);
+        for (int i = 0; i < matchList.size(); i++) {
+            CompoundTag match = matchList.getCompound(i);
+            int slotIdx = (match.contains("Slot", Tag.TAG_BYTE) ? match.getByte("Slot") : -1) & 255;
             if (slotIdx < this.matches.size()) {
-                this.matches.set(slotIdx, new CompactingHelper.Match(match.read("Item", ItemStack.CODEC).orElse(ItemStack.EMPTY), match.getIntOr("MatchRequired", 1)));
+                int required = match.contains("MatchRequired", Tag.TAG_INT) ? match.getInt("MatchRequired") : 1;
+                this.matches.set(slotIdx, new CompactingHelper.Match(loadItem(match, "Item", registries), required));
             }
         }
     }
@@ -73,8 +81,8 @@ public class CompactingCrateInventory extends CrateSidedInv {
             return;
         }
 
-        // The recipe manager is server side only in 26.x, so a compactor can only work out its
-        // tiers on the server; the client is told the result through the crate sync packet.
+        // A compactor works out its tiers on the server only, the side whose recipes are
+        // authoritative; the client is told the result through the crate's block update.
         if (!(this.inv.getLevel() instanceof ServerLevel serverLevel)) {
             return;
         }

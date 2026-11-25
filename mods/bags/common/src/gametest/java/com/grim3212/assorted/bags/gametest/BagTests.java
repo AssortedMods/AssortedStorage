@@ -15,8 +15,10 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -47,18 +49,18 @@ final class BagTests {
      */
     private static void bagDyesAndReadsBackColour(GameTestHelper helper) {
         ItemStack bag = new ItemStack(BagsItems.BAG.get());
-        ItemStack red = new ItemStack(Items.DYE.pick(DyeColor.RED));
-        ItemStack blue = new ItemStack(Items.DYE.pick(DyeColor.BLUE));
+        ItemStack red = new ItemStack(DyeItem.byColor(DyeColor.RED));
+        ItemStack blue = new ItemStack(DyeItem.byColor(DyeColor.BLUE));
 
         CraftingInput input = CraftingInput.of(3, 1, List.of(red, bag, blue));
-        helper.assertTrue(BagColoringRecipe.INSTANCE.matches(input, helper.getLevel()), "dye + bag + dye was not a bag colouring recipe");
+        BagColoringRecipe recipe = new BagColoringRecipe(CraftingBookCategory.MISC);
+        helper.assertTrue(recipe.matches(input, helper.getLevel()), "dye + bag + dye was not a bag colouring recipe");
 
-        ItemStack dyed = BagColoringRecipe.INSTANCE.assemble(input);
+        ItemStack dyed = recipe.assemble(input, helper.getLevel().registryAccess());
         helper.assertValueEqual(NBTHelper.getInt(dyed, BagItem.TAG_SECONDARY_COLOR, -1), DyeColor.RED.getId(), "secondary colour from the dye left of the bag");
         helper.assertValueEqual(NBTHelper.getInt(dyed, BagItem.TAG_PRIMARY_COLOR, -1), DyeColor.BLUE.getId(), "primary colour from the dye right of the bag");
 
-        // The name is derived from the primary colour, and it is per stack now that
-        // getDescriptionId lost its stack overload.
+        // The name is derived from the primary colour, per stack.
         Component name = BagsItems.BAG.get().getName(dyed);
         helper.assertTrue(name.getContents() instanceof TranslatableContents contents && contents.getKey().endsWith("_blue"),
                 "a dyed bag did not take its name from the primary colour");
@@ -109,7 +111,7 @@ final class BagTests {
         ownChest.setItem(0, new ItemStack(Items.DIAMOND, 3));
 
         EnderBagContainer menu = new EnderBagContainer(1, helper.getLevel(), player.blockPosition(), player.getInventory(), player);
-        helper.runBeforeTestEnd(() -> menu.removed(player));
+        whenTestEnds(helper, () -> menu.removed(player));
 
         // One padlock slot, the 27 chest slots, then the player's own 36.
         helper.assertValueEqual(menu.slots.size(), 1 + 27 + 36, "the ender bag menu's slot count");
@@ -129,7 +131,7 @@ final class BagTests {
         EnderSavedData.get(helper.getLevel()).getInventory("ender_bag_follows_its_lock").setStackInSlot(0, new ItemStack(Items.EMERALD, 5));
 
         EnderBagContainer menu = new EnderBagContainer(1, helper.getLevel(), player.blockPosition(), player.getInventory(), player);
-        helper.runBeforeTestEnd(() -> menu.removed(player));
+        whenTestEnds(helper, () -> menu.removed(player));
         helper.assertTrue(menu.getSlot(1).container == menu.getSlot(27).container, "two ender bag slots have different containers");
         helper.assertTrue(menu.getSlot(1).getItem().is(Items.DIAMOND), "an unlocked ender bag did not show the player's ender chest");
 

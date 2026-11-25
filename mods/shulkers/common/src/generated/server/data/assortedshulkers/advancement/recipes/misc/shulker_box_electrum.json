@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedshulkers:shulker_box_electrum"
+        "recipe": "assortedshulkers:shulker_box_electrum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -16,7 +16,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -160,12 +160,12 @@ public class EnderBagContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slot, int dragType, ContainerInput clickTypeIn, Player player) {
+    public void clicked(int slot, int dragType, ClickType clickTypeIn, Player player) {
         if (slot >= 0) {
             if (getSlot(slot).getItem().getItem() instanceof EnderBagItem)
                 return;
         }
-        if (clickTypeIn == ContainerInput.SWAP)
+        if (clickTypeIn == ClickType.SWAP)
             return;
 
         super.clicked(slot, dragType, clickTypeIn, player);
@@ -180,7 +180,7 @@ public class EnderBagContainer extends AbstractContainerMenu {
         if (slot != null && slot.hasItem()) {
             // -1 to account for the lock slot we don't want to put items in
             int totalSlotSize = slots.size() - 1;
-            int bagSlotCount = totalSlotSize - playerIn.getInventory().getNonEquipmentItems().size();
+            int bagSlotCount = totalSlotSize - playerIn.getInventory().items.size();
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index < bagSlotCount) {

@@ -10,6 +10,7 @@
     }
   ],
   "type": "assortedbags:locked_upgrading",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:tags_populated",
@@ -24,8 +25,12 @@
     }
   ],
   "key": {
-    "C": "#assortedbags:bags/level_1",
-    "M": "#c:gems/peridot"
+    "C": {
+      "tag": "assortedbags:bags/level_1"
+    },
+    "M": {
+      "tag": "c:gems/peridot"
+    }
   },
   "pattern": [
     "MMM",
@@ -33,6 +38,7 @@
     "MMM"
   ],
   "result": {
+    "count": 1,
     "id": "assortedbags:bag_peridot"
   }
 }

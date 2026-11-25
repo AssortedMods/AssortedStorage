@@ -1,5 +1,13 @@
 {
   "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "assortedbags:item/ender_bag_locked",
+      "predicate": {
+        "assortedbags:locked": 1.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "assortedbags:item/ender_bag"
   }

@@ -44,7 +44,7 @@ final class ShulkerBoxTests {
             BlockPos pos = spread(i);
             helper.setBlock(pos, block);
 
-            BaseStorageBlockEntity storage = helper.getBlockEntity(pos, BaseStorageBlockEntity.class);
+            BaseStorageBlockEntity storage = blockEntity(helper, pos, BaseStorageBlockEntity.class);
             IItemStorageHandler handler = storage.getStorageHandler().getItemStorageHandler(null);
             int last = handler.getSlots() - 1;
 
@@ -70,7 +70,7 @@ final class ShulkerBoxTests {
         for (int i = 0; i < blocks.size(); i++) {
             BlockPos pos = spread(i);
             helper.setBlock(pos, blocks.get(i));
-            helper.getBlockEntity(pos, BaseStorageBlockEntity.class).getItemStackStorageHandler().setStackInSlot(0, new ItemStack(MARKERS.get(i), 3));
+            blockEntity(helper, pos, BaseStorageBlockEntity.class).getItemStackStorageHandler().setStackInSlot(0, new ItemStack(MARKERS.get(i), 3));
 
             // Needs the loot table to run, which helper.destroyBlock never reaches.
             helper.getLevel().destroyBlock(helper.absolutePos(pos), true);
@@ -95,7 +95,7 @@ final class ShulkerBoxTests {
             BlockPos pos = spread(i);
             helper.setBlock(pos, block);
 
-            BaseStorageBlockEntity storage = helper.getBlockEntity(pos, BaseStorageBlockEntity.class);
+            BaseStorageBlockEntity storage = blockEntity(helper, pos, BaseStorageBlockEntity.class);
             int last = storage.getItemStackStorageHandler().getSlots() - 1;
             storage.getItemStackStorageHandler().setStackInSlot(0, new ItemStack(Items.DIAMOND, 5));
             storage.getItemStackStorageHandler().setStackInSlot(last, new ItemStack(Items.EMERALD, 2));

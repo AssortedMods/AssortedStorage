@@ -48,6 +48,7 @@ final class CrateTests {
         out.accept("creative_click_takes_from_a_crate_instead_of_breaking_it", CrateTests::creativeClickTakesFromACrateInsteadOfBreakingIt);
         out.accept("crate_reports_everything_it_holds", CrateTests::crateReportsEverythingItHolds);
         out.accept("an_aborted_transfer_leaves_a_crate_alone", CrateTests::anAbortedTransferLeavesACrateAlone);
+        out.accept("a_simulated_extract_leaves_a_crate_alone", CrateTests::aSimulatedExtractLeavesACrateAlone);
         out.accept("controller_lists_every_crate_on_the_network", CrateTests::controllerListsEveryCrateOnTheNetwork);
         out.accept("a_locked_controller_sends_its_lock_to_clients", CrateTests::aLockedControllerSendsItsLockToClients);
     }
@@ -64,7 +65,7 @@ final class CrateTests {
      */
     private static void crateReportsEverythingItHolds(GameTestHelper helper) {
         helper.setBlock(BLOCK, oakCrate());
-        CrateSidedInv crate = helper.getBlockEntity(BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
 
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.COBBLESTONE), 2000));
         helper.assertValueEqual(crate.getStackInSlot(0).getCount(), 2000, "what the crate reports holding");
@@ -77,7 +78,7 @@ final class CrateTests {
         // A locked slot that has run empty reads as empty, so nothing may be pulled from it.
         BlockPos quadPos = BLOCK.east(2);
         helper.setBlock(quadPos, oakCrateQuadruple());
-        CrateSidedInv quad = helper.getBlockEntity(quadPos, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv quad = blockEntity(helper, quadPos, CrateBlockEntity.class).getItemStackStorageHandler();
 
         quad.setItem(1, new LargeItemStack(new ItemStack(Items.DIAMOND), 0));
         quad.setSlotLocked(1, true);
@@ -89,7 +90,7 @@ final class CrateTests {
         helper.assertValueEqual(quad.getSlotLimit(1), 64 * 8, "the capacity a locked empty slot reports");
 
         // Nothing re-caps a slot on load, so an existing world's crates come back untouched.
-        CrateBlockEntity saved = helper.getBlockEntity(BLOCK, CrateBlockEntity.class);
+        CrateBlockEntity saved = blockEntity(helper, BLOCK, CrateBlockEntity.class);
         CompoundTag tag = saveWithoutProblems(helper, saved, "a crate holding more than a stack");
         BlockEntity reloaded = BlockEntity.loadStatic(helper.absolutePos(BLOCK), saved.getBlockState(), tag, helper.getLevel().registryAccess());
         CrateSidedInv loaded = ((CrateBlockEntity) reloaded).getItemStackStorageHandler();
@@ -105,7 +106,7 @@ final class CrateTests {
      */
     private static void anAbortedTransferLeavesACrateAlone(GameTestHelper helper) {
         helper.setBlock(BLOCK, oakCrate());
-        CrateSidedInv crate = helper.getBlockEntity(BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
 
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.COBBLESTONE), 2000, 7, false));
         Runnable rollback = crate.captureSlot(0);
@@ -120,12 +121,43 @@ final class CrateTests {
         // The same for a slot that had nothing in it: the rollback must not invent one.
         BlockPos emptyPos = BLOCK.east(2);
         helper.setBlock(emptyPos, oakCrate());
-        CrateSidedInv empty = helper.getBlockEntity(emptyPos, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv empty = blockEntity(helper, emptyPos, CrateBlockEntity.class).getItemStackStorageHandler();
 
         Runnable emptyRollback = empty.captureSlot(0);
         helper.assertTrue(empty.insertItem(0, new ItemStack(Items.DIAMOND, 5), false).isEmpty(), "an empty crate would not take five diamonds");
         emptyRollback.run();
         helper.assertTrue(empty.getStackInSlot(0).isEmpty(), "a rolled back insert left something in an empty slot");
+        helper.succeed();
+    }
+
+    /**
+     * A simulated extract only says what an extract would hand out. It must hand back its own stack,
+     * since the slot's stack is the one the crate keeps, and resizing it would change what the slot
+     * holds without an extract ever happening.
+     */
+    private static void aSimulatedExtractLeavesACrateAlone(GameTestHelper helper) {
+        helper.setBlock(BLOCK, oakCrate());
+        CrateSidedInv crate = blockEntity(helper, BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
+
+        crate.setItem(0, new LargeItemStack(new ItemStack(Items.COBBLESTONE), 2000));
+        ItemStack slotStack = crate.getLargeItemStack(0).getStack();
+        int slotStackCount = slotStack.getCount();
+
+        ItemStack simulated = crate.extractItem(0, 64, true);
+        helper.assertTrue(simulated.is(Items.COBBLESTONE), "a simulated extract offered " + simulated + " rather than cobblestone");
+        helper.assertValueEqual(simulated.getCount(), 64, "what the simulated extract would take");
+        helper.assertTrue(simulated != crate.getLargeItemStack(0).getStack(), "a simulated extract handed out the slot's own stack");
+        helper.assertValueEqual(crate.getLargeItemStack(0).getStack().getCount(), slotStackCount, "the slot's stack count after a simulated extract");
+        helper.assertValueEqual(crate.getLargeItemStack(0).getAmount(), 2000, "the amount left after a simulated extract");
+
+        // Whoever asked may do what they like with the answer without reaching the slot.
+        simulated.setCount(3);
+        helper.assertValueEqual(slotStack.getCount(), slotStackCount, "the slot's stack count after the simulated stack was changed");
+        helper.assertValueEqual(crate.getStackInSlot(0).getCount(), 2000, "what the crate reports after a simulated extract");
+
+        // The real extract that follows still takes a full stack.
+        helper.assertValueEqual(crate.extractItem(0, 64, false).getCount(), 64, "what the real extract took out");
+        helper.assertValueEqual(crate.getLargeItemStack(0).getAmount(), 1936, "the amount left after the real extract");
         helper.succeed();
     }
 
@@ -142,12 +174,12 @@ final class CrateTests {
         helper.setBlock(firstPos, oakCrate());
         helper.setBlock(secondPos, oakCrate());
 
-        CrateSidedInv first = helper.getBlockEntity(firstPos, CrateBlockEntity.class).getItemStackStorageHandler();
-        CrateSidedInv second = helper.getBlockEntity(secondPos, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv first = blockEntity(helper, firstPos, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv second = blockEntity(helper, secondPos, CrateBlockEntity.class).getItemStackStorageHandler();
         first.setItem(0, new LargeItemStack(new ItemStack(Items.COBBLESTONE), 300));
         second.setItem(0, new LargeItemStack(new ItemStack(Items.DIAMOND), 5));
 
-        CrateControllerBlockEntity controller = helper.getBlockEntity(controllerPos, CrateControllerBlockEntity.class);
+        CrateControllerBlockEntity controller = blockEntity(helper, controllerPos, CrateControllerBlockEntity.class);
         controller.tick();
 
         CrateControllerInvWrapper network = controller.getItemStackStorageHandler();
@@ -180,13 +212,13 @@ final class CrateTests {
         helper.setBlock(full, oakCrate().defaultBlockState().setValue(CrateBlock.FACING, Direction.UP));
         helper.setBlock(empty, oakCrate().defaultBlockState().setValue(CrateBlock.FACING, Direction.UP));
 
-        CrateSidedInv crate = helper.getBlockEntity(full, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, full, CrateBlockEntity.class).getItemStackStorageHandler();
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.DIAMOND), 3));
 
-        // A mock server player, not TestSupport's real one: emptying a slot syncs it to nearby
-        // players, and NeoForge refuses a payload to a connection that negotiated no channels. A
-        // mock player is never added to the level, so the sync has nobody to reach.
-        ServerPlayer player = (ServerPlayer) helper.makeMockServerPlayer(GameType.CREATIVE);
+        // Not TestSupport's real player: emptying a slot syncs it to nearby players, and NeoForge
+        // refuses a payload to a connection that negotiated no channels. This one is never added to
+        // the level, so the sync has nobody to reach.
+        ServerPlayer player = unplacedCreativePlayer(helper);
 
         hover(helper, player, Vec3.atCenterOf(full).add(0.0D, 2.0D, 0.0D), 90.0F);
         helper.assertFalse(player.gameMode.destroyBlock(helper.absolutePos(full)), "a creative click broke a crate that still had something in it");
@@ -215,7 +247,7 @@ final class CrateTests {
         helper.setBlock(bridgePos, CratesBlocks.CRATE_BRIDGE.get());
         helper.setBlock(cratePos, oakCrate());
 
-        CrateControllerBlockEntity controller = helper.getBlockEntity(controllerPos, CrateControllerBlockEntity.class);
+        CrateControllerBlockEntity controller = blockEntity(helper, controllerPos, CrateControllerBlockEntity.class);
         controller.tick();
 
         helper.assertTrue(controller.hasConnectedCrates(), "the controller found no crates through a bridge");
@@ -224,7 +256,7 @@ final class CrateTests {
         ItemStack leftover = controller.getItemStackStorageHandler().insertItem(0, new ItemStack(Items.DIAMOND, 1), false);
         helper.assertTrue(leftover.isEmpty(), "the controller rejected an item with a crate connected");
 
-        CrateSidedInv crate = helper.getBlockEntity(cratePos, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, cratePos, CrateBlockEntity.class).getItemStackStorageHandler();
         helper.assertTrue(crate.getLargeItemStack(0).getStack().is(Items.DIAMOND), "the item did not reach the crate behind the bridge");
         helper.assertValueEqual(crate.getLargeItemStack(0).getAmount(), 1, "the amount that reached the crate");
 
@@ -238,7 +270,7 @@ final class CrateTests {
     /** Upgrades dropped into a crate's enhancement slots take effect and read back off the crate. */
     private static void crateUpgradesApplyAndReadBack(GameTestHelper helper) {
         helper.setBlock(BLOCK, oakCrate());
-        CrateSidedInv crate = helper.getBlockEntity(BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
 
         // Capacity is a multiple of what the held item stacks to.
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.DIAMOND), 1));
@@ -265,12 +297,12 @@ final class CrateTests {
 
     /**
      * A compactor works out the crafting tiers of what it is given and keeps every tier in step.
-     * The whole search runs off the recipe manager, which is server side only in 26.x and reaches
-     * results and ingredients through {@code RecipeDisplay} rather than off the recipe itself.
+     * The whole search runs off the server's recipe manager, reading each crafting recipe's result
+     * and its filled ingredients.
      */
     private static void compactingCrateCompactsUpATier(GameTestHelper helper) {
         helper.setBlock(BLOCK, CratesBlocks.CRATE_COMPACTING.get());
-        CompactingCrateInventory compactor = (CompactingCrateInventory) helper.getBlockEntity(BLOCK, CrateCompactingBlockEntity.class).getItemStackStorageHandler();
+        CompactingCrateInventory compactor = (CompactingCrateInventory) blockEntity(helper, BLOCK, CrateCompactingBlockEntity.class).getItemStackStorageHandler();
 
         helper.assertValueEqual(compactor.addItem(0, new ItemStack(Items.IRON_INGOT, 9)), 0, "the compactor did not take nine iron ingots");
 
@@ -287,13 +319,13 @@ final class CrateTests {
 
     /**
      * A crate slot holds a multiple of what its item stacks to, and an empty slot has no item to
-     * size against: an empty ItemStack answers 1 to getMaxStackSize in 26.2 (air used to answer 64).
+     * size against: an empty ItemStack answers 1 to getMaxStackSize (the component default).
      * Without a fallback an empty crate takes only its stack count in items, so a full stack put
      * into a fresh crate comes back part used.
      */
     private static void emptyCrateTakesAFullStack(GameTestHelper helper) {
         helper.setBlock(BLOCK, oakCrate());
-        CrateSidedInv crate = helper.getBlockEntity(BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
 
         helper.assertValueEqual(crate.getMaxStackSizeForSlot(0), 64 * 32, "an empty single crate's capacity");
         helper.assertValueEqual(crate.addItem(0, new ItemStack(Items.DIAMOND, 64)), 0, "the leftover after a full stack went into an empty crate");
@@ -302,7 +334,7 @@ final class CrateTests {
         // The same through the handler a hopper or a controller inserts with.
         BlockPos second = BLOCK.east();
         helper.setBlock(second, oakCrate());
-        CrateSidedInv fresh = helper.getBlockEntity(second, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv fresh = blockEntity(helper, second, CrateBlockEntity.class).getItemStackStorageHandler();
 
         helper.assertTrue(fresh.insertItem(0, new ItemStack(Items.DIAMOND, 64), false).isEmpty(), "an empty crate handed back part of a full stack");
         helper.assertValueEqual(fresh.getLargeItemStack(0).getAmount(), 64, "the amount an empty crate took through insertItem");
@@ -311,12 +343,12 @@ final class CrateTests {
 
     /**
      * A crate saves with slots it has never held anything in, and a compactor with tiers it never
-     * found. ItemStack.CODEC refuses an empty stack, so an empty slot is left out of the save
+     * found. ItemStack#save refuses an empty stack, so an empty slot is left out of the save
      * entirely rather than written as air - what is written still has to load back.
      */
     private static void cratesSaveWithEmptySlots(GameTestHelper helper) {
         helper.setBlock(BLOCK, oakCrateQuadruple());
-        CrateBlockEntity crate = helper.getBlockEntity(BLOCK, CrateBlockEntity.class);
+        CrateBlockEntity crate = blockEntity(helper, BLOCK, CrateBlockEntity.class);
         saveWithoutProblems(helper, crate, "an untouched quadruple crate");
 
         // One slot filled and three still empty: the filled one has to survive the round trip.
@@ -334,19 +366,19 @@ final class CrateTests {
         // A compactor pads its tier list with empty matches until it has been given something.
         BlockPos compactorPos = BLOCK.east(2);
         helper.setBlock(compactorPos, CratesBlocks.CRATE_COMPACTING.get());
-        saveWithoutProblems(helper, helper.getBlockEntity(compactorPos, CrateCompactingBlockEntity.class), "an untouched compacting crate");
+        saveWithoutProblems(helper, blockEntity(helper, compactorPos, CrateCompactingBlockEntity.class), "an untouched compacting crate");
         helper.succeed();
     }
 
     /**
-     * A compactor's tiers are worked out from recipes, which only the server has, so a client's
-     * compactor knows nothing about them. Applying a synced slot must not re-cap it against what the
+     * A compactor's tiers are worked out from recipes on the server only, so a client's compactor
+     * knows nothing about them. Applying a synced slot must not re-cap it against what the
      * client can work out for itself: the lowest tier's cap is zero without the tier list, which
      * silently emptied the nugget slot everywhere but the server.
      */
     private static void compactingCrateTiersSurviveASync(GameTestHelper helper) {
         helper.setBlock(BLOCK, CratesBlocks.CRATE_COMPACTING.get());
-        CompactingCrateInventory compactor = (CompactingCrateInventory) helper.getBlockEntity(BLOCK, CrateCompactingBlockEntity.class).getItemStackStorageHandler();
+        CompactingCrateInventory compactor = (CompactingCrateInventory) blockEntity(helper, BLOCK, CrateCompactingBlockEntity.class).getItemStackStorageHandler();
         compactor.addItem(0, new ItemStack(Items.IRON_INGOT, 9));
 
         // A second compactor stands in for one on a client: placed, but never told its tiers.
@@ -359,7 +391,7 @@ final class CrateTests {
             SyncCrate.handle(new SyncCrate(helper.absolutePos(asClient), slot, new LargeItemStack(sent.getStack(), sent.getAmount(), sent.getRotation(), sent.isLocked())), player);
         }
 
-        CompactingCrateInventory synced = (CompactingCrateInventory) helper.getBlockEntity(asClient, CrateCompactingBlockEntity.class).getItemStackStorageHandler();
+        CompactingCrateInventory synced = (CompactingCrateInventory) blockEntity(helper, asClient, CrateCompactingBlockEntity.class).getItemStackStorageHandler();
         helper.assertTrue(synced.getLargeItemStack(0).getStack().is(Items.IRON_BLOCK), "the block tier did not survive the sync");
         helper.assertValueEqual(synced.getLargeItemStack(1).getAmount(), 9, "the ingot tier's amount across a sync");
         helper.assertTrue(synced.getLargeItemStack(2).getStack().is(Items.IRON_NUGGET), "the nugget tier did not survive the sync");
@@ -374,18 +406,18 @@ final class CrateTests {
      */
     private static void redstoneUpgradeEmitsASignal(GameTestHelper helper) {
         helper.setBlock(BLOCK, oakCrate());
-        CrateSidedInv crate = helper.getBlockEntity(BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
+        CrateSidedInv crate = blockEntity(helper, BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
 
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.DIAMOND), 1));
         int full = crate.getMaxStackSizeForSlot(0);
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.DIAMOND), full));
-        helper.assertRedstoneSignal(BLOCK, Direction.UP, signal -> signal == 0, () -> Component.literal("a full crate with no redstone upgrade should be silent"));
+        helper.assertRedstoneSignal(BLOCK, Direction.UP, signal -> signal == 0, () -> "a full crate with no redstone upgrade should be silent");
 
         crate.getEnhancements().set(1, new ItemStack(CratesItems.REDSTONE_UPGRADE.get()));
-        helper.assertRedstoneSignal(BLOCK, Direction.UP, signal -> signal == 15, () -> Component.literal("a full crate with a redstone upgrade should read 15"));
+        helper.assertRedstoneSignal(BLOCK, Direction.UP, signal -> signal == 15, () -> "a full crate with a redstone upgrade should read 15");
 
         crate.setItem(0, new LargeItemStack(new ItemStack(Items.DIAMOND), full / 2));
-        helper.assertRedstoneSignal(BLOCK, Direction.UP, signal -> signal == 8, () -> Component.literal("a half full crate with a redstone upgrade should read 8"));
+        helper.assertRedstoneSignal(BLOCK, Direction.UP, signal -> signal == 8, () -> "a half full crate with a redstone upgrade should read 8");
         helper.succeed();
     }
 }

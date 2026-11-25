@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcontainers:bamboo_warehouse_crate"
+        "recipe": "assortedcontainers:bamboo_warehouse_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

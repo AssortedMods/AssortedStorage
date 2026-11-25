@@ -10,6 +10,7 @@
     }
   ],
   "type": "assortedchests:locked_upgrading",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:tags_populated",
@@ -24,8 +25,12 @@
     }
   ],
   "key": {
-    "C": "#assortedchests:chests/level_1",
-    "M": "#c:ingots/lead"
+    "C": {
+      "tag": "assortedchests:chests/level_1"
+    },
+    "M": {
+      "tag": "c:ingots/lead"
+    }
   },
   "pattern": [
     "MMM",
@@ -33,6 +38,7 @@
     "MMM"
   ],
   "result": {
+    "count": 1,
     "id": "assortedchests:chest_lead"
   }
 }

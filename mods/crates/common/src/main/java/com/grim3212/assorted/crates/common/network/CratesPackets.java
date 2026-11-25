@@ -3,7 +3,7 @@ package com.grim3212.assorted.crates.common.network;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.platform.services.INetworkHelper;
 import com.grim3212.assorted.crates.Constants;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class CratesPackets {
 
@@ -13,8 +13,8 @@ public class CratesPackets {
         Services.NETWORK.register(new INetworkHelper.MessageHandler<>(resource("crate_sync"), SyncCrate.class, SyncCrate::encode, SyncCrate::decode, SyncCrate::handle, INetworkHelper.MessageBoundSide.CLIENT));
     }
 
-    private static Identifier resource(String name) {
-        return Identifier.fromNamespaceAndPath(Constants.MOD_ID, name);
+    private static ResourceLocation resource(String name) {
+        return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name);
     }
 
 }

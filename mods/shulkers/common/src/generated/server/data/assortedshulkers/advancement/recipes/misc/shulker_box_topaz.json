@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedshulkers:shulker_box_topaz"
+        "recipe": "assortedshulkers:shulker_box_topaz"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

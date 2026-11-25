@@ -16,17 +16,16 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.storage.TagValueInput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -66,7 +65,7 @@ final class LockedContainerTests {
         map.put(Blocks.BARREL, LocksBlocks.LOCKED_BARREL.get());
         map.put(Blocks.HOPPER, LocksBlocks.LOCKED_HOPPER.get());
         map.put(Blocks.SHULKER_BOX, LocksBlocks.LOCKED_SHULKER_BOX.get());
-        map.put(Blocks.DYED_SHULKER_BOX.pick(DyeColor.RED), LocksBlocks.LOCKED_SHULKER_BOX.get());
+        map.put(ShulkerBoxBlock.getBlockByColor(DyeColor.RED), LocksBlocks.LOCKED_SHULKER_BOX.get());
         return map;
     }
 
@@ -84,9 +83,9 @@ final class LockedContainerTests {
             BlockPos pos = spread(i++);
             helper.setBlock(pos, entry.getKey());
             String name = name(entry.getKey());
-            boolean holdsItems = helper.getBlockEntity(pos, BlockEntity.class) instanceof Container;
+            boolean holdsItems = blockEntity(helper, pos, BlockEntity.class) instanceof Container;
             if (holdsItems) {
-                ((Container) helper.getBlockEntity(pos, BlockEntity.class)).setItem(0, new ItemStack(Items.DIAMOND, 3));
+                ((Container) blockEntity(helper, pos, BlockEntity.class)).setItem(0, new ItemStack(Items.DIAMOND, 3));
             }
 
             if (!LockConversions.tryLock(helper.getLevel(), helper.absolutePos(pos), CODE)) {
@@ -98,7 +97,7 @@ final class LockedContainerTests {
                 continue;
             }
 
-            BlockEntity locked = helper.getBlockEntity(pos, BlockEntity.class);
+            BlockEntity locked = blockEntity(helper, pos, BlockEntity.class);
             if (!(locked instanceof ILockable lockable) || !CODE.equals(lockable.getLockCode())) {
                 wrong.add("a padlocked " + name + " does not carry the padlock's code");
             }
@@ -107,7 +106,7 @@ final class LockedContainerTests {
             }
         }
 
-        LockedShulkerBoxBlockEntity red = helper.getBlockEntity(spread(5), LockedShulkerBoxBlockEntity.class);
+        LockedShulkerBoxBlockEntity red = blockEntity(helper, spread(5), LockedShulkerBoxBlockEntity.class);
         helper.assertValueEqual(red.getColor(), DyeColor.RED, "the color of a padlocked red shulker box");
         helper.assertTrue(wrong.isEmpty(), wrong.size() + " problem(s): " + String.join("; ", wrong));
         helper.succeed();
@@ -127,7 +126,7 @@ final class LockedContainerTests {
         for (Map.Entry<Block, Block> entry : lockedToVanilla.entrySet()) {
             BlockPos pos = spread(i++);
             helper.setBlock(pos, entry.getKey());
-            BaseStorageBlockEntity storage = helper.getBlockEntity(pos, BaseStorageBlockEntity.class);
+            BaseStorageBlockEntity storage = blockEntity(helper, pos, BaseStorageBlockEntity.class);
             storage.setLockCode(CODE);
             boolean holdsItems = !(storage instanceof LockedEnderChestBlockEntity);
             if (holdsItems) {
@@ -142,13 +141,13 @@ final class LockedContainerTests {
                 wrong.add("an unlocked " + name + " is " + name(helper.getBlockState(pos).getBlock()) + ", not " + name(entry.getValue()));
                 continue;
             }
-            if (holdsItems && !(helper.getBlockEntity(pos, BlockEntity.class) instanceof Container vanilla && vanilla.getItem(0).is(Items.DIAMOND))) {
+            if (holdsItems && !(blockEntity(helper, pos, BlockEntity.class) instanceof Container vanilla && vanilla.getItem(0).is(Items.DIAMOND))) {
                 wrong.add("an unlocked " + name + " lost what was inside it");
             }
         }
 
         helper.assertTrue(wrong.isEmpty(), wrong.size() + " problem(s): " + String.join("; ", wrong));
-        helper.assertTrue(countInInventory(player, LocksItems.LOCKSMITH_LOCK.get()) + helper.getEntities(EntityTypes.ITEM).stream().filter(item -> item.getItem().is(LocksItems.LOCKSMITH_LOCK.get())).count() > 0, "no padlock came back from unlocking");
+        helper.assertTrue(countInInventory(player, LocksItems.LOCKSMITH_LOCK.get()) + helper.getEntities(EntityType.ITEM).stream().filter(item -> item.getItem().is(LocksItems.LOCKSMITH_LOCK.get())).count() > 0, "no padlock came back from unlocking");
         helper.succeed();
     }
 
@@ -186,7 +185,7 @@ final class LockedContainerTests {
             BlockPos pos = spread(i);
             helper.setBlock(pos, block);
 
-            BaseStorageBlockEntity storage = helper.getBlockEntity(pos, BaseStorageBlockEntity.class);
+            BaseStorageBlockEntity storage = blockEntity(helper, pos, BaseStorageBlockEntity.class);
             int last = storage.getItemStackStorageHandler().getSlots() - 1;
             storage.getItemStackStorageHandler().setStackInSlot(0, new ItemStack(Items.DIAMOND, 5));
             storage.getItemStackStorageHandler().setStackInSlot(last, new ItemStack(Items.EMERALD, 2));
@@ -218,7 +217,7 @@ final class LockedContainerTests {
             Block block = blocks.get(i);
             BlockPos pos = spread(i);
             helper.setBlock(pos, block);
-            BaseStorageBlockEntity storage = helper.getBlockEntity(pos, BaseStorageBlockEntity.class);
+            BaseStorageBlockEntity storage = blockEntity(helper, pos, BaseStorageBlockEntity.class);
             storage.setLockCode(CODE);
 
             CompoundTag saved = storage.saveWithFullMetadata(registries);
@@ -235,7 +234,7 @@ final class LockedContainerTests {
 
     private static LockedEnderChestBlockEntity enderChest(GameTestHelper helper, BlockPos pos, String code) {
         helper.setBlock(pos, LocksBlocks.LOCKED_ENDER_CHEST.get());
-        LockedEnderChestBlockEntity chest = helper.getBlockEntity(pos, LockedEnderChestBlockEntity.class);
+        LockedEnderChestBlockEntity chest = blockEntity(helper, pos, LockedEnderChestBlockEntity.class);
         chest.setLockCode(code);
         // The saved-data inventory is only bound when the platform handler is first asked for.
         chest.getStorageHandler();
@@ -254,7 +253,7 @@ final class LockedContainerTests {
         HolderLookup.Provider registries = helper.getLevel().registryAccess();
         BlockEntity onClient = placed.getType().create(placed.getBlockPos(), placed.getBlockState());
         helper.assertTrue(onClient instanceof ILockable, name + " did not recreate as a lockable block entity");
-        onClient.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, registries, placed.getUpdateTag(registries)));
+        onClient.loadWithComponents(placed.getUpdateTag(registries), registries);
         helper.assertValueEqual(((ILockable) onClient).getLockCode(), CODE, name + " lock code as a client receives it");
     }
 }

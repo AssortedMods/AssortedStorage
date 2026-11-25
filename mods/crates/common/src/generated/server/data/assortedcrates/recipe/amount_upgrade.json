@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,10 +14,15 @@
     }
   ],
   "ingredients": [
-    "assortedcrates:blank_upgrade",
-    "#minecraft:signs"
+    {
+      "item": "assortedcrates:blank_upgrade"
+    },
+    {
+      "tag": "minecraft:signs"
+    }
   ],
   "result": {
+    "count": 1,
     "id": "assortedcrates:amount_upgrade"
   }
 }

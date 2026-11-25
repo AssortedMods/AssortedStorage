@@ -3,6 +3,8 @@ package com.grim3212.assorted.containers.client.model;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -10,13 +12,13 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.RenderType;
 
-public class ItemTowerModel extends Model<ItemTowerModel.State> {
+public class ItemTowerModel extends Model {
 
 	/**
-	 * Which neighbours the tower has, and whether this is the flat inventory rendering. It travels
-	 * in the state because submission is deferred; the scroll counter stays on the per-tower model.
+	 * Which neighbours the tower has, and whether this is the flat inventory rendering. The scroll
+	 * counter stays on the per-tower model.
 	 */
 	public record State(boolean topBlock, boolean bottomBlock, boolean inventory) {
 
@@ -41,6 +43,7 @@ public class ItemTowerModel extends Model<ItemTowerModel.State> {
 	public float[] BottomSectionFramesY = new float[100];
 	public float[] BottomSectionFramesZ = new float[100];
 
+	private final ModelPart root;
 	private final ModelPart main;
 	private final ModelPart cap1;
 	private final ModelPart cap2;
@@ -52,7 +55,8 @@ public class ItemTowerModel extends Model<ItemTowerModel.State> {
 	private final ModelPart[] midbars;
 
 	public ItemTowerModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutCull);
+		super(RenderType::entityCutout);
+		this.root = root;
 
 		this.main = root.getChild("main");
 		this.cap1 = root.getChild("cap1");
@@ -204,10 +208,17 @@ public class ItemTowerModel extends Model<ItemTowerModel.State> {
 		shelf.addOrReplaceChild("shelf_part5", CubeListBuilder.create().texOffs(0, 72).addBox(2.0F, 1.0F, 2.0F, 12, 1, 1), PartPose.ZERO);
 	}
 
-	@Override
-	public void setupAnim(ItemTowerModel.State state) {
-		super.setupAnim(state);
+	public ModelPart root() {
+		return this.root;
+	}
 
+	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, int color) {
+		this.root.render(poseStack, buffer, packedLight, packedOverlay, color);
+	}
+
+	/** Poses the tower for one draw; the shelves also advance their scroll here. */
+	public void setupAnim(ItemTowerModel.State state) {
 		if (state.inventory()) {
 			setupInventoryAnim();
 			return;
@@ -280,8 +291,7 @@ public class ItemTowerModel extends Model<ItemTowerModel.State> {
 	}
 
 	/**
-	 * Offsets a shelf along the animation curve by setting the part's position, in sixteenths,
-	 * which survives the deferred submit.
+	 * Offsets a shelf along the animation curve by setting the part's position, in sixteenths.
 	 */
 	private void poseShelf(ModelPart shelf, int offset, float[] yTable, float[] zTable) {
 		int index = this.frame + offset;

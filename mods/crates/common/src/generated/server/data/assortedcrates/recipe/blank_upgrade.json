@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,8 +14,12 @@
     }
   ],
   "key": {
-    "P": "#minecraft:planks",
-    "W": "#c:paper"
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "W": {
+      "tag": "c:paper"
+    }
   },
   "pattern": [
     "PPP",
@@ -22,6 +27,7 @@
     "PPP"
   ],
   "result": {
+    "count": 1,
     "id": "assortedcrates:blank_upgrade"
   }
 }

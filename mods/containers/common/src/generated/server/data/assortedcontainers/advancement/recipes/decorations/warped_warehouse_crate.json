@@ -9,7 +9,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcontainers:warped_warehouse_crate"
+        "recipe": "assortedcontainers:warped_warehouse_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

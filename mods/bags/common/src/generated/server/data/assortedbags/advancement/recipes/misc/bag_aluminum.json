@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbags:bag_aluminum"
+        "recipe": "assortedbags:bag_aluminum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

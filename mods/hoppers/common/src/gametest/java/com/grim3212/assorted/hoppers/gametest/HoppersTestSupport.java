@@ -7,11 +7,10 @@ import com.grim3212.assorted.lib.core.inventory.locking.ILockable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.storage.TagValueInput;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -39,7 +38,7 @@ final class HoppersTestSupport {
         HolderLookup.Provider registries = helper.getLevel().registryAccess();
         BlockEntity onClient = placed.getType().create(placed.getBlockPos(), placed.getBlockState());
         helper.assertTrue(onClient instanceof ILockable, name + " did not recreate as a lockable block entity");
-        onClient.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, registries, placed.getUpdateTag(registries)));
+        onClient.loadWithComponents(placed.getUpdateTag(registries), registries);
         helper.assertValueEqual(((ILockable) onClient).getLockCode(), CODE, name + " lock code as a client receives it");
     }
 
@@ -58,7 +57,7 @@ final class HoppersTestSupport {
             helper.assertTrue(in != null, "this mod ships no en_us.json");
             return JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
         } catch (Exception e) {
-            throw helper.assertionException("could not read en_us.json: " + e);
+            throw new GameTestAssertException("could not read en_us.json: " + e);
         }
     }
 

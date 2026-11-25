@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,9 +14,15 @@
     }
   ],
   "key": {
-    "K": "assortedlocks:locksmith_key",
-    "L": "assortedlocks:locksmith_lock",
-    "W": "minecraft:crafting_table"
+    "K": {
+      "item": "assortedlocks:locksmith_key"
+    },
+    "L": {
+      "item": "assortedlocks:locksmith_lock"
+    },
+    "W": {
+      "item": "minecraft:crafting_table"
+    }
   },
   "pattern": [
     "K",
@@ -23,6 +30,7 @@
     "W"
   ],
   "result": {
+    "count": 1,
     "id": "assortedlocks:locksmith_workbench"
   }
 }

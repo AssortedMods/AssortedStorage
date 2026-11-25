@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbarrels:barrel_amethyst"
+        "recipe": "assortedbarrels:barrel_amethyst"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

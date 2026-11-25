@@ -10,6 +10,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:tags_populated",
@@ -24,8 +25,12 @@
     }
   ],
   "key": {
-    "M": "#c:stones",
-    "P": "#c:paper"
+    "M": {
+      "tag": "c:stones"
+    },
+    "P": {
+      "tag": "c:paper"
+    }
   },
   "pattern": [
     "MMM",
@@ -33,6 +38,7 @@
     "MMM"
   ],
   "result": {
+    "count": 1,
     "id": "assortedlevelupgrades:level_upgrade_stone"
   }
 }

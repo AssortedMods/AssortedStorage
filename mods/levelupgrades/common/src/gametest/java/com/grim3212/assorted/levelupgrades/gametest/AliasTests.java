@@ -6,7 +6,7 @@ import com.grim3212.assorted.levelupgrades.common.item.LevelUpgradesItems;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -32,7 +32,7 @@ final class AliasTests {
         helper.succeed();
     }
 
-    private static Identifier old(Identifier id) {
-        return Identifier.fromNamespaceAndPath(Constants.FAMILY_ID, id.getPath());
+    private static ResourceLocation old(ResourceLocation id) {
+        return ResourceLocation.fromNamespaceAndPath(Constants.FAMILY_ID, id.getPath());
     }
 }

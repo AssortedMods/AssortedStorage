@@ -15,7 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -31,12 +31,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class CrateControllerBlock extends Block implements EntityBlock, ICrateSystem {
 
-    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public CrateControllerBlock(Block.Properties props) {
         super(props);
@@ -85,20 +85,25 @@ public class CrateControllerBlock extends Block implements EntityBlock, ICrateSy
     }
 
     /**
-     * {@code onRemove} split in two: this only fires for a real removal, and the block entity is
-     * already gone by now - anything that needed it moved onto the block entity's
-     * {@code preRemoveSideEffects}.
+     * Drops the lock through the block entity while it still exists, but only when the block itself
+     * changes: turning the controller keeps the block entity.
      */
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel worldIn, BlockPos pos, boolean movedByPiston) {
-        worldIn.updateNeighbourForOutputSignal(pos, this);
+    protected void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock())) {
+            if (worldIn.getBlockEntity(pos) instanceof CrateControllerBlockEntity controller) {
+                controller.onBlockRemoved(worldIn, pos);
+            }
+            worldIn.updateNeighbourForOutputSignal(pos, this);
+        }
+        super.onRemove(state, worldIn, pos, newState, movedByPiston);
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack heldStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    protected ItemInteractionResult useItemOn(ItemStack heldStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (this.canBeLocked(worldIn, pos) && LockItems.isLock(player.getItemInHand(handIn))) {
             if (BaseStorageBlock.tryPlaceLock(worldIn, pos, player, handIn))
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
         }
 
         if (StorageAccessUtil.canAccess(worldIn, pos, player)) {
@@ -118,7 +123,7 @@ public class CrateControllerBlock extends Block implements EntityBlock, ICrateSy
                                     blockDropped.playerTouch(player);
                                 }
                             }
-                            return InteractionResult.SUCCESS;
+                            return ItemInteractionResult.SUCCESS;
                         }
                     }
                 }
@@ -129,7 +134,7 @@ public class CrateControllerBlock extends Block implements EntityBlock, ICrateSy
                 return controller.use(player, handIn);
             }
         }
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
     @Override
@@ -148,6 +153,7 @@ public class CrateControllerBlock extends Block implements EntityBlock, ICrateSy
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
+    @SuppressWarnings("deprecation") // NeoForge deprecates BlockState#rotate(Rotation) for its level aware overload; vanilla's own mirror calls this one
     @Override
     protected BlockState mirror(BlockState state, Mirror mirrorIn) {
         return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));

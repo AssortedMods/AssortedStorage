@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,8 +14,12 @@
     }
   ],
   "key": {
-    "L": "#minecraft:oak_logs",
-    "P": "minecraft:oak_planks"
+    "L": {
+      "tag": "minecraft:oak_logs"
+    },
+    "P": {
+      "item": "minecraft:oak_planks"
+    }
   },
   "pattern": [
     "LLL",
@@ -22,6 +27,7 @@
     "PPP"
   ],
   "result": {
+    "count": 1,
     "id": "assortedcontainers:oak_warehouse_crate"
   }
 }

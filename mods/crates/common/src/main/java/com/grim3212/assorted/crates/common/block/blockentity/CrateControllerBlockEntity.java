@@ -16,17 +16,17 @@ import com.grim3212.assorted.crates.api.crates.CrateConnection;
 import com.grim3212.assorted.crates.api.crates.ICrateSystem;
 import com.grim3212.assorted.crates.common.inventory.crates.CrateControllerInvWrapper;
 import com.grim3212.assorted.crates.common.properties.CratesModelProperties;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -34,8 +34,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -127,18 +125,20 @@ public class CrateControllerBlockEntity extends BlockEntity implements INamed, I
     }
 
     @Override
-    protected void loadAdditional(ValueInput input) {
-        super.loadAdditional(input);
-        this.customName = parseCustomNameSafe(input, "CustomName");
-        this.lockCode = StorageUtil.readLock(input);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
+        this.customName = tag.contains("CustomName", Tag.TAG_STRING) ? parseCustomNameSafe(tag.getString("CustomName"), registries) : null;
+        this.lockCode = StorageUtil.readLock(tag);
     }
 
     @Override
-    protected void saveAdditional(ValueOutput output) {
-        super.saveAdditional(output);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
 
-        output.storeNullable("CustomName", ComponentSerialization.CODEC, this.customName);
-        StorageUtil.writeLock(output, this.lockCode);
+        if (this.customName != null) {
+            tag.putString("CustomName", Component.Serializer.toJson(this.customName, registries));
+        }
+        StorageUtil.writeLock(tag, this.lockCode);
     }
 
     @Override
@@ -152,15 +152,12 @@ public class CrateControllerBlockEntity extends BlockEntity implements INamed, I
     }
 
     /**
-     * The block entity is already gone when the block's removal hook runs in 26.x, so the lock is
-     * dropped from here instead.
+     * Drops the lock. Block entities have no removal hook here, so the block calls this from its
+     * {@code onRemove} while the block entity still exists, and only when the block itself changes.
      */
-    @Override
-    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
-        super.preRemoveSideEffects(pos, state);
-
-        if (this.level != null && this.isLocked()) {
-            Containers.dropItemStack(this.level, pos.getX(), pos.getY(), pos.getZ(), LockItems.createLock(this.lockCode));
+    public void onBlockRemoved(Level level, BlockPos pos) {
+        if (this.isLocked()) {
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), LockItems.createLock(this.lockCode));
         }
     }
 
@@ -303,7 +300,7 @@ public class CrateControllerBlockEntity extends BlockEntity implements INamed, I
         }
     }
 
-    public InteractionResult use(Player player, InteractionHand handIn) {
+    public ItemInteractionResult use(Player player, InteractionHand handIn) {
         ItemStack playerStack = player.getItemInHand(handIn).copyWithCount(1);
         if (player.getUUID().equals(playerTimerUUID) && Util.getMillis() - playerTimerMillis < 275 && playerTimerStack != ItemStack.EMPTY) {
             List<Integer> slots = CrateBlockEntity.findMatchingStacks(player, playerTimerStack);
@@ -338,7 +335,7 @@ public class CrateControllerBlockEntity extends BlockEntity implements INamed, I
             playerTimerUUID = null;
             playerTimerMillis = 0;
             playerTimerStack = ItemStack.EMPTY;
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
         ItemStack playerItem = player.getItemInHand(handIn).copy();
@@ -371,6 +368,6 @@ public class CrateControllerBlockEntity extends BlockEntity implements INamed, I
             playerTimerStack = playerStack;
         }
 
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 }

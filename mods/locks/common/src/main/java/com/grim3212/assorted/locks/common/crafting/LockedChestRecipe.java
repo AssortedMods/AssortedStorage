@@ -1,27 +1,28 @@
 package com.grim3212.assorted.locks.common.crafting;
 
 import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
-import com.mojang.serialization.MapCodec;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.util.LibCommonTags;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 /** A wooden chest and a coded padlock make a locked chest. */
 public class LockedChestRecipe extends CustomRecipe {
 
-    public static final LockedChestRecipe INSTANCE = new LockedChestRecipe();
-    public static final MapCodec<LockedChestRecipe> MAP_CODEC = MapCodec.unit(INSTANCE);
-    public static final StreamCodec<RegistryFriendlyByteBuf, LockedChestRecipe> STREAM_CODEC = StreamCodec.unit(INSTANCE);
-    public static final RecipeSerializer<LockedChestRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+    public static final RecipeSerializer<LockedChestRecipe> SERIALIZER = new SimpleCraftingRecipeSerializer<>(LockedChestRecipe::new);
+
+    public LockedChestRecipe(CraftingBookCategory category) {
+        super(category);
+    }
 
     @Override
     public boolean matches(CraftingInput inv, Level worldIn) {
@@ -46,7 +47,7 @@ public class LockedChestRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) {
         ItemStack chest = ItemStack.EMPTY;
         ItemStack lock = ItemStack.EMPTY;
 
@@ -66,6 +67,11 @@ public class LockedChestRecipe extends CustomRecipe {
         return StorageUtil.setCodeOnStack(lockCode, new ItemStack(LocksBlocks.LOCKED_CHEST.get()));
     }
 
+
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return width * height >= 2;
+    }
 
     @Override
     public RecipeSerializer<LockedChestRecipe> getSerializer() {

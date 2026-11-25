@@ -6,6 +6,7 @@
     }
   ],
   "type": "assortedbags:bag_coloring",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",

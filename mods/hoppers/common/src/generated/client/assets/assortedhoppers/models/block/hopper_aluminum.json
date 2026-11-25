@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "fabric:type": "assortedhoppers:locked",
   "loader": "assortedhoppers:locked",
   "locked": "assortedhoppers:block/hopper_aluminum_locked",
   "textures": {

@@ -14,7 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -50,11 +50,11 @@ final class ContainersBlockTests {
 
     /**
      * Breaking a storage block spills its contents and its lock. This is the regression the
-     * onRemove / preRemoveSideEffects split caused elsewhere in the workspace.
+     * drop moving between onRemove and the block entity caused elsewhere in the workspace.
      */
     private static void storageBlockDropsContentsAndLock(GameTestHelper helper) {
         helper.setBlock(BLOCK, ContainersBlocks.WOOD_CABINET.get());
-        WoodCabinetBlockEntity cabinet = helper.getBlockEntity(BLOCK, WoodCabinetBlockEntity.class);
+        WoodCabinetBlockEntity cabinet = blockEntity(helper, BLOCK, WoodCabinetBlockEntity.class);
         cabinet.getItemStackStorageHandler().setStackInSlot(0, new ItemStack(Items.DIAMOND, 5));
         cabinet.setLockCode(CODE);
         // The padlock comes from Assorted Locks, so there is only one to drop when that is installed too.
@@ -68,7 +68,7 @@ final class ContainersBlockTests {
             }
 
             // The dropped lock has to keep the code, otherwise the block can never be reopened.
-            boolean codedLock = helper.getEntities(EntityTypes.ITEM).stream()
+            boolean codedLock = helper.getEntities(EntityType.ITEM).stream()
                     .map(entity -> entity.getItem())
                     .anyMatch(stack -> stack.is(lock) && CODE.equals(StorageUtil.getCode(stack)));
             helper.assertTrue(codedLock, "the dropped padlock lost its code");
@@ -78,7 +78,7 @@ final class ContainersBlockTests {
     /** Contents and lock survive the chunk save/load round trip block entity state moved onto. */
     private static void storageBlockSurvivesSaveLoad(GameTestHelper helper) {
         helper.setBlock(BLOCK, ContainersBlocks.WOOD_CABINET.get());
-        WoodCabinetBlockEntity cabinet = helper.getBlockEntity(BLOCK, WoodCabinetBlockEntity.class);
+        WoodCabinetBlockEntity cabinet = blockEntity(helper, BLOCK, WoodCabinetBlockEntity.class);
         cabinet.getItemStackStorageHandler().setStackInSlot(0, new ItemStack(Items.DIAMOND, 5));
         cabinet.getItemStackStorageHandler().setStackInSlot(26, new ItemStack(Items.EMERALD, 2));
         cabinet.setLockCode(CODE);
@@ -112,8 +112,8 @@ final class ContainersBlockTests {
         helper.setBlock(above, Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.DOWN));
         helper.setBlock(below, Blocks.HOPPER.defaultBlockState().setValue(HopperBlock.FACING, Direction.DOWN));
 
-        helper.getBlockEntity(above, HopperBlockEntity.class).setItem(0, new ItemStack(Items.DIAMOND, 1));
-        helper.getBlockEntity(cabinetPos, WoodCabinetBlockEntity.class)
+        blockEntity(helper, above, HopperBlockEntity.class).setItem(0, new ItemStack(Items.DIAMOND, 1));
+        blockEntity(helper, cabinetPos, WoodCabinetBlockEntity.class)
                 .getItemStackStorageHandler().setStackInSlot(26, new ItemStack(Items.EMERALD, 1));
 
         helper.succeedWhen(() -> {
@@ -135,7 +135,7 @@ final class ContainersBlockTests {
             BlockPos pos = spread(i);
             helper.setBlock(pos, block);
 
-            BaseStorageBlockEntity storage = helper.getBlockEntity(pos, BaseStorageBlockEntity.class);
+            BaseStorageBlockEntity storage = blockEntity(helper, pos, BaseStorageBlockEntity.class);
             IItemStorageHandler handler = storage.getStorageHandler().getItemStorageHandler(null);
             int last = handler.getSlots() - 1;
 
@@ -168,8 +168,8 @@ final class ContainersBlockTests {
         helper.assertBlockProperty(bottom, LockerBlock.HALF, LockerHalf.BOTTOM);
         helper.assertBlockProperty(top, LockerBlock.HALF, LockerHalf.TOP);
 
-        LockerBlockEntity lower = helper.getBlockEntity(bottom, LockerBlockEntity.class);
-        LockerBlockEntity upper = helper.getBlockEntity(top, LockerBlockEntity.class);
+        LockerBlockEntity lower = blockEntity(helper, bottom, LockerBlockEntity.class);
+        LockerBlockEntity upper = blockEntity(helper, top, LockerBlockEntity.class);
 
         IItemStorageHandler joined = lower.getStorageHandler().getItemStorageHandler(null);
         helper.assertValueEqual(joined.getSlots(), 90, "a double locker's joined slot count");
@@ -184,7 +184,7 @@ final class ContainersBlockTests {
 
     /**
      * Breaking a storage block gives its contents back. Most spill from {@code
-     * preRemoveSideEffects}; the gold safe keeps them in the dropped item.
+     * onBlockRemoved}; the gold safe keeps them in the dropped item.
      * Each block gets its own marker item.
      */
     private static void everyStorageBlockDropsItsContents(GameTestHelper helper) {
@@ -198,7 +198,7 @@ final class ContainersBlockTests {
             Item marker = MARKERS.get(i);
 
             helper.setBlock(pos, block);
-            helper.getBlockEntity(pos, BaseStorageBlockEntity.class).getItemStackStorageHandler().setStackInSlot(0, new ItemStack(marker, 3));
+            blockEntity(helper, pos, BaseStorageBlockEntity.class).getItemStackStorageHandler().setStackInSlot(0, new ItemStack(marker, 3));
 
             if (keepsContentsInTheItem.contains(block)) {
                 // Needs the loot table to run, which helper.destroyBlock never reaches.
@@ -234,7 +234,7 @@ final class ContainersBlockTests {
             BlockPos pos = spread(i);
             helper.setBlock(pos, block);
 
-            BaseStorageBlockEntity storage = helper.getBlockEntity(pos, BaseStorageBlockEntity.class);
+            BaseStorageBlockEntity storage = blockEntity(helper, pos, BaseStorageBlockEntity.class);
             int last = storage.getItemStackStorageHandler().getSlots() - 1;
             storage.getItemStackStorageHandler().setStackInSlot(0, new ItemStack(Items.DIAMOND, 5));
             storage.getItemStackStorageHandler().setStackInSlot(last, new ItemStack(Items.EMERALD, 2));

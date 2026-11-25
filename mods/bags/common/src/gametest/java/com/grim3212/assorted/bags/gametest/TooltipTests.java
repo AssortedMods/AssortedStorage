@@ -28,7 +28,7 @@ final class TooltipTests {
 
     /**
      * Each bag's lock and level lines come from its {@code storage_info} component: bags only say they are locked.
-     * NeoForge also builds the full tooltip on the server, so there it is checked too; {@code BagsClientGameTests} covers Fabric.
+     * NeoForge also builds the full tooltip on the server, so there it is checked too; Fabric builds it only on a client.
      */
     private static void storageTooltipsComeFromComponents(GameTestHelper helper) {
         DataComponentType<StorageInfo> info = BagsDataComponents.STORAGE_INFO.get();

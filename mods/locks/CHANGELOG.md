@@ -1,22 +1,9 @@
 # Changelog
 
-## 2.0.1
+## 21.1.0.0
 
-- Key ring slots can be emptied like vanilla slots, which sorting mods check before moving items
-- Requires Assorted Lib 5.0.2
+First release for Minecraft 1.21.1, for NeoForge and Fabric. Releases for 1.21.1 are numbered 21.1.x.y, where 21.1 is the Minecraft version.
 
-## 2.0.0
-
-Updated to Minecraft 26.3, for NeoForge and Fabric.
-
-- Added a locked Poplar door
-- Requires Assorted Lib 5.0.0
-
-## 1.0.0
-
-- First release as its own mod. It used to only be part of Assorted Storage
-- Worlds from Assorted Storage 11.x keep all of their locks, keys, locked doors and locked containers
-- Has the locked chest, ender chest, barrel, hopper and shulker box, so they work without the other Assorted Storage mods
-- The locked Decor doors now work with the doors from Assorted Building Blocks
-- A key worn in a Curios belt slot still opens locks
-- Requires Assorted Lib 4.3.0
+- Matches Assorted Locks 2.0.2 for Minecraft 26.3
+- Without the pale oak and poplar locked doors, which need a newer Minecraft
+- Requires Assorted Lib 21.1.0.0

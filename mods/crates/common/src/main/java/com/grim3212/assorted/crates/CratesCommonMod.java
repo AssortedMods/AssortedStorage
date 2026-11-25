@@ -11,7 +11,7 @@ import com.grim3212.assorted.crates.common.network.CratesPackets;
 import com.grim3212.assorted.crates.config.CratesCommonConfig;
 import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class CratesCommonMod {
 
@@ -20,7 +20,7 @@ public class CratesCommonMod {
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
         Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
-                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "oak_crate"), 80)
+                .icon(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "oak_crate"), 80)
                 .manualOrder(80);
 
         CratesDataComponents.init();

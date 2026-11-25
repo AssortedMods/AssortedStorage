@@ -9,7 +9,7 @@ import com.grim3212.assorted.locks.common.inventory.keyring.KeyRingItemHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -35,12 +35,12 @@ public class KeyRingItem extends Item implements IInventoryItem {
     }
 
     @LoaderImplement(loader = LoaderImplement.Loader.FABRIC, value = "FabricItem")
-    public boolean allowNbtUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
+    public boolean allowComponentsUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
         return false;
     }
 
     @Override
-    public InteractionResult use(Level level, Player playerIn, InteractionHand handIn) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
         if (!level.isClientSide()) {
             Services.PLATFORM.openMenu((ServerPlayer) playerIn, new MenuProvider() {
                 @Override
@@ -54,6 +54,6 @@ public class KeyRingItem extends Item implements IInventoryItem {
                 }
             });
         }
-        return InteractionResult.SUCCESS;
+        return InteractionResultHolder.sidedSuccess(playerIn.getItemInHand(handIn), level.isClientSide());
     }
 }

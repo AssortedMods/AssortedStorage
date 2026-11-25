@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "fabric:type": "assortedcrates:locked",
   "loader": "assortedcrates:locked",
   "locked": "assortedcrates:block/crate_controller_locked",
   "textures": {

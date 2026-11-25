@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbags:bag_amethyst"
+        "recipe": "assortedbags:bag_amethyst"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

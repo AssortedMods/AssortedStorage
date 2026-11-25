@@ -14,9 +14,15 @@
     }
   ],
   "key": {
-    "B": "#c:rods/blaze",
-    "I": "#c:ingots/iron",
-    "S": "#c:rods/wooden"
+    "B": {
+      "tag": "c:rods/blaze"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "S": {
+      "tag": "c:rods/wooden"
+    }
   },
   "pattern": [
     "I I",
@@ -24,6 +30,7 @@
     " S "
   ],
   "result": {
+    "count": 1,
     "id": "assortedcrates:rotator_majig"
   }
 }

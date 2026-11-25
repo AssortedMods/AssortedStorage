@@ -16,36 +16,32 @@ import com.grim3212.assorted.crates.common.inventory.crates.CrateSidedInv;
 import com.grim3212.assorted.crates.common.item.upgrades.AmountUpgradeItem;
 import com.grim3212.assorted.crates.common.item.upgrades.VoidUpgradeItem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.item.ItemModelResolver;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
-import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockEntity, CrateRenderState> {
+public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockEntity> {
 
-    private final ItemModelResolver itemModelResolver;
+    private final ItemRenderer itemRenderer;
     private final int viewDistance;
 
-    public static final RenderType ICONS = RenderTypes.text(ClientResources.CRATE_ICONS_LOCATION);
+    public static final RenderType ICONS = RenderType.text(ClientResources.CRATE_ICONS_LOCATION);
 
     public CrateBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
-        this.itemModelResolver = context.itemModelResolver();
+        this.itemRenderer = context.getItemRenderer();
         this.viewDistance = CratesClient.CLIENT_CONFIG.crateMaxRenderDistance.get();
     }
 
@@ -54,25 +50,21 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
         return this.viewDistance;
     }
 
-    @Override
-    public CrateRenderState createRenderState() {
-        return new CrateRenderState();
-    }
-
-    @Override
-    public void extractRenderState(CrateBlockEntity crate, CrateRenderState state, float partialTicks, Vec3 cameraPosition, ModelFeatureRenderer.@Nullable CrumblingOverlay breakProgress) {
-        BlockEntityRenderer.super.extractRenderState(crate, state, partialTicks, cameraPosition, breakProgress);
-
+    /** Reads everything this frame draws off the crate. */
+    private static CrateRenderState extractRenderState(CrateBlockEntity crate, int packedLight, int packedOverlay) {
+        CrateRenderState state = new CrateRenderState();
         CrateSidedInv inventory = crate.getItemStackStorageHandler();
         int slots = crate.getLayout().getNumStacks();
 
         state.facing = crate.getBlockState().getValue(CrateBlock.FACING);
         state.layout = crate.getLayout();
-        state.itemLightCoords = inventory.hasGlowUpgrade() ? LightCoordsUtil.FULL_BRIGHT : state.lightCoords;
+        state.lightCoords = packedLight;
+        state.overlayCoords = packedOverlay;
+        state.itemLightCoords = inventory.hasGlowUpgrade() ? LightTexture.FULL_BRIGHT : packedLight;
         state.anySlotLocked = inventory.anySlotsLocked();
+        state.seed = (int) crate.getBlockPos().asLong();
 
-        int seed = (int) crate.getBlockPos().asLong();
-        List<ItemStackRenderState> items = new ArrayList<>(slots);
+        List<ItemStack> items = new ArrayList<>(slots);
         state.itemRotations = new float[slots];
         state.slotLocked = new boolean[slots];
         state.slotAmounts = new int[slots];
@@ -80,9 +72,7 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
 
         for (int slot = 0; slot < slots; slot++) {
             LargeItemStack largeStack = inventory.getLargeItemStack(slot);
-            ItemStackRenderState itemState = new ItemStackRenderState();
-            this.itemModelResolver.updateForTopItem(itemState, largeStack.getStack(), ItemDisplayContext.GUI, crate.getLevel(), null, seed + slot);
-            items.add(itemState);
+            items.add(largeStack.getStack());
             state.itemRotations[slot] = largeStack.getRotation();
             state.slotLocked[slot] = inventory.isSlotLocked(slot);
             state.slotAmounts[slot] = largeStack.getAmount();
@@ -92,16 +82,18 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
 
         // Unique upgrades only
         state.upgrades = inventory.getEnhancements().stream().filter(StreamHelper.distinctByKey(ItemStack::getItem)).map(ItemStack::copy).toList();
+        return state;
     }
 
     @Override
-    public void submit(CrateRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
-        submitItems(state, poseStack, submitNodeCollector);
-        submitUpgrades(state, poseStack, submitNodeCollector);
-        submitSlotLocks(state, poseStack, submitNodeCollector);
+    public void render(CrateBlockEntity crate, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        CrateRenderState state = extractRenderState(crate, packedLight, packedOverlay);
+        renderItems(state, crate.getLevel(), poseStack, buffer);
+        renderUpgrades(state, poseStack, buffer);
+        renderSlotLocks(state, poseStack, buffer);
     }
 
-    private void submitItems(CrateRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
+    private void renderItems(CrateRenderState state, Level level, PoseStack poseStack, MultiBufferSource buffer) {
         poseStack.pushPose();
         faceCrate(state.facing, poseStack);
         poseStack.translate(0.0D, 0.0D, 0.449D);
@@ -112,59 +104,59 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
 
         switch (state.layout) {
             case SINGLE:
-                submitItemInSlot(state, 0, poseStack, submitNodeCollector, 0.0D, 0.0D);
+                renderItemInSlot(state, 0, level, poseStack, buffer, 0.0D, 0.0D);
                 break;
             case DOUBLE:
                 poseStack.scale(0.5f, 0.5f, 0.5f);
-                submitItemInSlot(state, 0, poseStack, submitNodeCollector, 0.0D, 0.875D);
-                submitItemInSlot(state, 1, poseStack, submitNodeCollector, 0.0D, -0.875D);
+                renderItemInSlot(state, 0, level, poseStack, buffer, 0.0D, 0.875D);
+                renderItemInSlot(state, 1, level, poseStack, buffer, 0.0D, -0.875D);
                 break;
             case TRIPLE:
                 poseStack.scale(0.5f, 0.5f, 0.5f);
-                submitItemInSlot(state, 0, poseStack, submitNodeCollector, 0.0D, 0.875D);
-                submitItemInSlot(state, 1, poseStack, submitNodeCollector, -0.875D, -0.875D);
-                submitItemInSlot(state, 2, poseStack, submitNodeCollector, 0.875D, -0.875D);
+                renderItemInSlot(state, 0, level, poseStack, buffer, 0.0D, 0.875D);
+                renderItemInSlot(state, 1, level, poseStack, buffer, -0.875D, -0.875D);
+                renderItemInSlot(state, 2, level, poseStack, buffer, 0.875D, -0.875D);
                 break;
             case QUADRUPLE:
                 poseStack.scale(0.5f, 0.5f, 0.5f);
-                submitItemInSlot(state, 0, poseStack, submitNodeCollector, -0.875D, 0.875D);
-                submitItemInSlot(state, 1, poseStack, submitNodeCollector, 0.875D, 0.875D);
-                submitItemInSlot(state, 2, poseStack, submitNodeCollector, -0.875D, -0.875D);
-                submitItemInSlot(state, 3, poseStack, submitNodeCollector, 0.875D, -0.875D);
+                renderItemInSlot(state, 0, level, poseStack, buffer, -0.875D, 0.875D);
+                renderItemInSlot(state, 1, level, poseStack, buffer, 0.875D, 0.875D);
+                renderItemInSlot(state, 2, level, poseStack, buffer, -0.875D, -0.875D);
+                renderItemInSlot(state, 3, level, poseStack, buffer, 0.875D, -0.875D);
                 break;
         }
 
         poseStack.popPose();
     }
 
-    private void submitItemInSlot(CrateRenderState state, int slot, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, double x, double y) {
-        ItemStackRenderState itemState = state.items.get(slot);
-        if (itemState.isEmpty()) {
+    private void renderItemInSlot(CrateRenderState state, int slot, Level level, PoseStack poseStack, MultiBufferSource buffer, double x, double y) {
+        ItemStack stack = state.items.get(slot);
+        if (stack.isEmpty()) {
             return;
         }
 
         poseStack.pushPose();
         poseStack.translate(x, y, 0.0D);
-        poseStack.rotate(Axis.ZP.rotationDegrees(-state.itemRotations[slot] * 360.0F / 16.0F));
-        itemState.submit(poseStack, submitNodeCollector, state.itemLightCoords, OverlayTexture.NO_OVERLAY, 0);
+        poseStack.mulPose(Axis.ZP.rotationDegrees(-state.itemRotations[slot] * 360.0F / 16.0F));
+        this.itemRenderer.renderStatic(stack, ItemDisplayContext.GUI, state.itemLightCoords, OverlayTexture.NO_OVERLAY, poseStack, buffer, level, state.seed + slot);
         poseStack.popPose();
     }
 
-    private void submitUpgrades(CrateRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
+    private void renderUpgrades(CrateRenderState state, PoseStack poseStack, MultiBufferSource buffer) {
         poseStack.pushPose();
         for (ItemStack stack : state.upgrades) {
             if (LockItems.isLock(stack)) {
-                PadlockUpgradeRenderer.INSTANCE.submit(state, stack, poseStack, submitNodeCollector);
+                PadlockUpgradeRenderer.INSTANCE.render(state, stack, poseStack, buffer);
             } else if (stack.getItem() instanceof VoidUpgradeItem) {
-                VoidUpgradeRenderer.INSTANCE.submit(state, stack, poseStack, submitNodeCollector);
+                VoidUpgradeRenderer.INSTANCE.render(state, stack, poseStack, buffer);
             } else if (stack.getItem() instanceof AmountUpgradeItem) {
-                AmountUpgradeRenderer.INSTANCE.submit(state, stack, poseStack, submitNodeCollector);
+                AmountUpgradeRenderer.INSTANCE.render(state, stack, poseStack, buffer);
             }
         }
         poseStack.popPose();
     }
 
-    private void submitSlotLocks(CrateRenderState state, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
+    private void renderSlotLocks(CrateRenderState state, PoseStack poseStack, MultiBufferSource buffer) {
         if (!state.anySlotLocked) {
             return;
         }
@@ -175,50 +167,42 @@ public class CrateBlockEntityRenderer implements BlockEntityRenderer<CrateBlockE
         float scale = 0.012F * 0.6666667F;
         poseStack.scale(scale, -scale, scale);
 
+        VertexConsumer consumer = buffer.getBuffer(ICONS);
         switch (state.layout) {
             case SINGLE:
-                submitLockIcons(poseStack, submitNodeCollector, state.lightCoords, state.slotLocked, new int[]{102}, new int[]{18});
+                renderLockIcons(consumer, poseStack, state.lightCoords, state.slotLocked, new int[]{102}, new int[]{18});
                 break;
             case DOUBLE:
-                submitLockIcons(poseStack, submitNodeCollector, state.lightCoords, state.slotLocked, new int[]{102, 102}, new int[]{18, 72});
+                renderLockIcons(consumer, poseStack, state.lightCoords, state.slotLocked, new int[]{102, 102}, new int[]{18, 72});
                 break;
             case TRIPLE:
-                submitLockIcons(poseStack, submitNodeCollector, state.lightCoords, state.slotLocked, new int[]{102, 47, 102}, new int[]{18, 72, 72});
+                renderLockIcons(consumer, poseStack, state.lightCoords, state.slotLocked, new int[]{102, 47, 102}, new int[]{18, 72, 72});
                 break;
             case QUADRUPLE:
-                submitLockIcons(poseStack, submitNodeCollector, state.lightCoords, state.slotLocked, new int[]{47, 102, 47, 102}, new int[]{18, 18, 72, 72});
+                renderLockIcons(consumer, poseStack, state.lightCoords, state.slotLocked, new int[]{47, 102, 47, 102}, new int[]{18, 18, 72, 72});
                 break;
         }
 
         poseStack.popPose();
     }
 
-    /**
-     * Draws the lock icons, one quad each, through {@code submitCustomGeometry}. The pose is copied
-     * into a local stack because the caller's is gone by the time the geometry is built.
-     */
-    private static void submitLockIcons(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int packedLight, boolean[] locked, int[] xs, int[] ys) {
-        submitNodeCollector.submitCustomGeometry(poseStack, ICONS, (pose, buffer) -> {
-            PoseStack local = new PoseStack();
-            local.last().set(pose);
-            for (int slot = 0; slot < xs.length; slot++) {
-                if (slot < locked.length && locked[slot]) {
-                    RenderHelper.lightedBlit(buffer, local, xs[slot], ys[slot], 0, 2, 0, 5, 5, 8, 8, packedLight);
-                }
+    private static void renderLockIcons(VertexConsumer consumer, PoseStack poseStack, int packedLight, boolean[] locked, int[] xs, int[] ys) {
+        for (int slot = 0; slot < xs.length; slot++) {
+            if (slot < locked.length && locked[slot]) {
+                RenderHelper.lightedBlit(consumer, poseStack, xs[slot], ys[slot], 0, 2, 0, 5, 5, 8, 8, packedLight);
             }
-        });
+        }
     }
 
     /**
-     * Rotates into the crate's face. Shared by the item, upgrade and lock passes, which all repeated
-     * it inline.
+     * Rotates into the crate's face. Shared by the item, upgrade and lock passes.
      */
     public static void faceCrate(Direction facing, PoseStack poseStack) {
         poseStack.translate(0.5D, 0.5D, 0.5D);
         if (facing.getAxis().isHorizontal()) {
-            poseStack.rotate(Axis.YP.rotationDegrees(-facing.toYRot()));
+            poseStack.mulPose(Axis.YP.rotationDegrees(-facing.toYRot()));
         } else {
-            poseStack.rotate(Axis.XP.rotationDegrees(facing == Direction.DOWN ? 90F : 270F));
+            poseStack.mulPose(Axis.XP.rotationDegrees(facing == Direction.DOWN ? 90F : 270F));
         }
     }
 }

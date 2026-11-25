@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,10 +14,18 @@
     }
   ],
   "key": {
-    "C": "#assortedcrates:crates",
-    "D": "#c:deepslate",
-    "E": "#c:ender_pearls",
-    "R": "minecraft:comparator"
+    "C": {
+      "tag": "assortedcrates:crates"
+    },
+    "D": {
+      "tag": "c:deepslate"
+    },
+    "E": {
+      "tag": "c:ender_pearls"
+    },
+    "R": {
+      "item": "minecraft:comparator"
+    }
   },
   "pattern": [
     "DDD",
@@ -24,6 +33,7 @@
     "DED"
   ],
   "result": {
+    "count": 1,
     "id": "assortedcrates:crate_controller"
   }
 }

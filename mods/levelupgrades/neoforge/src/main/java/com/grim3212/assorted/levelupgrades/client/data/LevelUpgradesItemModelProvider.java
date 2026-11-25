@@ -4,21 +4,15 @@ import com.grim3212.assorted.levelupgrades.Constants;
 import com.grim3212.assorted.levelupgrades.common.item.LevelUpgradesItems;
 import com.grim3212.assorted.levelupgrades.common.item.upgrades.LevelUpgradeItem;
 import com.grim3212.assorted.lib.registry.IRegistryObject;
-import net.minecraft.client.data.models.BlockModelGenerators;
-import net.minecraft.client.data.models.ItemModelGenerators;
-import net.minecraft.client.data.models.ModelProvider;
-import net.minecraft.client.data.models.model.ModelTemplates;
-import net.minecraft.core.Holder;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.level.block.Block;
-
-import java.util.stream.Stream;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 /** Item models for the level upgrades, which are this mod's only items. */
-public class LevelUpgradesItemModelProvider extends ModelProvider {
+public class LevelUpgradesItemModelProvider extends ItemModelProvider {
 
-    public LevelUpgradesItemModelProvider(PackOutput output) {
-        super(output, Constants.MOD_ID);
+    public LevelUpgradesItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, Constants.MOD_ID, existingFileHelper);
     }
 
     @Override
@@ -26,16 +20,10 @@ public class LevelUpgradesItemModelProvider extends ModelProvider {
         return "Assorted Level Upgrades item models";
     }
 
-    /** This mod has no blocks, so there is nothing for {@link BlockModelGenerators} to do. */
     @Override
-    protected Stream<? extends Holder<Block>> getKnownBlocks() {
-        return Stream.empty();
-    }
-
-    @Override
-    protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+    protected void registerModels() {
         for (IRegistryObject<LevelUpgradeItem> levelUpgrade : LevelUpgradesItems.LEVEL_UPGRADES.values()) {
-            itemModels.generateFlatItem(levelUpgrade.get(), ModelTemplates.FLAT_ITEM);
+            this.basicItem(levelUpgrade.get());
         }
     }
 }

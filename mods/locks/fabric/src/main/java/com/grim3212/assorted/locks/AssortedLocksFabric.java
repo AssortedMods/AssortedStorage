@@ -8,7 +8,6 @@ import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.registry.OxidizableBlocksRegistry;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 public class AssortedLocksFabric implements ModInitializer {
 
@@ -33,8 +32,12 @@ public class AssortedLocksFabric implements ModInitializer {
      * {@code LocksDataMapProvider}, so a change here needs the same change there.
      */
     private static void registerLockedCopperDoorOxidation() {
-        Blocks.COPPER_DOOR.weathering().progressMapping((from, to) -> OxidizableBlocksRegistry.registerNextStage(locked(from), locked(to)));
-        Blocks.COPPER_DOOR.zipUnwaxedWaxed((unwaxed, waxed) -> OxidizableBlocksRegistry.registerWaxable(locked(unwaxed), locked(waxed)));
+        for (int i = 0; i < LocksBlocks.COPPER_DOORS.size(); i++) {
+            if (i + 1 < LocksBlocks.COPPER_DOORS.size()) {
+                OxidizableBlocksRegistry.registerOxidizableBlockPair(locked(LocksBlocks.COPPER_DOORS.get(i)), locked(LocksBlocks.COPPER_DOORS.get(i + 1)));
+            }
+            OxidizableBlocksRegistry.registerWaxableBlockPair(locked(LocksBlocks.COPPER_DOORS.get(i)), locked(LocksBlocks.WAXED_COPPER_DOORS.get(i)));
+        }
     }
 
     private static Block locked(Block vanillaDoor) {

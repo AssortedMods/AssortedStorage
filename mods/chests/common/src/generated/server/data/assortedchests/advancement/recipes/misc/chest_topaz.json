@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedchests:chest_topaz"
+        "recipe": "assortedchests:chest_topaz"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

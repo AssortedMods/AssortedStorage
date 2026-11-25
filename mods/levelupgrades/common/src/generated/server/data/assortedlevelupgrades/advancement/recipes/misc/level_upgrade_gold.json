@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedlevelupgrades:level_upgrade_gold"
+        "recipe": "assortedlevelupgrades:level_upgrade_gold"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -6,6 +6,7 @@
     }
   ],
   "type": "assortedlocks:locked_chest",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",

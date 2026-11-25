@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,10 +14,15 @@
     }
   ],
   "ingredients": [
-    "assortedcrates:blank_upgrade",
-    "minecraft:glow_ink_sac"
+    {
+      "item": "assortedcrates:blank_upgrade"
+    },
+    {
+      "item": "minecraft:glow_ink_sac"
+    }
   ],
   "result": {
+    "count": 1,
     "id": "assortedcrates:glow_upgrade"
   }
 }

@@ -1,26 +1,27 @@
 package com.grim3212.assorted.bags.common.crafting;
 
-import com.mojang.serialization.MapCodec;
 import com.grim3212.assorted.lib.util.DyeHelper;
 import com.grim3212.assorted.lib.util.LibCommonTags;
 import com.grim3212.assorted.lib.util.NBTHelper;
 import com.grim3212.assorted.bags.common.item.BagItem;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class BagColoringRecipe extends CustomRecipe {
 
-    public static final BagColoringRecipe INSTANCE = new BagColoringRecipe();
-    public static final MapCodec<BagColoringRecipe> MAP_CODEC = MapCodec.unit(INSTANCE);
-    public static final StreamCodec<RegistryFriendlyByteBuf, BagColoringRecipe> STREAM_CODEC = StreamCodec.unit(INSTANCE);
-    public static final RecipeSerializer<BagColoringRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+    public static final RecipeSerializer<BagColoringRecipe> SERIALIZER = new SimpleCraftingRecipeSerializer<>(BagColoringRecipe::new);
+
+    public BagColoringRecipe(CraftingBookCategory category) {
+        super(category);
+    }
 
     @Override
     public boolean matches(CraftingInput container, Level level) {
@@ -74,7 +75,7 @@ public class BagColoringRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput container) {
+    public ItemStack assemble(CraftingInput container, HolderLookup.Provider registries) {
         ItemStack itemstack = ItemStack.EMPTY;
         int bagXSlot = -1;
 
@@ -126,6 +127,11 @@ public class BagColoringRecipe extends CustomRecipe {
         return copy;
     }
 
+    /** A bag and at least one dye. */
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return width * height >= 2;
+    }
 
     @Override
     public RecipeSerializer<BagColoringRecipe> getSerializer() {

@@ -15,26 +15,25 @@ import com.grim3212.assorted.crates.common.inventory.crates.CrateContainer;
 import com.grim3212.assorted.crates.common.inventory.crates.CrateSidedInv;
 import com.grim3212.assorted.crates.common.item.CratesItems;
 import com.grim3212.assorted.crates.common.network.SyncCrate;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,23 +111,28 @@ public class CrateBlockEntity extends BlockEntity implements IMenuDataProvider<B
     }
 
     @Override
-    protected void loadAdditional(ValueInput input) {
-        super.loadAdditional(input);
+    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
 
-        // The pre-"Inventory" flat layout is no longer read: ItemStack.of(CompoundTag) is gone and
-        // nothing needs to interoperate with a 1.20.1 world.
-        input.child("Inventory").ifPresent(this.getItemStackStorageHandler()::deserialize);
+        // The pre-"Inventory" flat layout is no longer read: nothing needs to interoperate with a 1.20.1 world.
+        if (tag.contains("Inventory", Tag.TAG_COMPOUND)) {
+            this.getItemStackStorageHandler().deserialize(tag.getCompound("Inventory"), registries);
+        }
 
-        this.customName = parseCustomNameSafe(input, "CustomName");
+        this.customName = tag.contains("CustomName", Tag.TAG_STRING) ? parseCustomNameSafe(tag.getString("CustomName"), registries) : null;
     }
 
     @Override
-    protected void saveAdditional(ValueOutput output) {
-        super.saveAdditional(output);
+    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveAdditional(tag, registries);
         // Save all the items
-        this.getItemStackStorageHandler().serialize(output.child("Inventory"));
+        CompoundTag inventory = new CompoundTag();
+        this.getItemStackStorageHandler().serialize(inventory, registries);
+        tag.put("Inventory", inventory);
 
-        output.storeNullable("CustomName", ComponentSerialization.CODEC, this.customName);
+        if (this.customName != null) {
+            tag.putString("CustomName", Component.Serializer.toJson(this.customName, registries));
+        }
     }
 
     @Override
@@ -142,24 +146,18 @@ public class CrateBlockEntity extends BlockEntity implements IMenuDataProvider<B
     }
 
     /**
-     * Contents used to be dropped from the block's {@code onRemove}. The block entity is gone by
-     * the time 26.x runs the block's removal hook, so the drop has to happen here.
+     * Drops the contents and the upgrades. Block entities have no removal hook here, so the block
+     * calls this from its {@code onRemove} while the block entity still exists, and only when the
+     * block itself changes.
      */
-    @Override
-    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
-        super.preRemoveSideEffects(pos, state);
-
-        if (this.level == null) {
-            return;
-        }
-
-        this.dropContents(pos);
-        Containers.dropContents(this.level, pos, this.getItemStackStorageHandler().getEnhancements());
+    public void onBlockRemoved(Level level, BlockPos pos) {
+        this.dropContents(level, pos);
+        Containers.dropContents(level, pos, this.getItemStackStorageHandler().getEnhancements());
     }
 
-    protected void dropContents(BlockPos pos) {
+    protected void dropContents(Level level, BlockPos pos) {
         for (int slot = 0; slot < this.getItemStackStorageHandler().getSlots(); slot++) {
-            Containers.dropContents(this.level, pos, this.getItemStackStorageHandler().getLargeItemStack(slot).asItemStacks());
+            Containers.dropContents(level, pos, this.getItemStackStorageHandler().getLargeItemStack(slot).asItemStacks());
         }
     }
 
@@ -201,7 +199,7 @@ public class CrateBlockEntity extends BlockEntity implements IMenuDataProvider<B
 
     public void setSlotChanged(int slot) {
         this.setChanged();
-        this.level.updateNeighborsAt(getBlockPos(), getBlockState().getBlock(), null);
+        this.level.updateNeighborsAt(getBlockPos(), getBlockState().getBlock());
 
         if (this.level != null && !this.level.isClientSide()) {
             Services.NETWORK.sendToNearby(level, getBlockPos(), new SyncCrate(getBlockPos(), slot, this.getItemStackStorageHandler().getLargeItemStack(slot)));
@@ -231,11 +229,11 @@ public class CrateBlockEntity extends BlockEntity implements IMenuDataProvider<B
      * Right-click: a rotate item rotates the hit slot; otherwise the first use inserts the held
      * item and a second inserts all of that item from the inventory.
      */
-    public InteractionResult use(Player player, InteractionHand handIn, BlockHitResult hit) {
+    public ItemInteractionResult use(Player player, InteractionHand handIn, BlockHitResult hit) {
         int hitSlot = getHitSlot(hit);
 
         if (hitSlot < 0) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
 
         ItemStack playerStack = player.getItemInHand(handIn).copyWithCount(1);
@@ -243,7 +241,7 @@ public class CrateBlockEntity extends BlockEntity implements IMenuDataProvider<B
         if (playerStack.getItem() == CratesItems.ROTATOR_MAJIG.get()) {
             this.getItemStackStorageHandler().cycleSlotRotation(hitSlot);
             this.setSlotChanged(hitSlot);
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
         if (player.getUUID().equals(playerTimerUUID) && Util.getMillis() - playerTimerMillis < 275 && playerTimerStack != ItemStack.EMPTY) {
@@ -264,14 +262,14 @@ public class CrateBlockEntity extends BlockEntity implements IMenuDataProvider<B
             playerTimerUUID = null;
             playerTimerMillis = 0;
             playerTimerStack = ItemStack.EMPTY;
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
         ItemStack playerItem = player.getItemInHand(handIn).copy();
         int addRet = this.getItemStackStorageHandler().addItem(hitSlot, playerItem);
         if (addRet < 0) {
             // We can't add anymore to this storage crate
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else if (addRet == 0) {
             player.getItemInHand(handIn).shrink(playerItem.getCount());
 
@@ -282,7 +280,7 @@ public class CrateBlockEntity extends BlockEntity implements IMenuDataProvider<B
             player.getItemInHand(handIn).shrink(playerItem.getCount() - addRet);
         }
 
-        return InteractionResult.SUCCESS;
+        return ItemInteractionResult.SUCCESS;
     }
 
     public static List<Integer> findMatchingStacks(Player player, ItemStack stack) {

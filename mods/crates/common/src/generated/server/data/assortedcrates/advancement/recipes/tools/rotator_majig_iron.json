@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcrates:rotator_majig_iron"
+        "recipe": "assortedcrates:rotator_majig_iron"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

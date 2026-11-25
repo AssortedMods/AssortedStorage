@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -83,12 +83,12 @@ public class KeyRingContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slot, int dragType, ContainerInput clickTypeIn, Player player) {
+    public void clicked(int slot, int dragType, ClickType clickTypeIn, Player player) {
         if (slot >= 0) {
             if (getSlot(slot).getItem().getItem() instanceof KeyRingItem)
                 return;
         }
-        if (clickTypeIn == ContainerInput.SWAP)
+        if (clickTypeIn == ClickType.SWAP)
             return;
 
         super.clicked(slot, dragType, clickTypeIn, player);
@@ -100,7 +100,7 @@ public class KeyRingContainer extends AbstractContainerMenu {
         Slot slot = this.getSlot(index);
 
         if (slot != null && slot.hasItem()) {
-            int keyringSlotCount = slots.size() - playerIn.getInventory().getNonEquipmentItems().size();
+            int keyringSlotCount = slots.size() - playerIn.getInventory().items.size();
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index < keyringSlotCount) {

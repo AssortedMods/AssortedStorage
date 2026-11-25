@@ -26,7 +26,6 @@ public class LocksmithWorkbenchContainer extends AbstractContainerMenu {
     };
     private final ResultContainer craftResult = new ResultContainer();
     private final ContainerLevelAccess worldPosCallable;
-    private String lock = "";
     private final Slot resultSlot;
 
     public LocksmithWorkbenchContainer(int id, Inventory playerInventory) {
@@ -86,7 +85,10 @@ public class LocksmithWorkbenchContainer extends AbstractContainerMenu {
         super.slotsChanged(inventoryIn);
 
         if (inventoryIn == this.craftMatrix) {
-            this.updateLock(this.lock);
+            // Whatever goes in starts from its own code, or none, rather than one typed for the last
+            // item or with the slot empty. The screen's field shows the same code.
+            ItemStack stack = this.craftMatrix.getItem(0);
+            this.updateLock(stack.isEmpty() ? "" : StorageUtil.getCode(stack));
         }
     }
 
@@ -115,11 +117,7 @@ public class LocksmithWorkbenchContainer extends AbstractContainerMenu {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index == 1) {
-                // onCraftedBy lost its Level parameter; the level side of it is onCraftedPostProcess.
-                this.worldPosCallable.execute((p_217067_2_, p_217067_3_) -> {
-                    itemstack1.getItem().onCraftedBy(itemstack1, playerIn);
-                    itemstack1.getItem().onCraftedPostProcess(itemstack1, p_217067_2_);
-                });
+                this.worldPosCallable.execute((level, pos) -> itemstack1.getItem().onCraftedBy(itemstack1, level, playerIn));
                 if (!this.moveItemStackTo(itemstack1, 2, 38, true)) {
                     return ItemStack.EMPTY;
                 }
@@ -168,7 +166,6 @@ public class LocksmithWorkbenchContainer extends AbstractContainerMenu {
     }
 
     public void updateLock(String lock) {
-        this.lock = lock;
         ItemStack itemstack = this.craftMatrix.getItem(0);
 
         if (!itemstack.isEmpty() && itemstack.getItem() instanceof CombinationItem) {

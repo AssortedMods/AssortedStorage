@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static com.grim3212.assorted.containers.gametest.ContainersTestSupport.blockEntity;
+
 /** What sets the safes and the item tower apart, as the site describes them. */
 final class SafeAndTowerTests {
 
@@ -75,6 +77,6 @@ final class SafeAndTowerTests {
     }
 
     private static IItemStorageHandler handler(GameTestHelper helper, BlockPos rel) {
-        return helper.getBlockEntity(rel, BaseStorageBlockEntity.class).getStorageHandler().getItemStorageHandler(null);
+        return blockEntity(helper, rel, BaseStorageBlockEntity.class).getStorageHandler().getItemStorageHandler(null);
     }
 }

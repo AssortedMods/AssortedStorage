@@ -1,0 +1,11 @@
+{
+  "parent": "assortedbarrels:block/barrel_peridot_unlocked",
+  "overrides": [
+    {
+      "model": "assortedbarrels:block/barrel_peridot_locked",
+      "predicate": {
+        "assortedbarrels:locked": 1.0
+      }
+    }
+  ]
+}

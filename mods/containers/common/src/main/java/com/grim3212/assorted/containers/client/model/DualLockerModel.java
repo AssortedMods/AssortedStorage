@@ -6,7 +6,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.RenderType;
 
 public class DualLockerModel extends BaseStorageModel {
 
@@ -15,7 +15,7 @@ public class DualLockerModel extends BaseStorageModel {
 	private final ModelPart lock;
 
 	public DualLockerModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutCull);
+		super(root, RenderType::entityCutout);
 
 		this.door = root.getChild("door");
 		this.handle = root.getChild("handle");
@@ -45,8 +45,6 @@ public class DualLockerModel extends BaseStorageModel {
 
 	@Override
 	public void setupAnim(ContainersModelState state) {
-		super.setupAnim(state);
-
 		float yRot = -(state.doorAngle() / 90.0F);
 		this.door.yRot = yRot;
 		this.handle.yRot = yRot;

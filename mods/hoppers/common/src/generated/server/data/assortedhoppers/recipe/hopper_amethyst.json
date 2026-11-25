@@ -10,6 +10,7 @@
     }
   ],
   "type": "assortedhoppers:locked_upgrading",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:tags_populated",
@@ -24,8 +25,12 @@
     }
   ],
   "key": {
-    "C": "#assortedhoppers:hoppers/level_1",
-    "M": "#c:gems/amethyst"
+    "C": {
+      "tag": "assortedhoppers:hoppers/level_1"
+    },
+    "M": {
+      "tag": "c:gems/amethyst"
+    }
   },
   "pattern": [
     "MMM",
@@ -33,6 +38,7 @@
     "MMM"
   ],
   "result": {
+    "count": 1,
     "id": "assortedhoppers:hopper_amethyst"
   }
 }

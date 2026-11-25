@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 import com.grim3212.assorted.lib.core.inventory.locking.LockConversions;
 import com.grim3212.assorted.lib.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import java.util.LinkedHashMap;
@@ -53,7 +53,7 @@ final class LockedBarrelTests {
             String name = BuiltInRegistries.BLOCK.getKey(entry.getKey()).toString();
 
             helper.assertValueEqual(LockConversions.tryLock(helper.getLevel(), helper.absolutePos(pos), CODE), locks, "whether a padlock locked a " + name);
-            Identifier expected = locks ? Identifier.fromNamespaceAndPath("assortedlocks", entry.getValue()) : BuiltInRegistries.BLOCK.getKey(entry.getKey());
+            ResourceLocation expected = locks ? ResourceLocation.fromNamespaceAndPath("assortedlocks", entry.getValue()) : BuiltInRegistries.BLOCK.getKey(entry.getKey());
             helper.assertValueEqual(BuiltInRegistries.BLOCK.getKey(helper.getBlockState(pos).getBlock()), expected, "what a padlock left of a " + name);
         }
         helper.succeed();

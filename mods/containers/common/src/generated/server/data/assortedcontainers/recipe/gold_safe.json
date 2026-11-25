@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,8 +14,12 @@
     }
   ],
   "key": {
-    "C": "assortedcontainers:obsidian_safe",
-    "G": "#c:ingots/gold"
+    "C": {
+      "item": "assortedcontainers:obsidian_safe"
+    },
+    "G": {
+      "tag": "c:ingots/gold"
+    }
   },
   "pattern": [
     " G ",
@@ -22,6 +27,7 @@
     " G "
   ],
   "result": {
+    "count": 1,
     "id": "assortedcontainers:gold_safe"
   }
 }

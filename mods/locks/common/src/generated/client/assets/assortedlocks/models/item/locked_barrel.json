@@ -1,0 +1,11 @@
+{
+  "parent": "assortedlocks:block/locked_barrel_unlocked",
+  "overrides": [
+    {
+      "model": "assortedlocks:block/locked_barrel_locked",
+      "predicate": {
+        "assortedlocks:locked": 1.0
+      }
+    }
+  ]
+}

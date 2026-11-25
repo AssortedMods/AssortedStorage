@@ -1,30 +1,38 @@
 {
   "variants": {
-    "facing=down": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
+    "enabled=false,facing=down": {
       "model": "assortedlocks:block/locked_hopper"
     },
-    "facing=east": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
+    "enabled=false,facing=east": {
       "model": "assortedlocks:block/locked_hopper_side",
       "y": 90
     },
-    "facing=north": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
+    "enabled=false,facing=north": {
       "model": "assortedlocks:block/locked_hopper_side"
     },
-    "facing=south": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
+    "enabled=false,facing=south": {
       "model": "assortedlocks:block/locked_hopper_side",
       "y": 180
     },
-    "facing=west": {
-      "type": "assortedlib:specification",
-      "fabric:type": "assortedlib:specification",
+    "enabled=false,facing=west": {
+      "model": "assortedlocks:block/locked_hopper_side",
+      "y": 270
+    },
+    "enabled=true,facing=down": {
+      "model": "assortedlocks:block/locked_hopper"
+    },
+    "enabled=true,facing=east": {
+      "model": "assortedlocks:block/locked_hopper_side",
+      "y": 90
+    },
+    "enabled=true,facing=north": {
+      "model": "assortedlocks:block/locked_hopper_side"
+    },
+    "enabled=true,facing=south": {
+      "model": "assortedlocks:block/locked_hopper_side",
+      "y": 180
+    },
+    "enabled=true,facing=west": {
       "model": "assortedlocks:block/locked_hopper_side",
       "y": 270
     }

@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerInput;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -102,12 +102,12 @@ public class BagContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public void clicked(int slot, int dragType, ContainerInput clickTypeIn, Player player) {
+    public void clicked(int slot, int dragType, ClickType clickTypeIn, Player player) {
         if (slot >= 0) {
             if (getSlot(slot).getItem().getItem() instanceof BagItem)
                 return;
         }
-        if (clickTypeIn == ContainerInput.SWAP)
+        if (clickTypeIn == ClickType.SWAP)
             return;
 
         super.clicked(slot, dragType, clickTypeIn, player);
@@ -122,7 +122,7 @@ public class BagContainer extends AbstractContainerMenu {
         if (slot != null && slot.hasItem()) {
             // -1 to account for the lock slot we don't want to put items in
             int totalSlotSize = slots.size() - 1;
-            int bagSlotCount = totalSlotSize - playerIn.getInventory().getNonEquipmentItems().size();
+            int bagSlotCount = totalSlotSize - playerIn.getInventory().items.size();
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
             if (index < bagSlotCount) {

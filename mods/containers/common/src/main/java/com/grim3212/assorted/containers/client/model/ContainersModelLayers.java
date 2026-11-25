@@ -2,14 +2,14 @@ package com.grim3212.assorted.containers.client.model;
 
 import com.grim3212.assorted.containers.Constants;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class ContainersModelLayers {
-    public static final ModelLayerLocation CABINET = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "cabinet"), "main");
-    public static final ModelLayerLocation GLASS_CABINET = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "glass_cabinet"), "main");
-    public static final ModelLayerLocation SAFE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "safe"), "main");
-    public static final ModelLayerLocation LOCKER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locker"), "main");
-    public static final ModelLayerLocation DUAL_LOCKER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "dual_locker"), "main");
-    public static final ModelLayerLocation WAREHOUSE_CRATE = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "warehouse_crate"), "main");
-    public static final ModelLayerLocation ITEM_TOWER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "item_tower"), "main");
+    public static final ModelLayerLocation CABINET = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "cabinet"), "main");
+    public static final ModelLayerLocation GLASS_CABINET = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "glass_cabinet"), "main");
+    public static final ModelLayerLocation SAFE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "safe"), "main");
+    public static final ModelLayerLocation LOCKER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "locker"), "main");
+    public static final ModelLayerLocation DUAL_LOCKER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "dual_locker"), "main");
+    public static final ModelLayerLocation WAREHOUSE_CRATE = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "warehouse_crate"), "main");
+    public static final ModelLayerLocation ITEM_TOWER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "item_tower"), "main");
 }

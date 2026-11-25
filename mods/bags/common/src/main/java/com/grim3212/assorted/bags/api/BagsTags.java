@@ -2,7 +2,7 @@ package com.grim3212.assorted.bags.api;
 
 import com.grim3212.assorted.bags.Constants;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
@@ -18,7 +18,7 @@ public class BagsTags {
         public static final TagKey<Item> BAGS_LEVEL_5 = bagsTag("bags/level_5");
 
         private static TagKey<Item> bagsTag(String name) {
-            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));
+            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name));
         }
     }
 

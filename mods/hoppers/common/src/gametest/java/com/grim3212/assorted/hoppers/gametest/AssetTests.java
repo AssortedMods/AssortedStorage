@@ -10,7 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.locale.Language;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
@@ -48,7 +48,7 @@ final class AssetTests {
         List<String> missing = new ArrayList<>();
 
         for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
-            Identifier id = entry.getKey().identifier();
+            ResourceLocation id = entry.getKey().location();
             if (!Constants.MOD_ID.equals(id.getNamespace())) {
                 continue;
             }
@@ -62,12 +62,13 @@ final class AssetTests {
         }
 
         for (Map.Entry<ResourceKey<Item>, Item> entry : BuiltInRegistries.ITEM.entrySet()) {
-            Identifier id = entry.getKey().identifier();
+            ResourceLocation id = entry.getKey().location();
             if (!Constants.MOD_ID.equals(id.getNamespace())) {
                 continue;
             }
 
-            if (!resourceExists("/assets/" + Constants.MOD_ID + "/items/" + id.getPath() + ".json")) {
+            // 1.21.1 reads an item's model straight from models/item; the items/ definitions came with 1.21.4.
+            if (!resourceExists("/assets/" + Constants.MOD_ID + "/models/item/" + id.getPath() + ".json")) {
                 missing.add("item model " + id.getPath());
             }
             if (!lang.has(entry.getValue().getDescriptionId())) {
@@ -76,24 +77,25 @@ final class AssetTests {
         }
 
         helper.assertTrue(BuiltInRegistries.CREATIVE_MODE_TAB.containsKey(HoppersCreativeItems.TAB), "the Assorted Storage creative tab is not registered");
-        helper.assertTrue(lang.has("itemGroup." + HoppersCreativeItems.TAB.identifier().getNamespace()), "the Assorted Storage creative tab has no name");
+        helper.assertTrue(lang.has("itemGroup." + HoppersCreativeItems.TAB.location().getNamespace()), "the Assorted Storage creative tab has no name");
 
         helper.assertTrue(missing.isEmpty(), missing.size() + " missing assets: " + String.join(", ", missing));
         helper.succeed();
     }
 
     /**
-     * Every custom blockstate model and loader model carries both loaders' keys: NeoForge reads
-     * {@code "type"} and {@code "loader"}, Fabric only {@code "fabric:type"}. With only NeoForge's
-     * key, Fabric loads a plain static model and nothing warns.
+     * Every hopper's blockstate reaches the {@code assortedhoppers:locked} loader model, named by the one
+     * {@code "loader"} key both loaders read in 1.21.1 (Fabric through AssortedLib), and that model names both of
+     * its children. A blockstate pointing at a plain model never shows the lock, and nothing warns; the 26.x keys,
+     * a variant {@code "type"} and a model's {@code "fabric:type"}, are read by neither loader here.
      */
     private static void loaderModelsAreReadOnBothLoaders(GameTestHelper helper) {
+        String lockedLoader = Constants.MOD_ID + ":locked";
         List<String> wrong = new ArrayList<>();
-        List<String> checkedModels = new ArrayList<>();
-        int customVariants = 0;
+        int loaderModels = 0;
 
         for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
-            Identifier id = entry.getKey().identifier();
+            ResourceLocation id = entry.getKey().location();
             if (!Constants.MOD_ID.equals(id.getNamespace())) {
                 continue;
             }
@@ -103,29 +105,41 @@ final class AssetTests {
             }
 
             for (JsonObject variant : blockstateVariants(blockstate)) {
-                if (variant.has("type")) {
-                    customVariants++;
-                    if (!variant.get("type").equals(variant.get("fabric:type"))) {
-                        wrong.add("blockstate " + id.getPath() + " has type " + variant.get("type") + " but fabric:type " + variant.get("fabric:type"));
-                    }
+                if (variant.has("type") || variant.has("fabric:type")) {
+                    wrong.add("blockstate " + id.getPath() + " still has the 26.x key " + (variant.has("type") ? "type" : "fabric:type"));
                 }
 
                 String model = variant.has("model") ? variant.get("model").getAsString() : null;
-                if (model == null || checkedModels.contains(model) || !model.startsWith(Constants.MOD_ID + ":")) {
+                if (model == null || !model.startsWith(Constants.MOD_ID + ":")) {
+                    wrong.add("blockstate " + id.getPath() + " names " + model + " rather than one of this mod's models");
                     continue;
                 }
-                checkedModels.add(model);
 
-                Identifier modelId = Identifier.parse(model);
+                ResourceLocation modelId = ResourceLocation.parse(model);
                 JsonObject modelJson = json("/assets/" + modelId.getNamespace() + "/models/" + modelId.getPath() + ".json");
-                if (modelJson != null && modelJson.has("loader") && !modelJson.get("loader").equals(modelJson.get("fabric:type"))) {
-                    wrong.add("model " + model + " has loader " + modelJson.get("loader") + " but fabric:type " + modelJson.get("fabric:type"));
+                if (modelJson == null) {
+                    wrong.add("blockstate " + id.getPath() + " names " + model + ", which does not exist");
+                    continue;
+                }
+                if (modelJson.has("fabric:type")) {
+                    wrong.add("model " + model + " still has the 26.x key fabric:type");
+                }
+                if (!modelJson.has("loader") || !lockedLoader.equals(modelJson.get("loader").getAsString())) {
+                    wrong.add("model " + model + " has loader " + modelJson.get("loader") + " rather than " + lockedLoader);
+                    continue;
+                }
+                loaderModels++;
+                for (String child : List.of("unlocked", "locked")) {
+                    ResourceLocation childId = modelJson.has(child) ? ResourceLocation.parse(modelJson.get(child).getAsString()) : null;
+                    if (childId == null || json("/assets/" + childId.getNamespace() + "/models/" + childId.getPath() + ".json") == null) {
+                        wrong.add("model " + model + " names no " + child + " model that exists");
+                    }
                 }
             }
         }
 
-        helper.assertTrue(customVariants > 0, "no custom blockstate variants were found to check");
-        helper.assertTrue(wrong.isEmpty(), wrong.size() + " json(s) Fabric would read as static: " + String.join("; ", wrong));
+        helper.assertTrue(loaderModels > 0, "no locked loader models were found to check");
+        helper.assertTrue(wrong.isEmpty(), wrong.size() + " json(s) that would draw a static model: " + String.join("; ", wrong));
         helper.succeed();
     }
 
@@ -140,8 +154,8 @@ final class AssetTests {
         List<String> failed = new ArrayList<>();
 
         recipes.listMatchingResources(server.getResourceManager()).forEach((file, resource) -> {
-            Identifier id = recipes.fileToId(file);
-            if (!id.getNamespace().equals(Constants.MOD_ID) || server.getRecipeManager().byKey(ResourceKey.create(Registries.RECIPE, id)).isPresent()) {
+            ResourceLocation id = recipes.fileToId(file);
+            if (!id.getNamespace().equals(Constants.MOD_ID) || server.getRecipeManager().byKey(id).isPresent()) {
                 return;
             }
 
@@ -166,7 +180,7 @@ final class AssetTests {
      */
     private static void everyItemTagHasAName(GameTestHelper helper) {
         Language language = Language.getInstance();
-        List<String> missing = helper.getLevel().registryAccess().lookupOrThrow(Registries.ITEM).getTags()
+        List<String> missing = helper.getLevel().registryAccess().lookupOrThrow(Registries.ITEM).listTags()
                 .map(tag -> tag.key().location())
                 .filter(id -> !"minecraft".equals(id.getNamespace()))
                 .map(id -> "tag.item." + id.getNamespace() + "." + id.getPath().replace('/', '.'))

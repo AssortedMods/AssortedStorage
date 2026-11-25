@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcrates:blank_upgrade"
+        "recipe": "assortedcrates:blank_upgrade"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

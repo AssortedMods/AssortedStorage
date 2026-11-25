@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,9 +14,15 @@
     }
   ],
   "key": {
-    "C": "#c:chests/wooden",
-    "D": "#c:deepslate",
-    "L": "#minecraft:spruce_logs"
+    "C": {
+      "tag": "c:chests/wooden"
+    },
+    "D": {
+      "tag": "c:deepslate"
+    },
+    "L": {
+      "tag": "minecraft:spruce_logs"
+    }
   },
   "pattern": [
     "DCD",
@@ -23,6 +30,7 @@
     "DCD"
   ],
   "result": {
+    "count": 1,
     "id": "assortedcrates:spruce_crate_double"
   }
 }

@@ -1,7 +1,6 @@
 package com.grim3212.assorted.locks.common.crafting;
 
 import com.grim3212.assorted.lib.core.inventory.locking.LockItems;
-import com.mojang.serialization.MapCodec;
 import com.grim3212.assorted.lib.core.inventory.locking.StorageUtil;
 import com.grim3212.assorted.lib.util.NBTHelper;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
@@ -9,11 +8,12 @@ import net.minecraft.world.item.AirItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
@@ -21,10 +21,11 @@ import net.minecraft.world.level.block.ShulkerBoxBlock;
 /** A vanilla shulker box, dyed or not, and a coded padlock make a locked shulker box that keeps its contents. */
 public class LockedShulkerBoxRecipe extends CustomRecipe {
 
-    public static final LockedShulkerBoxRecipe INSTANCE = new LockedShulkerBoxRecipe();
-    public static final MapCodec<LockedShulkerBoxRecipe> MAP_CODEC = MapCodec.unit(INSTANCE);
-    public static final StreamCodec<RegistryFriendlyByteBuf, LockedShulkerBoxRecipe> STREAM_CODEC = StreamCodec.unit(INSTANCE);
-    public static final RecipeSerializer<LockedShulkerBoxRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+    public static final RecipeSerializer<LockedShulkerBoxRecipe> SERIALIZER = new SimpleCraftingRecipeSerializer<>(LockedShulkerBoxRecipe::new);
+
+    public LockedShulkerBoxRecipe(CraftingBookCategory category) {
+        super(category);
+    }
 
     @Override
     public boolean matches(CraftingInput inv, Level worldIn) {
@@ -49,7 +50,7 @@ public class LockedShulkerBoxRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inv) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) {
         ItemStack shulker = ItemStack.EMPTY;
         ItemStack lock = ItemStack.EMPTY;
 
@@ -77,6 +78,11 @@ public class LockedShulkerBoxRecipe extends CustomRecipe {
         return output;
     }
 
+
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return width * height >= 2;
+    }
 
     @Override
     public RecipeSerializer<LockedShulkerBoxRecipe> getSerializer() {

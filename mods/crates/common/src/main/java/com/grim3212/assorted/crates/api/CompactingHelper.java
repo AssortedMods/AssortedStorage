@@ -4,19 +4,17 @@ import com.google.common.collect.Maps;
 import com.grim3212.assorted.lib.platform.Services;
 import com.grim3212.assorted.lib.registry.ILoaderRegistry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.display.RecipeDisplay;
-import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +30,9 @@ import java.util.stream.Stream;
 public class CompactingHelper {
 
     private final ServerLevel level;
-    private final ContextMap displayContext;
 
     public CompactingHelper(ServerLevel level) {
         this.level = level;
-        this.displayContext = SlotDisplayContext.fromLevel(level);
     }
 
     public List<Match> findMatches(ItemStack stack, int numTiers) {
@@ -140,7 +136,8 @@ public class CompactingHelper {
                 continue;
 
             // Look for a match
-            List<Ingredient> ingredients = craftingRecipe.placementInfo().ingredients();
+            // A shaped recipe lists its blank cells as empty ingredients; only the filled ones count.
+            List<Ingredient> ingredients = craftingRecipe.getIngredients().stream().filter(x -> !x.isEmpty()).toList();
             ItemStack match = tryMatch(stack, ingredients);
             if (!match.isEmpty()) {
                 int recipeSize = ingredients.size();
@@ -186,16 +183,11 @@ public class CompactingHelper {
     }
 
     private Stream<CraftingRecipe> craftingRecipes() {
-        return this.level.recipeAccess().getRecipes().stream().map(RecipeHolder::value).filter(CraftingRecipe.class::isInstance).map(CraftingRecipe.class::cast);
+        return this.level.getRecipeManager().getRecipes().stream().map(RecipeHolder::value).filter(CraftingRecipe.class::isInstance).map(CraftingRecipe.class::cast);
     }
 
-    /**
-     * A recipe's result is only reachable through its display now - {@code getResultItem} was
-     * dropped from {@code Recipe} when the recipe book moved onto {@code RecipeDisplay}.
-     */
     private ItemStack resultOf(CraftingRecipe recipe) {
-        List<RecipeDisplay> displays = recipe.display();
-        return displays.isEmpty() ? ItemStack.EMPTY : displays.get(0).result().resolveForFirstStack(this.displayContext);
+        return recipe.getResultItem(this.level.registryAccess());
     }
 
     private List<ItemStack> findMatchingStacks(CraftingInput crafting) {
@@ -203,15 +195,15 @@ public class CompactingHelper {
             return List.of();
         }
 
-        return craftingRecipes().filter(x -> x.matches(crafting, this.level)).map(r -> r.assemble(crafting)).filter(i -> !i.isEmpty()).collect(Collectors.toList());
+        return craftingRecipes().filter(x -> x.matches(crafting, this.level)).map(r -> r.assemble(crafting, this.level.registryAccess())).filter(i -> !i.isEmpty()).collect(Collectors.toList());
     }
 
     private ItemStack findSameItems(ItemStack stack, List<ItemStack> ingredientItems) {
         ILoaderRegistry<Item> itemRegistry = Services.PLATFORM.getRegistry(Registries.ITEM);
-        Identifier stackKey = itemRegistry.getRegistryName(stack.getItem());
+        ResourceLocation stackKey = itemRegistry.getRegistryName(stack.getItem());
         if (stackKey != null) {
             ItemStack firstMatch = ingredientItems.stream().filter(x -> {
-                Identifier optionKey = itemRegistry.getRegistryName(x.getItem());
+                ResourceLocation optionKey = itemRegistry.getRegistryName(x.getItem());
                 return optionKey != null && stackKey.getNamespace().equals(optionKey.getNamespace());
             }).findFirst().orElse(ItemStack.EMPTY);
 
@@ -227,9 +219,7 @@ public class CompactingHelper {
             return ItemStack.EMPTY;
 
         Ingredient refIngredient = ingredients.get(0);
-        // An Ingredient no longer hands back an ItemStack[]; its accepted items come off the
-        // SlotDisplay it exposes for the recipe book.
-        List<ItemStack> refMatchingStacks = refIngredient.display().resolveForStacks(this.displayContext);
+        List<ItemStack> refMatchingStacks = Arrays.asList(refIngredient.getItems());
         if (refMatchingStacks.isEmpty())
             return ItemStack.EMPTY;
 

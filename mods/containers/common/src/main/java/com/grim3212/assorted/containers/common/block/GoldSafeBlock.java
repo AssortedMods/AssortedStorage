@@ -6,8 +6,7 @@ import com.grim3212.assorted.containers.Constants;
 import com.grim3212.assorted.containers.common.block.blockentity.GoldSafeBlockEntity;
 import com.grim3212.assorted.containers.common.block.blockentity.ContainersBlockEntityTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +24,7 @@ import java.util.List;
 
 public class GoldSafeBlock extends BaseStorageBlock {
 
-    public static final Identifier CONTENTS = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "contents");
+    public static final ResourceLocation CONTENTS = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "contents");
 
     public GoldSafeBlock(Properties properties) {
         super(properties.requiresCorrectToolForDrops().strength(50.0F, 1200.0F));
@@ -41,19 +40,12 @@ public class GoldSafeBlock extends BaseStorageBlock {
         return ObsidianSafeBlock.SAFE_SHAPE;
     }
 
-    /**
-     * {@code onRemove} split in two: this only fires for a real removal, and the block entity is
-     * already gone by now - anything that needed it moved onto the block entity's
-     * {@code preRemoveSideEffects}.
-     */
+    // NeoForge deprecates this in favour of its IBlockExtension overload, which defaults to
+    // calling it, so overriding this one is what answers pick block on both loaders.
+    @SuppressWarnings("deprecation")
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel worldIn, BlockPos pos, boolean movedByPiston) {
-        worldIn.updateNeighbourForOutputSignal(pos, this);
-    }
-
-    @Override
-    protected ItemStack getCloneItemStack(LevelReader worldIn, BlockPos pos, BlockState state, boolean includeData) {
-        ItemStack itemstack = super.getCloneItemStack(worldIn, pos, state, includeData);
+    public ItemStack getCloneItemStack(LevelReader worldIn, BlockPos pos, BlockState state) {
+        ItemStack itemstack = super.getCloneItemStack(worldIn, pos, state);
         worldIn.getBlockEntity(pos, ContainersBlockEntityTypes.GOLD_SAFE.get()).ifPresent((goldSafeBlockEntity) -> {
             itemstack.applyComponents(goldSafeBlockEntity.collectComponents());
             String lockCode = StorageUtil.getCode(goldSafeBlockEntity);

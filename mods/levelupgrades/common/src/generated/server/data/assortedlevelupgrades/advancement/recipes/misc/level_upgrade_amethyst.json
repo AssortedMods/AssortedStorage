@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedlevelupgrades:level_upgrade_amethyst"
+        "recipe": "assortedlevelupgrades:level_upgrade_amethyst"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

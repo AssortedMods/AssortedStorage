@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedlevelupgrades:level_upgrade_nickel"
+        "recipe": "assortedlevelupgrades:level_upgrade_nickel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

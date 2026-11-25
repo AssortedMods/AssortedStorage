@@ -10,6 +10,7 @@
     }
   ],
   "type": "assortedbags:locked_upgrading",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:tags_populated",
@@ -24,8 +25,12 @@
     }
   ],
   "key": {
-    "C": "#assortedbags:bags/level_0",
-    "M": "#c:ingots/aluminum"
+    "C": {
+      "tag": "assortedbags:bags/level_0"
+    },
+    "M": {
+      "tag": "c:ingots/aluminum"
+    }
   },
   "pattern": [
     "MMM",
@@ -33,6 +38,7 @@
     "MMM"
   ],
   "result": {
+    "count": 1,
     "id": "assortedbags:bag_aluminum"
   }
 }

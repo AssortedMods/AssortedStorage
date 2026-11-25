@@ -3,23 +3,20 @@ package com.grim3212.assorted.hoppers;
 import com.grim3212.assorted.hoppers.common.block.HoppersBlocks;
 import com.grim3212.assorted.hoppers.common.block.blockentity.HoppersBlockEntityTypes;
 import com.grim3212.assorted.hoppers.common.crafting.HoppersRecipeSerializers;
-import com.grim3212.assorted.hoppers.common.crafting.LockedUpgradingRecipe;
 import com.grim3212.assorted.hoppers.common.handlers.HoppersCreativeItems;
 import com.grim3212.assorted.hoppers.common.handlers.HoppersLevelUpgrades;
 import com.grim3212.assorted.hoppers.common.inventory.HoppersContainerTypes;
 import com.grim3212.assorted.hoppers.common.item.HoppersDataComponents;
-import com.grim3212.assorted.lib.crafting.SyncedRecipes;
 import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.resources.ResourceLocation;
 
 public class HoppersCommonMod {
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
         Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
-                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "hopper_gold"), 30)
+                .icon(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "hopper_gold"), 30)
                 .manualOrder(80);
 
         HoppersDataComponents.init();
@@ -27,8 +24,6 @@ public class HoppersCommonMod {
         HoppersBlockEntityTypes.init();
         HoppersContainerTypes.init();
         HoppersRecipeSerializers.init();
-        // The manual reads whole recipes, and Fabric only sends clients the serializers named here.
-        SyncedRecipes.require(() -> RecipeType.CRAFTING, LockedUpgradingRecipe.SERIALIZER);
         HoppersLevelUpgrades.init();
         HoppersCreativeItems.init();
 

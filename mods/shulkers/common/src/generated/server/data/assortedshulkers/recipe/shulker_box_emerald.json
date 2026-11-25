@@ -10,6 +10,7 @@
     }
   ],
   "type": "assortedshulkers:locked_upgrading",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:tags_populated",
@@ -24,8 +25,12 @@
     }
   ],
   "key": {
-    "C": "#assortedshulkers:shulkers/level_1",
-    "M": "#c:gems/emerald"
+    "C": {
+      "tag": "assortedshulkers:shulkers/level_1"
+    },
+    "M": {
+      "tag": "c:gems/emerald"
+    }
   },
   "pattern": [
     "MMM",
@@ -33,6 +38,7 @@
     "MMM"
   ],
   "result": {
+    "count": 1,
     "id": "assortedshulkers:shulker_box_emerald"
   }
 }

@@ -5,14 +5,14 @@ import com.grim3212.assorted.levelupgrades.common.item.LevelUpgradesDataComponen
 import com.grim3212.assorted.levelupgrades.common.item.LevelUpgradesItems;
 import com.grim3212.assorted.lib.family.Families;
 import com.grim3212.assorted.lib.migration.MovedIds;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class LevelUpgradesCommonMod {
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
         Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
-                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "level_upgrade_gold"), 10)
+                .icon(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "level_upgrade_gold"), 10)
                 .manualOrder(80);
 
         LevelUpgradesDataComponents.init();

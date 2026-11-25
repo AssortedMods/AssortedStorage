@@ -14,12 +14,14 @@ import com.grim3212.assorted.lib.data.ForgeItemTagProvider;
 import com.grim3212.assorted.lib.data.ForgeRegistryEntries;
 import com.grim3212.assorted.lib.inventory.ForgePlatformInventoryStorageHandlerUnsided;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
@@ -32,41 +34,34 @@ public class AssortedBarrelsNeoForge {
      * into the {@code @Mod} constructor instead.
      */
     public AssortedBarrelsNeoForge(IEventBus modBus, ModContainer modContainer) {
-        modBus.addListener(this::gatherServerData);
-        modBus.addListener(this::gatherClientData);
+        modBus.addListener(this::gatherData);
         modBus.addListener(this::registerCapabilities);
 
         BarrelsCommonMod.init();
     }
 
-    /**
-     * Server datagen. The server and client halves are separate events; if the wrong one runs, the
-     * build still succeeds, with "All providers took: 0 ms".
-     */
-    private void gatherServerData(final GatherDataEvent.Server event) {
-        PackOutput packOutput = event.getGenerator().getPackOutput();
-        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getWorldLookupProvider();
+    /** One event for both halves; each provider is added for the half its output belongs to. */
+    private void gatherData(final GatherDataEvent event) {
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        ExistingFileHelper fileHelper = event.getExistingFileHelper();
 
         ForgeRegistryEntries.of(Constants.MOD_ID).recipes(BarrelsRecipes::new).blockLoot(BarrelsBlockLoot::new).addTo(event);
-        ForgeBlockTagProvider blockTagProvider = event.addProvider(new ForgeBlockTagProvider(packOutput, lookupProvider, Constants.MOD_ID, new BarrelsBlockTagProvider(packOutput, lookupProvider)));
-        event.addProvider(new ForgeItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), Constants.MOD_ID, new BarrelsItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter())));
-    }
+        ForgeBlockTagProvider blockTagProvider = generator.addProvider(event.includeServer(), new ForgeBlockTagProvider(packOutput, lookupProvider, Constants.MOD_ID, fileHelper, new BarrelsBlockTagProvider(packOutput, lookupProvider)));
+        generator.addProvider(event.includeServer(), new ForgeItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), Constants.MOD_ID, fileHelper, new BarrelsItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter())));
 
-    /** Client datagen: block states and models, the lang file and the manual. */
-    private void gatherClientData(final GatherDataEvent.Client event) {
-        PackOutput packOutput = event.getGenerator().getPackOutput();
-
-        event.addProvider(new BarrelsBlockstateProvider(packOutput));
-        event.addProvider(new BarrelsLanguageProvider(packOutput));
-        event.addProvider(new BarrelsManualProvider(packOutput));
+        generator.addProvider(event.includeClient(), new BarrelsBlockstateProvider(packOutput, fileHelper));
+        generator.addProvider(event.includeClient(), new BarrelsLanguageProvider(packOutput));
+        generator.addProvider(event.includeClient(), new BarrelsManualProvider(packOutput));
     }
 
     /**
-     * Exposes the barrels as item handlers ({@code Capabilities.Item.BLOCK}), the NeoForge side of
+     * Exposes the barrels as item handlers ({@code Capabilities.ItemHandler.BLOCK}), the NeoForge side of
      * Fabric's {@code ItemStorage.SIDED}.
      */
     private void registerCapabilities(final RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.Item.BLOCK, BarrelsBlockEntityTypes.LOCKED_BARREL.get(), (blockEntity, side) -> {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BarrelsBlockEntityTypes.LOCKED_BARREL.get(), (blockEntity, side) -> {
             if (blockEntity.isRemoved() || !(blockEntity instanceof IInventoryBlockEntity inv)) {
                 return null;
             }

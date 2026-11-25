@@ -1,0 +1,11 @@
+{
+  "parent": "assortedbarrels:block/barrel_nickel_unlocked",
+  "overrides": [
+    {
+      "model": "assortedbarrels:block/barrel_nickel_locked",
+      "predicate": {
+        "assortedbarrels:locked": 1.0
+      }
+    }
+  ]
+}

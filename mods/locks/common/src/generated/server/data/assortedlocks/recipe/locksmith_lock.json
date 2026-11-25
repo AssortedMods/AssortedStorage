@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,7 +14,9 @@
     }
   ],
   "key": {
-    "X": "#c:ingots/iron"
+    "X": {
+      "tag": "c:ingots/iron"
+    }
   },
   "pattern": [
     " X ",

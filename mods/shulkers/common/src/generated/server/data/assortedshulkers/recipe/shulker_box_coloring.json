@@ -6,6 +6,7 @@
     }
   ],
   "type": "assortedshulkers:shulker_box_coloring",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",

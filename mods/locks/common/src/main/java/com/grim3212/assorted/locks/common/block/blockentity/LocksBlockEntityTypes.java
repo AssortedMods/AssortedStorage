@@ -11,7 +11,7 @@ import com.grim3212.assorted.lib.registry.RegistryProvider;
 import com.grim3212.assorted.locks.Constants;
 import com.grim3212.assorted.locks.common.block.LocksBlocks;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.Map;
@@ -47,7 +47,7 @@ public class LocksBlockEntityTypes {
     private static void aliasUnlessAPartHasIt() {
         SHARED_WITH.forEach((type, part) -> {
             if (!Services.PLATFORM.isModLoaded(part)) {
-                Services.REGISTRY_FACTORY.alias(Registries.BLOCK_ENTITY_TYPE, Identifier.fromNamespaceAndPath(Constants.FAMILY_ID, type.getId().getPath()), type.getId());
+                Services.REGISTRY_FACTORY.alias(Registries.BLOCK_ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(Constants.FAMILY_ID, type.getId().getPath()), type.getId());
             }
         });
     }

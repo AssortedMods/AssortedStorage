@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,10 +14,18 @@
     }
   ],
   "key": {
-    "C": "minecraft:comparator",
-    "D": "#c:dusts/redstone",
-    "R": "minecraft:repeater",
-    "U": "assortedcrates:blank_upgrade"
+    "C": {
+      "item": "minecraft:comparator"
+    },
+    "D": {
+      "tag": "c:dusts/redstone"
+    },
+    "R": {
+      "item": "minecraft:repeater"
+    },
+    "U": {
+      "item": "assortedcrates:blank_upgrade"
+    }
   },
   "pattern": [
     "DCD",

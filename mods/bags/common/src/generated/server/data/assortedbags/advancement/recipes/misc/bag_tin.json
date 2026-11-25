@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbags:bag_tin"
+        "recipe": "assortedbags:bag_tin"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

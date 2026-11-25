@@ -1,5 +1,26 @@
 {
   "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "assortedbags:item/bag_nickel_colored",
+      "predicate": {
+        "assortedbags:dyed": 1.0
+      }
+    },
+    {
+      "model": "assortedbags:item/bag_nickel_locked",
+      "predicate": {
+        "assortedbags:locked": 1.0
+      }
+    },
+    {
+      "model": "assortedbags:item/bag_nickel_locked_colored",
+      "predicate": {
+        "assortedbags:dyed": 1.0,
+        "assortedbags:locked": 1.0
+      }
+    }
+  ],
   "textures": {
     "layer0": "assortedbags:item/bag_material",
     "layer1": "assortedbags:item/bag_strap",

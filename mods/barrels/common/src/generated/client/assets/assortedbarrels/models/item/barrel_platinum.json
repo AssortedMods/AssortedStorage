@@ -1,0 +1,11 @@
+{
+  "parent": "assortedbarrels:block/barrel_platinum_unlocked",
+  "overrides": [
+    {
+      "model": "assortedbarrels:block/barrel_platinum_locked",
+      "predicate": {
+        "assortedbarrels:locked": 1.0
+      }
+    }
+  ]
+}

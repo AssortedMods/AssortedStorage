@@ -19,6 +19,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:and",
@@ -44,8 +45,12 @@
     }
   ],
   "key": {
-    "B": "assortedcrates:blank_upgrade",
-    "M": "#c:ingots/iron"
+    "B": {
+      "item": "assortedcrates:blank_upgrade"
+    },
+    "M": {
+      "tag": "c:ingots/iron"
+    }
   },
   "pattern": [
     "MMM",
@@ -53,6 +58,7 @@
     "MMM"
   ],
   "result": {
+    "count": 1,
     "id": "assortedlevelupgrades:level_upgrade_iron"
   }
 }

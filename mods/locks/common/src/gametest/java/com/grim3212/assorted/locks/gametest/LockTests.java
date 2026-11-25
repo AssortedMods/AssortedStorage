@@ -19,7 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -61,6 +61,7 @@ final class LockTests {
         out.accept("key_ring_holds_keys_and_opens_a_lock", LockTests::keyRingHoldsKeysAndOpensALock);
         out.accept("locked_doors_open_only_with_the_right_key", LockTests::lockedDoorsOpenOnlyWithTheRightKey);
         out.accept("locksmith_workbench_codes_a_key_and_a_lock", LockTests::locksmithWorkbenchCodesAKeyAndALock);
+        out.accept("workbench_starts_each_key_from_its_own_code", LockTests::workbenchStartsEachKeyFromItsOwnCode);
         out.accept("every_vanilla_door_can_be_locked", LockTests::everyVanillaDoorCanBeLocked);
         out.accept("locked_doors_drop_the_door_they_stand_in_for", LockTests::lockedDoorsDropTheDoorTheyStandInFor);
         out.accept("locked_doors_are_picked_as_the_door_they_stand_in_for", LockTests::lockedDoorsArePickedAsTheDoorTheyStandInFor);
@@ -78,14 +79,14 @@ final class LockTests {
      */
     private static void aLockedCopperDoorOxidisesOnItsOwn(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        Block unaffected = LocksBlocks.VANILLA_DOORS.get(Blocks.COPPER_DOOR.weathering().unaffected()).get();
-        Block exposed = LocksBlocks.VANILLA_DOORS.get(Blocks.COPPER_DOOR.weathering().exposed()).get();
+        Block unaffected = LocksBlocks.VANILLA_DOORS.get(LocksBlocks.COPPER_DOORS.get(0)).get();
+        Block exposed = LocksBlocks.VANILLA_DOORS.get(LocksBlocks.COPPER_DOORS.get(1)).get();
 
         BlockPos lower = new BlockPos(4, 1, 4);
         helper.setBlock(lower, unaffected.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
         helper.setBlock(lower.above(), unaffected.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
-        helper.getBlockEntity(lower, BaseLockedBlockEntity.class).setLockCode(CODE);
-        helper.getBlockEntity(lower.above(), BaseLockedBlockEntity.class).setLockCode(CODE);
+        blockEntity(helper, lower, BaseLockedBlockEntity.class).setLockCode(CODE);
+        blockEntity(helper, lower.above(), BaseLockedBlockEntity.class).setLockCode(CODE);
 
         // ~4% a tick, so 2000 tries is a certainty many times over without being a slow test.
         BlockPos pos = helper.absolutePos(lower);
@@ -95,7 +96,7 @@ final class LockTests {
 
         helper.assertTrue(helper.getBlockState(lower).is(exposed), "the locked copper door never oxidised in 2000 random ticks, it is still " + name(helper.getBlockState(lower).getBlock()));
         helper.assertTrue(helper.getBlockState(lower.above()).is(exposed), "the upper half did not follow the lower half as it oxidised, it is still " + name(helper.getBlockState(lower.above()).getBlock()));
-        helper.assertValueEqual(helper.getBlockEntity(lower, BaseLockedBlockEntity.class).getLockCode(), CODE, "the lock after oxidising");
+        helper.assertValueEqual(blockEntity(helper, lower, BaseLockedBlockEntity.class).getLockCode(), CODE, "the lock after oxidising");
         helper.succeed();
     }
 
@@ -118,8 +119,8 @@ final class LockTests {
             BlockPos upper = lower.above();
             helper.setBlock(lower, locked.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
             helper.setBlock(upper, locked.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
-            helper.getBlockEntity(lower, BaseLockedBlockEntity.class).setLockCode(CODE);
-            helper.getBlockEntity(upper, BaseLockedBlockEntity.class).setLockCode(CODE);
+            blockEntity(helper, lower, BaseLockedBlockEntity.class).setLockCode(CODE);
+            blockEntity(helper, upper, BaseLockedBlockEntity.class).setLockCode(CODE);
 
             // The baked property that actually schedules the change. It cannot be worked out from
             // the loaders' oxidation registries, which load later, so it is the thing to assert.
@@ -154,7 +155,7 @@ final class LockTests {
             }
         }
 
-        List<ItemEntity> dropped = helper.getEntities(EntityTypes.ITEM);
+        List<ItemEntity> dropped = helper.getEntities(EntityType.ITEM);
         if (dropped.stream().anyMatch(item -> item.getItem().is(LocksItems.LOCKSMITH_LOCK.get()))) {
             wrong.add("a padlock was dropped while oxidising - the block entity was removed rather than kept");
         }
@@ -173,23 +174,23 @@ final class LockTests {
     private static void lockedCopperDoorsScrapeAndWax(GameTestHelper helper) {
         List<String> wrong = new ArrayList<>();
 
-        Blocks.COPPER_DOOR.weathering().progressMapping((from, to) -> {
-            Block lockedFrom = LocksBlocks.VANILLA_DOORS.get(from).get();
-            Block lockedTo = LocksBlocks.VANILLA_DOORS.get(to).get();
+        for (int i = 0; i + 1 < LocksBlocks.COPPER_DOORS.size(); i++) {
+            Block lockedFrom = LocksBlocks.VANILLA_DOORS.get(LocksBlocks.COPPER_DOORS.get(i)).get();
+            Block lockedTo = LocksBlocks.VANILLA_DOORS.get(LocksBlocks.COPPER_DOORS.get(i + 1)).get();
             Optional<BlockState> scraped = WeatheringCopper.getPrevious(lockedTo.defaultBlockState());
             if (scraped.filter(state -> state.is(lockedFrom)).isEmpty()) {
                 wrong.add(name(lockedTo) + " scrapes back to " + scraped.map(state -> name(state.getBlock())).orElse("nothing") + ", not " + name(lockedFrom));
             }
-        });
+        }
 
-        Blocks.COPPER_DOOR.zipUnwaxedWaxed((unwaxed, waxed) -> {
-            Block lockedUnwaxed = LocksBlocks.VANILLA_DOORS.get(unwaxed).get();
-            Block lockedWaxed = LocksBlocks.VANILLA_DOORS.get(waxed).get();
+        for (int i = 0; i < LocksBlocks.COPPER_DOORS.size(); i++) {
+            Block lockedUnwaxed = LocksBlocks.VANILLA_DOORS.get(LocksBlocks.COPPER_DOORS.get(i)).get();
+            Block lockedWaxed = LocksBlocks.VANILLA_DOORS.get(LocksBlocks.WAXED_COPPER_DOORS.get(i)).get();
             Optional<BlockState> waxedState = HoneycombItem.getWaxed(lockedUnwaxed.defaultBlockState());
             if (waxedState.filter(state -> state.is(lockedWaxed)).isEmpty()) {
                 wrong.add(name(lockedUnwaxed) + " waxes into " + waxedState.map(state -> name(state.getBlock())).orElse("nothing") + ", not " + name(lockedWaxed));
             }
-        });
+        }
 
         helper.assertTrue(wrong.isEmpty(), wrong.size() + " scrape/wax problem(s) on " + Services.PLATFORM.getPlatformName() + ": " + String.join("; ", wrong));
         helper.succeed();
@@ -198,7 +199,8 @@ final class LockTests {
     /** The eight locked copper doors, keyed on the vanilla door each stands in for. */
     private static Map<Block, IRegistryObject<LockedDoorBlock>> copperDoors() {
         Map<Block, IRegistryObject<LockedDoorBlock>> doors = new LinkedHashMap<>();
-        Blocks.COPPER_DOOR.forEach(door -> doors.put(door, LocksBlocks.VANILLA_DOORS.get(door)));
+        LocksBlocks.COPPER_DOORS.forEach(door -> doors.put(door, LocksBlocks.VANILLA_DOORS.get(door)));
+        LocksBlocks.WAXED_COPPER_DOORS.forEach(door -> doors.put(door, LocksBlocks.VANILLA_DOORS.get(door)));
         return doors;
     }
 
@@ -209,10 +211,10 @@ final class LockTests {
      */
     private static void everyVanillaDoorCanBeLocked(GameTestHelper helper) {
         List<String> missing = BuiltInRegistries.BLOCK.entrySet().stream()
-                .filter(entry -> "minecraft".equals(entry.getKey().identifier().getNamespace()))
+                .filter(entry -> "minecraft".equals(entry.getKey().location().getNamespace()))
                 .filter(entry -> entry.getValue() instanceof DoorBlock)
                 .filter(entry -> !LocksBlocks.VANILLA_DOORS.containsKey(entry.getValue()))
-                .map(entry -> entry.getKey().identifier().toString())
+                .map(entry -> entry.getKey().location().toString())
                 .sorted()
                 .toList();
 
@@ -229,8 +231,10 @@ final class LockTests {
     /**
      * A locked door is picked as the door the padlock went on; it has no item of its own, so a block
      * that does not answer here hands back nothing at all. Asked through
-     * {@code BlockState#getCloneItemStack}, which is what vanilla's pick block calls on both loaders.
+     * {@code Block#getCloneItemStack}, which is what vanilla's pick block calls, and what NeoForge's
+     * own overload falls back to.
      */
+    @SuppressWarnings("deprecation") // NeoForge deprecates the vanilla method for its overload taking the hit and the player, which common cannot see
     private static void lockedDoorsArePickedAsTheDoorTheyStandInFor(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         List<String> wrong = new ArrayList<>();
@@ -241,7 +245,7 @@ final class LockTests {
             BlockPos lower = spread(i++);
             helper.setBlock(lower, locked.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
 
-            ItemStack picked = helper.getBlockState(lower).getCloneItemStack(level, helper.absolutePos(lower), true);
+            ItemStack picked = locked.getCloneItemStack(level, helper.absolutePos(lower), helper.getBlockState(lower));
             if (!picked.is(entry.getKey().asItem())) {
                 wrong.add(name(locked) + " was picked as " + picked + " rather than " + name(entry.getKey()));
             }
@@ -268,7 +272,7 @@ final class LockTests {
             }
 
             level.destroyBlock(helper.absolutePos(lower), true);
-            List<ItemEntity> dropped = helper.getEntities(EntityTypes.ITEM);
+            List<ItemEntity> dropped = helper.getEntities(EntityType.ITEM);
             if (dropped.stream().noneMatch(item -> item.getItem().is(entry.getKey().asItem()))) {
                 wrong.add(name(locked) + " dropped " + dropped.stream().map(item -> item.getItem().toString()).toList() + " rather than " + name(entry.getKey()));
             }
@@ -287,7 +291,7 @@ final class LockTests {
         lockedOakDoor(helper, BLOCK, CODE);
         BlockPos pos = helper.absolutePos(BLOCK);
 
-        BaseLockedBlockEntity door = helper.getBlockEntity(BLOCK, BaseLockedBlockEntity.class);
+        BaseLockedBlockEntity door = blockEntity(helper, BLOCK, BaseLockedBlockEntity.class);
         helper.assertTrue(door.isLocked(), "the door did not lock");
         helper.assertValueEqual(door.getLockCode(), CODE, "the code the padlock put on the door");
 
@@ -346,8 +350,8 @@ final class LockTests {
 
             helper.setBlock(lower, door.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
             helper.setBlock(upper, door.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
-            helper.getBlockEntity(lower, BaseLockedBlockEntity.class).setLockCode(CODE);
-            helper.getBlockEntity(upper, BaseLockedBlockEntity.class).setLockCode(CODE);
+            blockEntity(helper, lower, BaseLockedBlockEntity.class).setLockCode(CODE);
+            blockEntity(helper, upper, BaseLockedBlockEntity.class).setLockCode(CODE);
             helper.assertFalse(helper.getBlockState(lower).getValue(DoorBlock.OPEN), name(door) + " was open before anyone touched it");
 
             player.getInventory().clearContent();
@@ -391,11 +395,11 @@ final class LockTests {
         // NeoForge sends a payload, Fabric demands an ExtendedMenuProvider - and neither survives a
         // test player's embedded connection. What is under test is the code, not the opening.
         Vec3 standing = helper.absoluteVec(Vec3.atBottomCenterOf(BLOCK.above()));
-        player.snapTo(standing.x, standing.y, standing.z, 0.0F, 0.0F);
+        player.moveTo(standing.x, standing.y, standing.z, 0.0F, 0.0F);
 
         ContainerLevelAccess at = ContainerLevelAccess.create(level, helper.absolutePos(BLOCK));
         player.containerMenu = LocksmithWorkbenchContainer.createContainer(1, player.getInventory(), at);
-        helper.runBeforeTestEnd(() -> player.containerMenu.removed(player));
+        whenTestEnds(helper, () -> player.containerMenu.removed(player));
         helper.assertTrue(player.containerMenu.stillValid(player), "the workbench menu did not accept the block it was opened on");
 
         LocksmithWorkbenchContainer menu = (LocksmithWorkbenchContainer) player.containerMenu;
@@ -410,11 +414,50 @@ final class LockTests {
 
         BlockPos door = new BlockPos(4, 1, 6);
         lockedOakDoor(helper, door, StorageUtil.getCode(codedLock));
-        helper.assertValueEqual(helper.getBlockEntity(door, BaseLockedBlockEntity.class).getLockCode(), CODE, "the code the workbench's padlock put on the door");
+        helper.assertValueEqual(blockEntity(helper, door, BaseLockedBlockEntity.class).getLockCode(), CODE, "the code the workbench's padlock put on the door");
 
         player.getInventory().clearContent();
         player.getInventory().setItem(0, codedKey);
         helper.assertTrue(StorageAccessUtil.canAccess(level, helper.absolutePos(door), player), "the key the workbench made did not open the lock it made");
+        helper.succeed();
+    }
+
+    /**
+     * A key put in the workbench starts from the code it already has, or none, never from one typed
+     * earlier with the slot empty or for another key. The screen's field shows the same code once a
+     * key is in, and cannot be typed in while the slot is empty; that half needs a client.
+     */
+    private static void workbenchStartsEachKeyFromItsOwnCode(GameTestHelper helper) {
+        helper.setBlock(BLOCK, LocksBlocks.LOCKSMITH_WORKBENCH.get());
+        ServerPlayer player = survivalPlayer(helper, ItemStack.EMPTY);
+        Vec3 standing = helper.absoluteVec(Vec3.atBottomCenterOf(BLOCK.above()));
+        player.moveTo(standing.x, standing.y, standing.z, 0.0F, 0.0F);
+
+        ContainerLevelAccess at = ContainerLevelAccess.create(helper.getLevel(), helper.absolutePos(BLOCK));
+        player.containerMenu = LocksmithWorkbenchContainer.createContainer(1, player.getInventory(), at);
+        whenTestEnds(helper, () -> player.containerMenu.removed(player));
+        LocksmithWorkbenchContainer menu = (LocksmithWorkbenchContainer) player.containerMenu;
+
+        // A code typed at an empty slot is not carried onto the key put in after it.
+        SetLockPacket.handle(new SetLockPacket("9999"), player);
+        menu.getSlot(0).set(new ItemStack(LocksItems.LOCKSMITH_KEY.get()));
+        helper.assertTrue(menu.getSlot(1).getItem().isEmpty(), "a blank key came out coded " + StorageUtil.getCode(menu.getSlot(1).getItem()) + ", typed before it went in");
+
+        // Nor is one typed for the last key carried onto the next.
+        SetLockPacket.handle(new SetLockPacket("5678"), player);
+        helper.assertValueEqual(StorageUtil.getCode(menu.getSlot(1).getItem()), "5678", "the code typed for the first key");
+        menu.getSlot(0).set(new ItemStack(LocksItems.LOCKSMITH_LOCK.get()));
+        helper.assertTrue(menu.getSlot(1).getItem().isEmpty(), "a blank lock came out coded " + StorageUtil.getCode(menu.getSlot(1).getItem()) + ", typed for the key before it");
+
+        // A key that already has a code starts from it.
+        menu.getSlot(0).set(StorageUtil.setCodeOnStack(CODE, new ItemStack(LocksItems.LOCKSMITH_KEY.get())));
+        helper.assertValueEqual(StorageUtil.getCode(menu.getSlot(1).getItem()), CODE, "the code a coded key starts from");
+
+        // An emptied slot forgets it.
+        menu.getSlot(0).set(ItemStack.EMPTY);
+        menu.getSlot(0).set(new ItemStack(LocksItems.LOCKSMITH_KEY.get()));
+        helper.assertTrue(menu.getSlot(1).getItem().isEmpty(), "a blank key came out coded after a coded one left the slot");
+        menu.getSlot(0).set(ItemStack.EMPTY);
         helper.succeed();
     }
 }

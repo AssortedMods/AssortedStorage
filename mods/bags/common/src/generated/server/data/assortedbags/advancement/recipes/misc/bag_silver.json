@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbags:bag_silver"
+        "recipe": "assortedbags:bag_silver"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

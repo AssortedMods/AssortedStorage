@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/hopper",
+  "render_type": "minecraft:cutout_mipped"
+}

@@ -1,20 +1,8 @@
 # Changelog
 
-## 2.0.1
+## 21.1.0.0
 
-- Sorting mods such as ClientSort sort bags and ender bags, locked ones too, and leave the lock where it is
-- Putting a lock in an open ender bag or taking it out switches it to that inventory straight away
-- Requires Assorted Lib 5.0.2
+First release for Minecraft 1.21.1, for NeoForge and Fabric. Releases for 1.21.1 are numbered 21.1.x.y, where 21.1 is the Minecraft version.
 
-## 2.0.0
-
-Updated to Minecraft 26.3, for NeoForge and Fabric.
-
-- Requires Assorted Lib 5.0.0
-
-## 1.0.0
-
-- First release as its own mod. It used to only be part of Assorted Storage
-- Worlds from Assorted Storage 11.x keep all of their bags
-- A material chest from Assorted Chests still crafts straight into a bag when both are installed
-- Requires Assorted Lib 4.3.0
+- Matches Assorted Bags 2.0.1 for Minecraft 26.3
+- Requires Assorted Lib 21.1.0.0

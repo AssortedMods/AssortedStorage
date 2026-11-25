@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "fabric:type": "assortedlocks:locked",
   "loader": "assortedlocks:locked",
   "locked": "assortedlocks:block/locked_barrel_locked",
   "textures": {

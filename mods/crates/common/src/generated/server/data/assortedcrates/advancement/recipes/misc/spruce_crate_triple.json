@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcrates:spruce_crate_triple"
+        "recipe": "assortedcrates:spruce_crate_triple"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

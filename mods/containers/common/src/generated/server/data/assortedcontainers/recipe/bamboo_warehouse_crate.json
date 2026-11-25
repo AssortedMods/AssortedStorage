@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,8 +14,12 @@
     }
   ],
   "key": {
-    "L": "#minecraft:bamboo_blocks",
-    "P": "minecraft:bamboo_planks"
+    "L": {
+      "tag": "minecraft:bamboo_blocks"
+    },
+    "P": {
+      "item": "minecraft:bamboo_planks"
+    }
   },
   "pattern": [
     "LLL",
@@ -22,6 +27,7 @@
     "PPP"
   ],
   "result": {
+    "count": 1,
     "id": "assortedcontainers:bamboo_warehouse_crate"
   }
 }

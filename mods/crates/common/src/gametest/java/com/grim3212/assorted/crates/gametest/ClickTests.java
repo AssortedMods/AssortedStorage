@@ -14,6 +14,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.grim3212.assorted.crates.gametest.CratesTestSupport.BLOCK;
+import static com.grim3212.assorted.crates.gametest.CratesTestSupport.blockEntity;
 import static com.grim3212.assorted.crates.gametest.CratesTestSupport.oakCrate;
 
 /** The clicks the site lists for a crate's face: right click puts in, left click takes one, and sneaking takes a stack. */
@@ -28,7 +29,7 @@ final class ClickTests {
 
     private static void crateClicksPutInAndTakeOut(GameTestHelper helper) {
         helper.setBlock(BLOCK, oakCrate());
-        CrateBlockEntity crate = helper.getBlockEntity(BLOCK, CrateBlockEntity.class);
+        CrateBlockEntity crate = blockEntity(helper, BLOCK, CrateBlockEntity.class);
         // A crate faces north until placed by a player.
         BlockHitResult front = TestSupport.hitSide(helper.absolutePos(BLOCK), Direction.NORTH);
         ServerPlayer player = TestSupport.survivalPlayer(helper, new ItemStack(Items.DIAMOND, 10));

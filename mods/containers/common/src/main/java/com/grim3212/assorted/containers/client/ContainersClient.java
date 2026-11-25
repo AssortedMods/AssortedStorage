@@ -7,10 +7,11 @@ import com.grim3212.assorted.containers.client.blockentity.LockerBlockEntityRend
 import com.grim3212.assorted.containers.client.blockentity.ObsidianSafeBlockEntityRenderer;
 import com.grim3212.assorted.containers.client.blockentity.WarehouseCrateBlockEntityRenderer;
 import com.grim3212.assorted.containers.client.blockentity.WoodCabinetBlockEntityRenderer;
-import com.grim3212.assorted.containers.client.blockentity.item.ContainersSpecialRenderer;
-import com.grim3212.assorted.containers.client.blockentity.item.ItemTowerSpecialRenderer;
+import com.grim3212.assorted.containers.client.blockentity.item.ContainersItemRenderer;
+import com.grim3212.assorted.containers.client.blockentity.item.ItemTowerItemRenderer;
 import com.grim3212.assorted.containers.client.model.CabinetModel;
 import com.grim3212.assorted.containers.client.model.ContainersModelLayers;
+import com.grim3212.assorted.containers.client.model.ContainersModelType;
 import com.grim3212.assorted.containers.client.model.DualLockerModel;
 import com.grim3212.assorted.containers.client.model.ItemTowerModel;
 import com.grim3212.assorted.containers.client.model.LockerModel;
@@ -20,6 +21,7 @@ import com.grim3212.assorted.containers.client.screen.DualLockerScreen;
 import com.grim3212.assorted.containers.client.screen.GoldSafeScreen;
 import com.grim3212.assorted.containers.client.screen.ItemTowerScreen;
 import com.grim3212.assorted.containers.client.screen.LockerScreen;
+import com.grim3212.assorted.containers.common.block.ContainersBlocks;
 import com.grim3212.assorted.containers.common.block.blockentity.ContainersBlockEntityTypes;
 import com.grim3212.assorted.containers.common.inventory.ContainersContainerTypes;
 import com.grim3212.assorted.lib.client.screen.storage.GenericStorageScreen;
@@ -53,12 +55,16 @@ public class ContainersClient {
         ClientServices.CLIENT.registerBlockEntityRenderer(ContainersBlockEntityTypes.LOCKER, LockerBlockEntityRenderer::new);
         ClientServices.CLIENT.registerBlockEntityRenderer(ContainersBlockEntityTypes.ITEM_TOWER, ItemTowerBlockEntityRenderer::new);
 
-        // BlockEntityWithoutLevelRenderer is gone: a special item renderer is selected by the item's
-        // own model json ("minecraft:special" naming one of these ids), so code only registers the id
-        // to codec pairs. The generated item models for every block here point at them.
+        // Each block item is a builtin/entity model drawn by its own renderer, with the texture the
+        // matching block entity renderer uses, so the item and the placed block look the same.
         ClientServices.CLIENT.registerSpecialModelRenderers((register) -> {
-            register.registerSpecialModelRenderer(ContainersSpecialRenderer.ID, ContainersSpecialRenderer.Unbaked.MAP_CODEC);
-            register.registerSpecialModelRenderer(ItemTowerSpecialRenderer.ID, ItemTowerSpecialRenderer.Unbaked.MAP_CODEC);
+            register.registerItemRenderer(() -> ContainersBlocks.WOOD_CABINET.get().asItem(), () -> new ContainersItemRenderer(ContainersModelType.CABINET, WoodCabinetBlockEntityRenderer.CABINET_TEXTURE));
+            register.registerItemRenderer(() -> ContainersBlocks.GLASS_CABINET.get().asItem(), () -> new ContainersItemRenderer(ContainersModelType.GLASS_CABINET, WoodCabinetBlockEntityRenderer.CABINET_TEXTURE));
+            register.registerItemRenderer(() -> ContainersBlocks.GOLD_SAFE.get().asItem(), () -> new ContainersItemRenderer(ContainersModelType.SAFE, GoldSafeBlockEntityRenderer.TEXTURE));
+            register.registerItemRenderer(() -> ContainersBlocks.OBSIDIAN_SAFE.get().asItem(), () -> new ContainersItemRenderer(ContainersModelType.SAFE, ObsidianSafeBlockEntityRenderer.TEXTURE));
+            register.registerItemRenderer(() -> ContainersBlocks.LOCKER.get().asItem(), () -> new ContainersItemRenderer(ContainersModelType.LOCKER, LockerBlockEntityRenderer.LOCKER_TEXTURE));
+            register.registerItemRenderer(() -> ContainersBlocks.ITEM_TOWER.get().asItem(), ItemTowerItemRenderer::new);
+            ContainersBlocks.WAREHOUSE_CRATES.forEach((wood, crate) -> register.registerItemRenderer(() -> crate.get().asItem(), () -> new ContainersItemRenderer(ContainersModelType.WAREHOUSE_CRATE, WarehouseCrateBlockEntityRenderer.texture(wood))));
         });
     }
 }

@@ -13,14 +13,14 @@ import com.grim3212.assorted.locks.common.item.LocksItems;
 import com.grim3212.assorted.locks.common.loot.LocksLootConditions;
 import com.grim3212.assorted.locks.common.loot.LocksLootEntries;
 import com.grim3212.assorted.locks.common.network.LocksPackets;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class LocksCommonMod {
 
     public static void init() {
         Constants.LOG.info(Constants.MOD_NAME + " starting up...");
         Families.join(Constants.MOD_ID, Constants.FAMILY_ID)
-                .icon(Identifier.fromNamespaceAndPath(Constants.MOD_ID, "locksmith_lock"), 20)
+                .icon(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "locksmith_lock"), 20)
                 .manualOrder(80);
 
         LocksDataComponents.init();

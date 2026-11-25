@@ -7,10 +7,7 @@ import com.grim3212.assorted.crates.client.blockentity.state.CrateRenderState;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.network.chat.Style;
-import net.minecraft.util.ARGB;
-import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 
@@ -35,7 +32,7 @@ public class AmountUpgradeRenderer implements ICrateUpgradeRenderer {
     }
 
     @Override
-    public void submit(CrateRenderState state, ItemStack upgrade, PoseStack poseStack, SubmitNodeCollector collector) {
+    public void render(CrateRenderState state, ItemStack upgrade, PoseStack poseStack, MultiBufferSource buffer) {
         Font font = Minecraft.getInstance().font;
 
         boolean showFull = NBTHelper.getInt(upgrade, "Mode") > 0;
@@ -50,33 +47,33 @@ public class AmountUpgradeRenderer implements ICrateUpgradeRenderer {
 
         switch (state.layout) {
             case SINGLE:
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 0, showFull), 63F, 90.0F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 0, showFull), 63F, 90.0F, scale, light);
                 break;
             case DOUBLE:
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 0, showFull), 63F, 45.25F, scale, light);
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 1, showFull), 63F, 100.0F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 0, showFull), 63F, 45.25F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 1, showFull), 63F, 100.0F, scale, light);
                 break;
             case TRIPLE:
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 0, showFull), 63F, 45.25F, scale, light);
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 1, showFull), 35.5F, 100.0F, scale, light);
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 2, showFull), 90F, 100.0F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 0, showFull), 63F, 45.25F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 1, showFull), 35.5F, 100.0F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 2, showFull), 90F, 100.0F, scale, light);
                 break;
             case QUADRUPLE:
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 0, showFull), 35.5F, 45.25F, scale, light);
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 1, showFull), 90F, 45.25F, scale, light);
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 2, showFull), 35.5F, 100.0F, scale, light);
-                submitAmount(collector, poseStack, font, getSlotAmount(state, 3, showFull), 90F, 100.0F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 0, showFull), 35.5F, 45.25F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 1, showFull), 90F, 45.25F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 2, showFull), 35.5F, 100.0F, scale, light);
+                renderAmount(buffer, poseStack, font, getSlotAmount(state, 3, showFull), 90F, 100.0F, scale, light);
                 break;
         }
 
         poseStack.popPose();
     }
 
-    private void submitAmount(SubmitNodeCollector collector, PoseStack poseStack, Font font, String amount, float x, float y, float scale, int light) {
+    private void renderAmount(MultiBufferSource buffer, PoseStack poseStack, Font font, String amount, float x, float y, float scale, int light) {
         if (amount.isEmpty()) {
             return;
         }
 
-        collector.submitText(poseStack, getTextOffset(font, amount, scale) + x, y, FormattedCharSequence.forward(amount, Style.EMPTY), false, Font.DisplayMode.NORMAL, light, ARGB.opaque(DyeColor.WHITE.getTextColor()), 0, 0);
+        font.drawInBatch(amount, getTextOffset(font, amount, scale) + x, y, 0xFF000000 | DyeColor.WHITE.getTextColor(), false, poseStack.last().pose(), buffer, Font.DisplayMode.NORMAL, 0, light);
     }
 }

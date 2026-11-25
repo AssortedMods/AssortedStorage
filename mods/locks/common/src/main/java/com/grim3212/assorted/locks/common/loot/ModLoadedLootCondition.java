@@ -6,12 +6,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.grim3212.assorted.lib.platform.Services;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
-/**
- * Loot conditions are codec driven in 26.x: the registry holds a {@link MapCodec} directly and a
- * condition exposes it through {@code codec()}, so the old Gson {@code Serializer} inner class and
- * the {@code getType()} lookup are both gone.
- */
+/** Passes only while the named mod is loaded, so a table can name an optional dependency. */
 public record ModLoadedLootCondition(String modId) implements LootItemCondition {
 
     public static final MapCodec<ModLoadedLootCondition> MAP_CODEC = RecordCodecBuilder.mapCodec(
@@ -20,8 +17,8 @@ public record ModLoadedLootCondition(String modId) implements LootItemCondition 
             ).apply(instance, ModLoadedLootCondition::new));
 
     @Override
-    public MapCodec<ModLoadedLootCondition> codec() {
-        return MAP_CODEC;
+    public LootItemConditionType getType() {
+        return LocksLootConditions.MOD_LOADED.get();
     }
 
     @Override

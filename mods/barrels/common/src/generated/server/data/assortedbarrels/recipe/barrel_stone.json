@@ -10,6 +10,7 @@
     }
   ],
   "type": "assortedbarrels:locked_upgrading",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:tags_populated",
@@ -24,8 +25,12 @@
     }
   ],
   "key": {
-    "C": "#c:barrels/wooden",
-    "M": "#c:stones"
+    "C": {
+      "tag": "c:barrels/wooden"
+    },
+    "M": {
+      "tag": "c:stones"
+    }
   },
   "pattern": [
     "MMM",
@@ -33,6 +38,7 @@
     "MMM"
   ],
   "result": {
+    "count": 1,
     "id": "assortedbarrels:barrel_stone"
   }
 }

@@ -9,9 +9,8 @@ import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import java.util.Optional;
 
 /**
- * The search goes through the API's own {@code findCurios(Predicate)} rather than a walk over
- * {@code getEquippedCurios()}, which hands back an {@code IItemHandlerModifiable} - deprecated for
- * removal in 26.2.
+ * Whether a key worn in a Curios slot opens a lock. Only reached when Curios is loaded, which is
+ * why the api jar is compileOnly. The search goes through the API's own {@code findCurios(Predicate)}.
  */
 public class CuriosHelper {
 

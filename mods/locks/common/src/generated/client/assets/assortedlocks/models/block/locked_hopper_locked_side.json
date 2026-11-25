@@ -1,3 +1,4 @@
 {
-  "parent": "assortedlocks:block/template_hopper_side"
+  "parent": "assortedlocks:block/template_hopper_side",
+  "render_type": "minecraft:cutout_mipped"
 }

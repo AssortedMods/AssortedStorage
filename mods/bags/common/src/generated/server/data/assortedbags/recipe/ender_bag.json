@@ -6,6 +6,7 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "assortedlib:part_enabled",
@@ -13,9 +14,15 @@
     }
   ],
   "key": {
-    "C": "#c:chests/ender",
-    "L": "#c:leathers",
-    "S": "#c:strings"
+    "C": {
+      "tag": "c:chests/ender"
+    },
+    "L": {
+      "tag": "c:leathers"
+    },
+    "S": {
+      "tag": "c:strings"
+    }
   },
   "pattern": [
     "SLS",
@@ -23,6 +30,7 @@
     "LLL"
   ],
   "result": {
+    "count": 1,
     "id": "assortedbags:ender_bag"
   }
 }

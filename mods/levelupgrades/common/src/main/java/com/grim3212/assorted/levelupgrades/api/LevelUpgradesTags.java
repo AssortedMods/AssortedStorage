@@ -2,7 +2,7 @@ package com.grim3212.assorted.levelupgrades.api;
 
 import com.grim3212.assorted.lib.util.LibCommonTags;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
@@ -21,7 +21,7 @@ public class LevelUpgradesTags {
         public static final TagKey<Item> STORAGE_LEVEL_5_UPGRADES = commonTag("storage/level_5_upgrades");
 
         private static TagKey<Item> commonTag(String name) {
-            return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(LibCommonTags.COMMON_NAMESPACE, name));
+            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(LibCommonTags.COMMON_NAMESPACE, name));
         }
     }
 }

@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcontainers:locker"
+        "recipe": "assortedcontainers:locker"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

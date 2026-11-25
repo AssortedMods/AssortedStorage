@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,7 +14,7 @@ import java.util.Optional;
 /**
  * A locked copper door, which oxidises on its own like the vanilla door it stands in for; the four
  * waxed copper doors get a plain {@link LockedDoorBlock}, since a waxed door never changes. The lock
- * survives each step through {@link LockedDoorBlock#shouldChangedStateKeepBlockEntity} and
+ * survives each step through {@link LockedDoorBlock#onRemove} and
  * {@link LockedDoorBlock#updateShape}. Scraping with an axe and waxing with a honeycomb are vanilla's
  * item code, which reaches these blocks through the loaders' oxidation registries - NeoForge's data
  * maps in {@code LocksDataMapProvider}, Fabric's {@code OxidizableBlocksRegistry}.
@@ -46,7 +45,7 @@ public class LockedCopperDoorBlock extends LockedDoorBlock implements Weathering
             return Optional.empty();
         }
 
-        Block next = Blocks.COPPER_DOOR.weathering().pick(this.age.next());
+        Block next = LocksBlocks.COPPER_DOORS.get(this.age.ordinal() + 1);
         return Optional.of(LocksBlocks.VANILLA_DOORS.get(next).get().withPropertiesOf(state));
     }
 

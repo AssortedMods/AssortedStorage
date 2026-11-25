@@ -13,6 +13,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static com.grim3212.assorted.locks.gametest.LocksTestSupport.CODE;
+import static com.grim3212.assorted.locks.gametest.LocksTestSupport.blockEntity;
 
 /** The site's promise that a locked door no longer answers redstone, so a button outside cannot open it. */
 final class RedstoneTests {
@@ -30,8 +31,8 @@ final class RedstoneTests {
         Block door = LocksBlocks.VANILLA_DOORS.get(Blocks.IRON_DOOR).get();
         helper.setBlock(LOWER, door.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER));
         helper.setBlock(LOWER.above(), door.defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER));
-        helper.getBlockEntity(LOWER, BaseLockedBlockEntity.class).setLockCode(CODE);
-        helper.getBlockEntity(LOWER.above(), BaseLockedBlockEntity.class).setLockCode(CODE);
+        blockEntity(helper, LOWER, BaseLockedBlockEntity.class).setLockCode(CODE);
+        blockEntity(helper, LOWER.above(), BaseLockedBlockEntity.class).setLockCode(CODE);
 
         helper.setBlock(LOWER.east(), Blocks.REDSTONE_BLOCK);
         helper.runAfterDelay(10, () -> {

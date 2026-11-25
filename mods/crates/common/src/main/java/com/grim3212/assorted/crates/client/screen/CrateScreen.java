@@ -12,12 +12,10 @@ import com.grim3212.assorted.crates.common.inventory.crates.CrateSidedInv;
 import com.grim3212.assorted.crates.common.inventory.crates.LargeItemStackSlot;
 import com.grim3212.assorted.crates.common.network.SetSlotLockPacket;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.ARGB;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.DyeColor;
@@ -28,24 +26,25 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The crate screen. Slot amounts are drawn in a later {@code nextStratum()} so they sit above the
- * item stacks, and tooltips are recorded with {@code setTooltipForNextFrame}.
+ * The crate screen. Slot amounts are drawn after the slots, pushed forward so they sit above the
+ * item stacks, and the hovered slot's tooltip carries the slot's real amount.
  */
 public class CrateScreen extends AbstractContainerScreen<CrateContainer> {
 
-    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/crate.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/crate.png");
     private static final int LABEL_COLOR = -12566464;
 
     private final ItemStack renderStack;
 
     public CrateScreen(CrateContainer container, Inventory playerInventory, Component title) {
-        super(container, playerInventory, title, DEFAULT_IMAGE_WIDTH, 188);
+        super(container, playerInventory, title);
+        this.imageHeight = 188;
 
         this.renderStack = new ItemStack(container.getCrateBlockEntity().getBlockState().getBlock());
     }
 
     @Override
-    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (this.menu.getCarried().isEmpty() && this.hoveredSlot != null && this.hoveredSlot.hasItem()) {
             List<Component> tooltip = getTooltipFromContainerItem(this.hoveredSlot.getItem());
             Optional<TooltipComponent> tooltipComponents = this.hoveredSlot.getItem().getTooltipImage();
@@ -61,7 +60,7 @@ public class CrateScreen extends AbstractContainerScreen<CrateContainer> {
                 tooltip.add(Component.translatable(Constants.MOD_ID + ".info.storage_multiplier", Component.literal(String.valueOf(upgrade.getStorageModifier())).withStyle(ChatFormatting.AQUA)).withStyle(ChatFormatting.GOLD));
             }
 
-            graphics.setTooltipForNextFrame(this.font, tooltip, tooltipComponents, mouseX, mouseY);
+            graphics.renderTooltip(this.font, tooltip, tooltipComponents, mouseX, mouseY);
         }
     }
 
@@ -127,82 +126,81 @@ public class CrateScreen extends AbstractContainerScreen<CrateContainer> {
         }
     }
 
-    private void extractAmount(GuiGraphicsExtractor graphics, int slot, int x, int y) {
+    private void renderAmount(GuiGraphics graphics, int slot, int x, int y) {
         ItemStack stack = this.getStack(slot).getStack();
         if (!stack.isEmpty()) {
             int slotAmount = getSlotAmount(slot);
             String displayAmount = String.valueOf(slotAmount);
-            int color = ARGB.opaque(slotAmount <= 0 ? DyeColor.RED.getTextColor() : DyeColor.WHITE.getTextColor());
-            graphics.text(this.font, displayAmount, x - this.font.width(displayAmount), y, color, true);
+            int color = 0xFF000000 | (slotAmount <= 0 ? DyeColor.RED.getTextColor() : DyeColor.WHITE.getTextColor());
+            graphics.drawString(this.font, displayAmount, x - this.font.width(displayAmount), y, color, true);
         }
     }
 
     @Override
-    protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-        graphics.text(this.font, this.title, (this.imageWidth - this.font.width(this.title)) / 2, 6, LABEL_COLOR, false);
-        graphics.text(this.font, this.playerInventoryTitle, 8, this.imageHeight - 93, LABEL_COLOR, false);
-        graphics.text(this.font, Component.translatable(Constants.MOD_ID + ".container.storage_crate.upgrades"), 8, this.imageHeight - 124, LABEL_COLOR, false);
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.drawString(this.font, this.title, (this.imageWidth - this.font.width(this.title)) / 2, 6, LABEL_COLOR, false);
+        graphics.drawString(this.font, this.playerInventoryTitle, 8, this.imageHeight - 93, LABEL_COLOR, false);
+        graphics.drawString(this.font, Component.translatable(Constants.MOD_ID + ".container.storage_crate.upgrades"), 8, this.imageHeight - 124, LABEL_COLOR, false);
 
         int mod = this.getCrateInventory().getStorageModifier();
         if (mod > 0) {
             String s = "X " + mod;
-            graphics.text(this.font, s, 160 - this.font.width(s), this.imageHeight - 93, ARGB.opaque(DyeColor.GRAY.getTextColor()), false);
+            graphics.drawString(this.font, s, 160 - this.font.width(s), this.imageHeight - 93, 0xFF000000 | DyeColor.GRAY.getTextColor(), false);
         }
     }
 
     @Override
-    public void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-        super.extractContents(graphics, mouseX, mouseY, partialTicks);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        super.render(graphics, mouseX, mouseY, partialTicks);
 
-        // The slot amounts sit on top of the item stacks; a new stratum is what replaces the old
-        // "translate 300 along z" trick now that the GUI pose is two dimensional.
-        graphics.nextStratum();
-        graphics.pose().pushMatrix();
-        graphics.pose().translate(this.leftPos, this.topPos);
-        graphics.pose().scale(0.5F, 0.5F);
+        // The slot amounts sit on top of the item stacks, which the GUI draws at up to 232 along z.
+        graphics.pose().pushPose();
+        graphics.pose().translate(this.leftPos, this.topPos, 300.0F);
+        graphics.pose().scale(0.5F, 0.5F, 1.0F);
 
         switch (this.menu.getCrateBlockEntity().getLayout()) {
             case SINGLE:
-                this.extractAmount(graphics, 0, 191, 91);
+                this.renderAmount(graphics, 0, 191, 91);
                 break;
             case DOUBLE:
-                this.extractAmount(graphics, 0, 191, 69);
-                this.extractAmount(graphics, 1, 191, 113);
+                this.renderAmount(graphics, 0, 191, 69);
+                this.renderAmount(graphics, 1, 191, 113);
                 break;
             case TRIPLE:
-                this.extractAmount(graphics, 0, 191, 69);
-                this.extractAmount(graphics, 1, 169, 113);
-                this.extractAmount(graphics, 2, 213, 113);
+                this.renderAmount(graphics, 0, 191, 69);
+                this.renderAmount(graphics, 1, 169, 113);
+                this.renderAmount(graphics, 2, 213, 113);
                 break;
             case QUADRUPLE:
-                this.extractAmount(graphics, 0, 169, 69);
-                this.extractAmount(graphics, 1, 213, 69);
-                this.extractAmount(graphics, 2, 169, 113);
-                this.extractAmount(graphics, 3, 213, 113);
+                this.renderAmount(graphics, 0, 169, 69);
+                this.renderAmount(graphics, 1, 213, 69);
+                this.renderAmount(graphics, 2, 169, 113);
+                this.renderAmount(graphics, 3, 213, 113);
                 break;
         }
 
-        graphics.pose().popMatrix();
+        graphics.pose().popPose();
+
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTicks);
-
+    protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
         int i = this.leftPos;
         int j = this.topPos;
 
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, i, j, 0.0F, 0.0F, this.imageWidth + 26, this.imageHeight, 256, 256);
+        graphics.blit(TEXTURE, i, j, 0.0F, 0.0F, this.imageWidth + 26, this.imageHeight, 256, 256);
 
         // The preview shows the crate's face, not the usual three-quarter item icon: the slots the
-        // screen draws on top of it are the ones on that face. GuiGraphicsExtractor#item always uses
+        // screen draws on top of it are the ones on that face. GuiGraphics#renderItem always uses
         // the GUI display context, so the view comes from AssortedLib instead. The crate's facing
-        // texture is its model's north side, hence the half turn. Scaling the 2D pose keeps the
-        // 51px footprint the screen's background is drawn around.
-        graphics.pose().pushMatrix();
-        graphics.pose().translate(i + 88, j + 42);
-        graphics.pose().scale(3.2F, 3.2F);
+        // texture is its model's north side, hence the half turn. Scaling the pose keeps the
+        // 51px footprint the screen's background is drawn around; depth is left unscaled and pulled
+        // back so the preview sits between the background and the slots' items.
+        graphics.pose().pushPose();
+        graphics.pose().translate(i + 88, j + 42, -100.0F);
+        graphics.pose().scale(3.2F, 3.2F, 1.0F);
         LibGuiItemRenderer.item(graphics, this.renderStack, ItemDisplayContext.NONE, LibGuiItemRenderer.facingViewer(180.0F), -8, -8);
-        graphics.pose().popMatrix();
+        graphics.pose().popPose();
     }
 }

@@ -9,13 +9,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -72,7 +74,7 @@ final class ContainersTestSupport {
 
     /** Whether a dropped {@code blockItem} is carrying {@code content} in its CONTAINER component. */
     static boolean droppedItemCarries(GameTestHelper helper, Item blockItem, Item content) {
-        return helper.getEntities(EntityTypes.ITEM).stream()
+        return helper.getEntities(EntityType.ITEM).stream()
                 .map(entity -> entity.getItem())
                 .filter(stack -> stack.is(blockItem))
                 .anyMatch(stack -> {
@@ -88,8 +90,17 @@ final class ContainersTestSupport {
             helper.assertTrue(in != null, "this mod ships no en_us.json");
             return JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
         } catch (Exception e) {
-            throw helper.assertionException("could not read en_us.json: " + e);
+            throw new GameTestAssertException("could not read en_us.json: " + e);
         }
+    }
+
+    /** The block entity at a test position, failing the test if it is missing or of another type. */
+    static <T extends BlockEntity> T blockEntity(GameTestHelper helper, BlockPos pos, Class<T> type) {
+        BlockEntity found = helper.getBlockEntity(pos);
+        if (!type.isInstance(found)) {
+            throw new GameTestAssertException("expected a " + type.getSimpleName() + " at " + pos + " but found " + found);
+        }
+        return type.cast(found);
     }
 
     static boolean resourceExists(String path) {

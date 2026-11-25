@@ -1,58 +1,63 @@
 package com.grim3212.assorted.chests.common.crafting;
 
+import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.grim3212.assorted.lib.core.storage.chest.LockedChestBlock;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.NormalCraftingRecipe;
-import net.minecraft.world.item.crafting.PlacementInfo;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
-import net.minecraft.world.item.crafting.display.RecipeDisplay;
-import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
-import net.minecraft.world.item.crafting.display.SlotDisplay;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
-import java.util.List;
-
 /**
- * A shaped recipe whose result keeps the data components of the storage item being upgraded; the
- * shape matching is {@link ShapedRecipePattern}'s.
+ * A shaped recipe whose result keeps the data components of the storage item being upgraded. The
+ * shape matching, the ingredients and the recipe book entry are vanilla's {@link ShapedRecipe}.
  */
-public class LockedUpgradingRecipe extends NormalCraftingRecipe {
+public class LockedUpgradingRecipe extends ShapedRecipe {
 
     public static final MapCodec<LockedUpgradingRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
-                    Recipe.CommonInfo.MAP_CODEC.forGetter(recipe -> recipe.commonInfo),
-                    CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(recipe -> recipe.bookInfo),
-                    ShapedRecipePattern.MAP_CODEC.forGetter(recipe -> recipe.pattern),
-                    ItemStackTemplate.CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
+                    Codec.STRING.optionalFieldOf("group", "").forGetter(ShapedRecipe::getGroup),
+                    CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(ShapedRecipe::category),
+                    ShapedRecipePattern.MAP_CODEC.forGetter(recipe -> recipe.shape),
+                    ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+                    Codec.BOOL.optionalFieldOf("show_notification", true).forGetter(ShapedRecipe::showNotification)
             ).apply(instance, LockedUpgradingRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, LockedUpgradingRecipe> STREAM_CODEC = StreamCodec.composite(
-            Recipe.CommonInfo.STREAM_CODEC, recipe -> recipe.commonInfo,
-            CraftingRecipe.CraftingBookInfo.STREAM_CODEC, recipe -> recipe.bookInfo,
-            ShapedRecipePattern.STREAM_CODEC, recipe -> recipe.pattern,
-            ItemStackTemplate.STREAM_CODEC, recipe -> recipe.result,
+            ByteBufCodecs.STRING_UTF8, ShapedRecipe::getGroup,
+            CraftingBookCategory.STREAM_CODEC, ShapedRecipe::category,
+            ShapedRecipePattern.STREAM_CODEC, recipe -> recipe.shape,
+            ItemStack.STREAM_CODEC, recipe -> recipe.result,
+            ByteBufCodecs.BOOL, ShapedRecipe::showNotification,
             LockedUpgradingRecipe::new);
 
-    public static final RecipeSerializer<LockedUpgradingRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+    public static final RecipeSerializer<LockedUpgradingRecipe> SERIALIZER = new RecipeSerializer<>() {
+        @Override
+        public MapCodec<LockedUpgradingRecipe> codec() {
+            return MAP_CODEC;
+        }
 
-    private final ShapedRecipePattern pattern;
-    private final ItemStackTemplate result;
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, LockedUpgradingRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
+    };
 
-    public LockedUpgradingRecipe(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo bookInfo, ShapedRecipePattern pattern, ItemStackTemplate result) {
-        super(commonInfo, bookInfo);
-        this.pattern = pattern;
+    // ShapedRecipe's own fields are package-private in vanilla, so the codecs read these copies.
+    private final ShapedRecipePattern shape;
+    private final ItemStack result;
+
+    public LockedUpgradingRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification) {
+        super(group, category, pattern, result, showNotification);
+        this.shape = pattern;
         this.result = result;
     }
 
@@ -62,18 +67,8 @@ public class LockedUpgradingRecipe extends NormalCraftingRecipe {
     }
 
     @Override
-    protected PlacementInfo createPlacementInfo() {
-        return PlacementInfo.createFromOptionals(this.pattern.ingredients());
-    }
-
-    @Override
-    public boolean matches(CraftingInput input, Level level) {
-        return this.pattern.matches(input);
-    }
-
-    @Override
-    public ItemStack assemble(CraftingInput input) {
-        ItemStack output = this.result.create();
+    public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
+        ItemStack output = this.result.copy();
 
         ItemStack itemstack = ItemStack.EMPTY;
 
@@ -87,36 +82,12 @@ public class LockedUpgradingRecipe extends NormalCraftingRecipe {
             }
         }
 
-        // Stack NBT is gone; carrying the upgraded item's stored contents, name and lock over is a
-        // matter of applying its data component patch to the fresh result.
+        // Carrying the upgraded item's stored contents, name and lock over is a matter of applying
+        // its data component patch to the fresh result.
         if (!itemstack.isEmpty()) {
             output.applyComponents(itemstack.getComponentsPatch());
         }
 
         return output;
-    }
-
-    public ItemStackTemplate getResultTemplate() {
-        return this.result;
-    }
-
-    public int getWidth() {
-        return this.pattern.width();
-    }
-
-    public int getHeight() {
-        return this.pattern.height();
-    }
-
-    public List<Ingredient> getIngredients() {
-        return this.placementInfo().ingredients();
-    }
-
-    @Override
-    public List<RecipeDisplay> display() {
-        return List.of(new ShapedCraftingRecipeDisplay(this.pattern.width(), this.pattern.height(),
-                this.pattern.ingredients().stream().map(ingredient -> ingredient.map(Ingredient::display).orElse(SlotDisplay.Empty.INSTANCE)).toList(),
-                new SlotDisplay.ItemStackSlotDisplay(this.result),
-                new SlotDisplay.ItemSlotDisplay(Items.CRAFTING_TABLE)));
     }
 }

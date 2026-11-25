@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbags:bag_stone"
+        "recipe": "assortedbags:bag_stone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

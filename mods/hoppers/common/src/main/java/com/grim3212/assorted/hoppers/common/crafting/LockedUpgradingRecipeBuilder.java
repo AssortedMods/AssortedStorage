@@ -2,53 +2,53 @@ package com.grim3212.assorted.hoppers.common.crafting;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.advancements.triggers.Criterion;
-import net.minecraft.core.HolderGetter;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeUnlockAdvancementBuilder;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-/**
- * Builds a {@link LockedUpgradingRecipe} for data generation. The result is an
- * {@link ItemStackTemplate} because a stack cannot be built before item components are bound.
- */
+/** Builds a {@link LockedUpgradingRecipe} for data generation, with the unlock advancement vanilla's shaped builder gives. */
 public class LockedUpgradingRecipeBuilder implements RecipeBuilder {
-    private final HolderGetter<Item> items;
-    private final ItemStackTemplate result;
+    private final Item result;
+    private final int count;
     private final List<String> rows = Lists.newArrayList();
     private final Map<Character, Ingredient> key = Maps.newLinkedHashMap();
-    private final RecipeUnlockAdvancementBuilder advancementBuilder = new RecipeUnlockAdvancementBuilder();
+    private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
     @Nullable
     private String group;
 
-    private LockedUpgradingRecipeBuilder(HolderGetter<Item> items, ItemLike result, int count) {
-        this.items = items;
-        this.result = new ItemStackTemplate(result.asItem(), count);
+    private LockedUpgradingRecipeBuilder(ItemLike result, int count) {
+        this.result = result.asItem();
+        this.count = count;
     }
 
-    public static LockedUpgradingRecipeBuilder shaped(HolderGetter<Item> items, ItemLike result) {
-        return shaped(items, result, 1);
+    public static LockedUpgradingRecipeBuilder shaped(ItemLike result) {
+        return shaped(result, 1);
     }
 
-    public static LockedUpgradingRecipeBuilder shaped(HolderGetter<Item> items, ItemLike result, int count) {
-        return new LockedUpgradingRecipeBuilder(items, result, count);
+    public static LockedUpgradingRecipeBuilder shaped(ItemLike result, int count) {
+        return new LockedUpgradingRecipeBuilder(result, count);
     }
 
     public LockedUpgradingRecipeBuilder define(Character symbol, TagKey<Item> tag) {
-        return this.define(symbol, Ingredient.of(this.items.getOrThrow(tag)));
+        return this.define(symbol, Ingredient.of(tag));
     }
 
     public LockedUpgradingRecipeBuilder define(Character symbol, ItemLike item) {
@@ -77,7 +77,7 @@ public class LockedUpgradingRecipeBuilder implements RecipeBuilder {
 
     @Override
     public LockedUpgradingRecipeBuilder unlockedBy(String name, Criterion<?> criterion) {
-        this.advancementBuilder.unlockedBy(name, criterion);
+        this.criteria.put(name, criterion);
         return this;
     }
 
@@ -88,18 +88,25 @@ public class LockedUpgradingRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public ResourceKey<Recipe<?>> defaultId() {
-        return RecipeBuilder.getDefaultRecipeId(this.result);
+    public Item getResult() {
+        return this.result;
     }
 
     @Override
-    public void save(RecipeOutput output, ResourceKey<Recipe<?>> id) {
+    public void save(RecipeOutput output, ResourceLocation id) {
+        if (this.criteria.isEmpty()) {
+            throw new IllegalStateException("No way of obtaining recipe " + id);
+        }
+
         ShapedRecipePattern pattern = ShapedRecipePattern.of(this.key, this.rows);
-        LockedUpgradingRecipe recipe = new LockedUpgradingRecipe(
-                RecipeBuilder.createCraftingCommonInfo(true),
-                RecipeBuilder.createCraftingBookInfo(RecipeCategory.MISC, this.group),
-                pattern,
-                this.result);
-        output.accept(id, recipe, this.advancementBuilder.build(output, id, RecipeCategory.MISC));
+        LockedUpgradingRecipe recipe = new LockedUpgradingRecipe(Objects.requireNonNullElse(this.group, ""), RecipeBuilder.determineBookCategory(RecipeCategory.MISC),
+                pattern, new ItemStack(this.result, this.count), true);
+
+        Advancement.Builder advancement = output.advancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+                .rewards(AdvancementRewards.Builder.recipe(id))
+                .requirements(AdvancementRequirements.Strategy.OR);
+        this.criteria.forEach(advancement::addCriterion);
+        output.accept(id, recipe, advancement.build(id.withPrefix("recipes/" + RecipeCategory.MISC.getFolderName() + "/")));
     }
 }

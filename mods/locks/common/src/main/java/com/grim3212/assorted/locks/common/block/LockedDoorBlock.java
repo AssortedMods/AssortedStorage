@@ -7,20 +7,19 @@ import com.grim3212.assorted.lib.core.inventory.locking.BaseLockedBlockEntity;
 import com.grim3212.assorted.locks.common.block.blockentity.LocksBlockEntityTypes;
 import com.grim3212.assorted.locks.mixin.block.DoorBlockAccessor;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -28,7 +27,6 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -48,7 +46,7 @@ public class LockedDoorBlock extends DoorBlock implements EntityBlock {
         this.parent = () -> parent;
     }
 
-    public LockedDoorBlock(Identifier parent, BlockSetType type, Properties builder) {
+    public LockedDoorBlock(ResourceLocation parent, BlockSetType type, Properties builder) {
         super(type, builder);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(OPEN, false).setValue(HINGE, DoorHingeSide.LEFT).setValue(POWERED, false).setValue(HALF, DoubleBlockHalf.LOWER));
         // Looked up when used: the mod that owns the door may register its blocks after this one.
@@ -60,26 +58,38 @@ public class LockedDoorBlock extends DoorBlock implements EntityBlock {
         return this.parent.get();
     }
 
-    /** A locked door has no item of its own; it is picked as the door the padlock went on. */
+    /**
+     * A locked door has no item of its own; it is picked as the door the padlock went on. NeoForge
+     * deprecates this in favour of its IBlockExtension overload, which defaults to calling it, so
+     * overriding this one is what answers pick block on both loaders.
+     */
+    @SuppressWarnings("deprecation")
     @Override
-    protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
-        return this.getParent().defaultBlockState().getCloneItemStack(level, pos, includeData);
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        return new ItemStack(this.getParent());
     }
 
     /**
-     * Keep the block entity, and with it the lock, when one locked door becomes another in place - a
+     * Keeps the block entity, and with it the lock, when one locked door becomes another in place - a
      * copper door oxidising, being waxed, or being scraped back. Every locked door shares the one
-     * {@code BASE_LOCKED} block entity type, so the one already there is still the right one. Without
-     * this the lock is lost and {@code BaseLockedBlockEntity#preRemoveSideEffects} drops the padlock
-     * on every oxidation step.
+     * {@code BASE_LOCKED} block entity type, so the one already there is still the right one. Any
+     * other change drops the padlock through {@code BaseLockedBlockEntity#onBlockRemoved} while the
+     * block entity is still there.
      */
     @Override
-    protected boolean shouldChangedStateKeepBlockEntity(BlockState oldState) {
-        return oldState.getBlock() instanceof LockedDoorBlock;
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (newState.getBlock() instanceof LockedDoorBlock) {
+            return;
+        }
+
+        if (level.getBlockEntity(pos) instanceof BaseLockedBlockEntity locked) {
+            locked.onBlockRemoved(level, pos, state);
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, Orientation orientation, boolean isMoving) {
+    protected void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
         // redstone doesn't work with locked doors
     }
 
@@ -89,7 +99,7 @@ public class LockedDoorBlock extends DoorBlock implements EntityBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState stateIn, LevelReader worldIn, ScheduledTickAccess scheduledTickAccess, BlockPos currentPos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource randomSource) {
+    protected BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
         DoubleBlockHalf doubleblockhalf = stateIn.getValue(HALF);
         if (facing.getAxis() == Direction.Axis.Y && doubleblockhalf == DoubleBlockHalf.LOWER == (facing == Direction.UP)) {
 
@@ -111,7 +121,7 @@ public class LockedDoorBlock extends DoorBlock implements EntityBlock {
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack heldStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    protected ItemInteractionResult useItemOn(ItemStack heldStack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (player.isShiftKeyDown() && StorageAccessUtil.canAccess(worldIn, pos, player)) {
             BlockEntity tileentity = worldIn.getBlockEntity(pos);
             if (tileentity instanceof BaseLockedBlockEntity) {
@@ -119,7 +129,7 @@ public class LockedDoorBlock extends DoorBlock implements EntityBlock {
 
                 if (teStorage.isLocked()) {
                     if (removeLock(worldIn, pos, player)) {
-                        return InteractionResult.SUCCESS;
+                        return ItemInteractionResult.SUCCESS;
                     }
                 }
             }
@@ -129,9 +139,10 @@ public class LockedDoorBlock extends DoorBlock implements EntityBlock {
             state = state.cycle(OPEN);
             worldIn.setBlock(pos, state, 10);
             this.playSound(player, worldIn, pos, state.getValue(OPEN));
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         } else {
-            return InteractionResult.PASS;
+            // Not the default interaction either: the door it extends would open
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
     }
 

@@ -10,6 +10,7 @@
     }
   ],
   "type": "assortedhoppers:locked_upgrading",
+  "category": "misc",
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
@@ -23,8 +24,12 @@
     }
   ],
   "key": {
-    "C": "assortedchests:chest_sapphire",
-    "M": "#c:ingots/iron"
+    "C": {
+      "item": "assortedchests:chest_sapphire"
+    },
+    "M": {
+      "tag": "c:ingots/iron"
+    }
   },
   "pattern": [
     "M M",
@@ -32,6 +37,7 @@
     " M "
   ],
   "result": {
+    "count": 1,
     "id": "assortedhoppers:hopper_sapphire"
   }
 }

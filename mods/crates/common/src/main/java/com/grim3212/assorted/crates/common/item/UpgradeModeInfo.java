@@ -4,16 +4,19 @@ import com.grim3212.assorted.crates.common.item.upgrades.AmountUpgradeItem;
 import com.grim3212.assorted.crates.common.item.upgrades.RedstoneUpgradeItem;
 import com.mojang.serialization.Codec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.core.component.DataComponentGetter;
+import com.grim3212.assorted.lib.core.item.IStackTooltipProvider;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.component.TooltipProvider;
+
 
 import java.util.function.Consumer;
 
@@ -23,14 +26,15 @@ import java.util.function.Consumer;
  *
  * @param kind which upgrade this is
  */
-public record UpgradeModeInfo(Kind kind) implements TooltipProvider {
+public record UpgradeModeInfo(Kind kind) implements IStackTooltipProvider {
 
     public static final Codec<UpgradeModeInfo> CODEC = Kind.CODEC.xmap(UpgradeModeInfo::new, UpgradeModeInfo::kind);
     public static final StreamCodec<ByteBuf, UpgradeModeInfo> STREAM_CODEC = Kind.STREAM_CODEC.map(UpgradeModeInfo::new, UpgradeModeInfo::kind);
 
     @Override
-    public void addToTooltip(Item.TooltipContext context, Consumer<Component> tooltip, TooltipFlag flag, DataComponentGetter components) {
-        int mode = components.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("Mode", this.kind.startingMode);
+    public void addToTooltip(Item.TooltipContext context, Consumer<Component> tooltip, TooltipFlag flag, ItemStack stack) {
+        CompoundTag data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        int mode = data.contains("Mode", Tag.TAG_INT) ? data.getInt("Mode") : this.kind.startingMode;
         tooltip.accept(switch (this.kind) {
             case AMOUNT -> AmountUpgradeItem.describeMode(mode);
             case REDSTONE -> RedstoneUpgradeItem.describeMode(mode);

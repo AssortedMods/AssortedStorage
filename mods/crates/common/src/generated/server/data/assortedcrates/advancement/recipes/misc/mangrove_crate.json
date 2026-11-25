@@ -29,7 +29,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedcrates:mangrove_crate"
+        "recipe": "assortedcrates:mangrove_crate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

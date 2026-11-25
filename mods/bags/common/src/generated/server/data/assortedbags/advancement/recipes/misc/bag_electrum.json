@@ -33,7 +33,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbags:bag_electrum"
+        "recipe": "assortedbags:bag_electrum"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

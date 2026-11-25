@@ -9,14 +9,17 @@ import com.grim3212.assorted.shulkers.common.block.ShulkersBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -62,9 +65,10 @@ public class ShulkersBlockTagProvider extends LibBlockTagProvider {
             }
         }
 
-        // The per colour shulker boxes are a ColorCollection now rather than 16 separate fields.
-        tagger.apply(ShulkersTags.Blocks.SHULKERS_LEVEL_0).add(Blocks.SHULKER_BOX).addAll(Blocks.DYED_SHULKER_BOX.asList());
-        tagger.apply(ShulkersTags.Blocks.SHULKERS_NORMAL).add(Blocks.SHULKER_BOX).addAll(Blocks.DYED_SHULKER_BOX.asList());
+        // Vanilla's undyed box and one per dye colour, read from 1.21.1's own colour list.
+        List<Block> dyed = Stream.of(DyeColor.values()).map(ShulkerBoxBlock::getBlockByColor).toList();
+        tagger.apply(ShulkersTags.Blocks.SHULKERS_LEVEL_0).add(Blocks.SHULKER_BOX).addAll(dyed);
+        tagger.apply(ShulkersTags.Blocks.SHULKERS_NORMAL).add(Blocks.SHULKER_BOX).addAll(dyed);
     }
 
     /**

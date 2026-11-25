@@ -2,16 +2,19 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "condition": {
-        "type": "minecraft:survives_explosion"
-      },
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "assortedcrates:acacia_crate_triple"
         }
       ],
-      "rolls": 1
+      "rolls": 1.0
     }
   ],
   "random_sequence": "assortedcrates:blocks/acacia_crate_triple"

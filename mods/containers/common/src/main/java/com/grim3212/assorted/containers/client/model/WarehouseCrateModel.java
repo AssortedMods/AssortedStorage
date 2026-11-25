@@ -6,7 +6,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.RenderType;
 
 public class WarehouseCrateModel extends BaseStorageModel {
 
@@ -14,7 +14,7 @@ public class WarehouseCrateModel extends BaseStorageModel {
 	private final ModelPart lock;
 
 	public WarehouseCrateModel(ModelPart root) {
-		super(root, RenderTypes::entityCutoutCull);
+		super(root, RenderType::entityCutout);
 
 		this.lid = root.getChild("lid");
 		this.lock = root.getChild("lock");
@@ -49,8 +49,6 @@ public class WarehouseCrateModel extends BaseStorageModel {
 
 	@Override
 	public void setupAnim(ContainersModelState state) {
-		super.setupAnim(state);
-
 		float xRot = (float) Math.toRadians(state.doorAngle() / -3.0F);
 		this.lid.xRot = xRot;
 		this.lock.xRot = xRot;

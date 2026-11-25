@@ -6,7 +6,6 @@ import com.grim3212.assorted.containers.api.LockerHalf;
 import com.grim3212.assorted.containers.common.block.blockentity.LockerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -45,7 +44,7 @@ public class LockerBlock extends BaseStorageBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess scheduledTickAccess, BlockPos pos, Direction dir, BlockPos neighborPos, BlockState neighborState, RandomSource randomSource) {
+    protected BlockState updateShape(BlockState state, Direction dir, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (neighborState.is(this) && dir.getAxis().isVertical()) {
             LockerHalf half = neighborState.getValue(HALF);
             if (state.getValue(HALF) == LockerHalf.SINGLE && half != LockerHalf.SINGLE && state.getValue(FACING) == neighborState.getValue(FACING) && getConnectedDirection(neighborState) == dir.getOpposite()) {
@@ -55,7 +54,7 @@ public class LockerBlock extends BaseStorageBlock {
             return state.setValue(HALF, LockerHalf.SINGLE);
         }
 
-        return super.updateShape(state, level, scheduledTickAccess, pos, dir, neighborPos, neighborState, randomSource);
+        return super.updateShape(state, dir, neighborState, level, pos, neighborPos);
     }
 
     public static Direction getConnectedDirection(BlockState state) {
@@ -100,16 +99,6 @@ public class LockerBlock extends BaseStorageBlock {
             return super.getDestroyProgress(state, player, worldIn, pos.below());
 
         return super.getDestroyProgress(state, player, worldIn, pos);
-    }
-
-    /**
-     * {@code onRemove} split in two: this only fires for a real removal, and the block entity is
-     * already gone by now - anything that needed it moved onto the block entity's
-     * {@code preRemoveSideEffects}.
-     */
-    @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel worldIn, BlockPos pos, boolean movedByPiston) {
-        worldIn.updateNeighbourForOutputSignal(pos, this);
     }
 
     @Override

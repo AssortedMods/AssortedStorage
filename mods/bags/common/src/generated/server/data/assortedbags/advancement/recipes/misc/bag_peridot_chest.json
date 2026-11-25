@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipes": "assortedbags:bag_peridot_chest"
+        "recipe": "assortedbags:bag_peridot_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

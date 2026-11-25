@@ -7,7 +7,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.DataMapProvider;
 import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 import net.neoforged.neoforge.registries.datamaps.builtin.Oxidizable;
@@ -30,10 +29,14 @@ public class LocksDataMapProvider extends DataMapProvider {
     @Override
     protected void gather(HolderLookup.Provider registries) {
         Builder<Oxidizable, Block> oxidizables = builder(NeoForgeDataMaps.OXIDIZABLES);
-        Blocks.COPPER_DOOR.weathering().progressMapping((from, to) -> oxidizables.add(key(locked(from)), new Oxidizable(locked(to)), false));
+        for (int i = 0; i + 1 < LocksBlocks.COPPER_DOORS.size(); i++) {
+            oxidizables.add(key(locked(LocksBlocks.COPPER_DOORS.get(i))), new Oxidizable(locked(LocksBlocks.COPPER_DOORS.get(i + 1))), false);
+        }
 
         Builder<Waxable, Block> waxables = builder(NeoForgeDataMaps.WAXABLES);
-        Blocks.COPPER_DOOR.zipUnwaxedWaxed((unwaxed, waxed) -> waxables.add(key(locked(unwaxed)), new Waxable(locked(waxed)), false));
+        for (int i = 0; i < LocksBlocks.COPPER_DOORS.size(); i++) {
+            waxables.add(key(locked(LocksBlocks.COPPER_DOORS.get(i))), new Waxable(locked(LocksBlocks.WAXED_COPPER_DOORS.get(i))), false);
+        }
     }
 
     private static Block locked(Block vanillaDoor) {

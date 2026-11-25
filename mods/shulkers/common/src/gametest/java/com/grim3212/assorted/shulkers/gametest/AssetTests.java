@@ -10,7 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.locale.Language;
 import net.minecraft.resources.FileToIdConverter;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
@@ -46,7 +46,7 @@ final class AssetTests {
         List<String> missing = new ArrayList<>();
 
         for (Map.Entry<ResourceKey<Block>, Block> entry : BuiltInRegistries.BLOCK.entrySet()) {
-            Identifier id = entry.getKey().identifier();
+            ResourceLocation id = entry.getKey().location();
             if (!Constants.MOD_ID.equals(id.getNamespace())) {
                 continue;
             }
@@ -60,12 +60,12 @@ final class AssetTests {
         }
 
         for (Map.Entry<ResourceKey<Item>, Item> entry : BuiltInRegistries.ITEM.entrySet()) {
-            Identifier id = entry.getKey().identifier();
+            ResourceLocation id = entry.getKey().location();
             if (!Constants.MOD_ID.equals(id.getNamespace())) {
                 continue;
             }
 
-            if (!resourceExists("/assets/" + Constants.MOD_ID + "/items/" + id.getPath() + ".json")) {
+            if (!resourceExists("/assets/" + Constants.MOD_ID + "/models/item/" + id.getPath() + ".json")) {
                 missing.add("item model " + id.getPath());
             }
             if (!lang.has(entry.getValue().getDescriptionId())) {
@@ -74,7 +74,7 @@ final class AssetTests {
         }
 
         helper.assertTrue(BuiltInRegistries.CREATIVE_MODE_TAB.containsKey(ShulkersCreativeItems.TAB), "the Assorted Storage creative tab is not registered");
-        helper.assertTrue(lang.has("itemGroup." + ShulkersCreativeItems.TAB.identifier().getNamespace()), "the Assorted Storage creative tab has no name");
+        helper.assertTrue(lang.has("itemGroup." + ShulkersCreativeItems.TAB.location().getNamespace()), "the Assorted Storage creative tab has no name");
 
         helper.assertTrue(missing.isEmpty(), missing.size() + " missing assets: " + String.join(", ", missing));
         helper.succeed();
@@ -91,8 +91,8 @@ final class AssetTests {
         List<String> failed = new ArrayList<>();
 
         recipes.listMatchingResources(server.getResourceManager()).forEach((file, resource) -> {
-            Identifier id = recipes.fileToId(file);
-            if (!id.getNamespace().equals(Constants.MOD_ID) || server.getRecipeManager().byKey(ResourceKey.create(Registries.RECIPE, id)).isPresent()) {
+            ResourceLocation id = recipes.fileToId(file);
+            if (!id.getNamespace().equals(Constants.MOD_ID) || server.getRecipeManager().byKey(id).isPresent()) {
                 return;
             }
 
@@ -117,7 +117,7 @@ final class AssetTests {
      */
     private static void everyItemTagHasAName(GameTestHelper helper) {
         Language language = Language.getInstance();
-        List<String> missing = helper.getLevel().registryAccess().lookupOrThrow(Registries.ITEM).getTags()
+        List<String> missing = helper.getLevel().registryAccess().lookupOrThrow(Registries.ITEM).listTags()
                 .map(tag -> tag.key().location())
                 .filter(id -> !"minecraft".equals(id.getNamespace()))
                 .map(id -> "tag.item." + id.getNamespace() + "." + id.getPath().replace('/', '.'))
