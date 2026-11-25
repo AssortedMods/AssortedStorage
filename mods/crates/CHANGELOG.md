@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- Asking a crate what an extract would take, as hoppers and storage mods do, no longer changes the item in the slot
+
 ## 2.0.1
 
 - Sorting mods such as ClientSort leave crate stacks, upgrades and locks alone

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.2
+
+- Keys and the key ring can be worn in a Curios belt slot; the belt tag was in a folder that never loaded
+- The locksmith workbench shows the code a key already has, and its code field only takes typing once a key or lock is in the slot. A key put in starts from its own code rather than one typed earlier
+
 ## 2.0.1
 
 - Key ring slots can be emptied like vanilla slots, which sorting mods check before moving items

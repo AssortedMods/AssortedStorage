@@ -238,9 +238,8 @@ public class CrateSidedInv implements IItemStorageHandler, LockedStorageHandler,
             if (stackInSlot.getAmount() < amount) {
                 return stackInSlot.getStack().copyWithCount(stackInSlot.getAmount());
             } else {
-                ItemStack copy = stackInSlot.getStack();
-                copy.setCount(amount);
-                return copy;
+                // A copy: the slot's own stack is shared with the slot and must not be resized.
+                return stackInSlot.getStack().copyWithCount(amount);
             }
         } else {
             int m = Math.min(stackInSlot.getAmount(), amount);

@@ -38,8 +38,19 @@ public class LocksmithWorkbenchScreen extends AbstractContainerScreen<LocksmithW
         this.lockField.setBordered(false);
         this.lockField.setMaxLength(10);
         this.lockField.setResponder(this::onNameChanged);
+        // Nothing to code until a key or lock is in the slot; slotChanged keeps this up to date.
+        this.lockField.setEditable(this.menu.getSlot(0).hasItem());
         this.addRenderableWidget(this.lockField);
         this.setInitialFocus(this.lockField);
+
+        // As vanilla's ItemCombinerScreen does: without this slotChanged is never called.
+        this.menu.addSlotListener(this);
+    }
+
+    @Override
+    public void removed() {
+        super.removed();
+        this.menu.removeSlotListener(this);
     }
 
     private void onNameChanged(String lock) {

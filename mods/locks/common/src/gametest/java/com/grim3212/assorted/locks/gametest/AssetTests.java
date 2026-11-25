@@ -17,6 +17,9 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.TagKey;
+import com.grim3212.assorted.locks.common.item.LocksItems;
 import net.minecraft.world.level.block.Block;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,7 @@ final class AssetTests {
         out.accept("every_block_and_item_has_a_model_and_a_name", AssetTests::everyBlockAndItemHasAModelAndAName);
         out.accept("every_recipe_loads_or_is_conditioned_off", AssetTests::everyRecipeLoadsOrIsConditionedOff);
         out.accept("every_item_tag_has_a_name", AssetTests::everyItemTagHasAName);
+        out.accept("keys_are_tagged_for_a_curios_belt", AssetTests::keysAreTaggedForACuriosBelt);
         out.accept("every_locked_door_has_its_textures", AssetTests::everyLockedDoorHasItsTextures);
         out.accept("locked_container_items_show_their_padlock", AssetTests::lockedContainerItemsShowTheirPadlock);
     }
@@ -206,6 +210,36 @@ final class AssetTests {
                 .sorted()
                 .toList();
         helper.assertTrue(missing.isEmpty(), "item tags with no name in any lang file: " + missing);
+        helper.succeed();
+    }
+
+    /**
+     * The keys and the key ring go in Curios' belt slot through Curios' own item tag, which NeoForge
+     * reads from {@code data/curios/tags/item}. A tag under the pre-1.21 {@code tags/items} folder is
+     * never loaded. Fabric has no Curios, so the tag is NeoForge's alone, but its name is in the
+     * shared lang so recipe viewers can show it.
+     */
+    private static void keysAreTaggedForACuriosBelt(GameTestHelper helper) {
+        helper.assertTrue(Language.getInstance().has("tag.item.curios.belt"), "the curios:belt tag has no name in any lang file");
+
+        if (Services.PLATFORM.getPlatformName().equals("Fabric")) {
+            helper.assertTrue(!resourceExists("/data/curios/tags/item/belt.json"), "Fabric ships a Curios belt tag it has no Curios for");
+            helper.succeed();
+            return;
+        }
+
+        helper.assertTrue(!resourceExists("/data/curios/tags/items/belt.json"), "the Curios belt tag is still under tags/items, which is never loaded");
+        JsonObject belt = json("/data/curios/tags/item/belt.json");
+        helper.assertTrue(belt != null && belt.has("values"), "data/curios/tags/item/belt.json is missing or is not a tag");
+
+        List<String> values = new ArrayList<>();
+        belt.getAsJsonArray("values").forEach(value -> values.add(value.getAsString()));
+        helper.assertValueEqual(values, List.of("assortedlocks:locksmith_key", "assortedlocks:key_ring"), "what the Curios belt tag lists");
+
+        // And it loads: the items are in the tag the server built.
+        TagKey<Item> beltTag = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("curios", "belt"));
+        helper.assertTrue(new ItemStack(LocksItems.LOCKSMITH_KEY.get()).is(beltTag), "the locksmith key is not in the loaded curios:belt tag");
+        helper.assertTrue(new ItemStack(LocksItems.KEY_RING.get()).is(beltTag), "the key ring is not in the loaded curios:belt tag");
         helper.succeed();
     }
 }

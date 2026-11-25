@@ -34,6 +34,8 @@ public class LocksLanguageProvider extends LibLanguageProvider {
 
         // Item tag names, which recipe viewers show in place of the raw tag id.
         this.add("tag.item.c.hoppers", "Hoppers");
+        // Curios' belt slot, which the keys and key ring are tagged into so they can be worn.
+        this.add("tag.item.curios.belt", "Belt");
 
         // A dyed locked shulker box is named for its color.
         for (DyeColor color : DyeColor.values()) {
