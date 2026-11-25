@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.BlockPos;
@@ -22,6 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -52,6 +54,7 @@ public class LocksClientGameTests implements FabricClientGameTest {
             ClientChecks.assertDrawsRight(context, Constants.MOD_ID);
             tooltipsShowTheCode(context);
             workbenchOpensOnTheClient(context, world);
+            workbenchHandsOverTheCodedKey(context, world);
             lockedDoorsReachOtherClientsWhole(context, world);
             lockedContainersShowTheirPadlockInTheTab(context, world);
         }
@@ -93,6 +96,60 @@ public class LocksClientGameTests implements FabricClientGameTest {
 
         world.getServer().runOnServer(server -> player(server).closeContainer());
         context.waitFor(client -> client.player.containerMenu == client.player.inventoryMenu);
+    }
+
+    /**
+     * A key goes in, a code is typed, and the coded key comes out in the player's hand on both sides. The
+     * clicks go through the client's game mode, as a mouse click does, so the screen and its packets take part.
+     */
+    private static void workbenchHandsOverTheCodedKey(ClientGameTestContext context, TestSingleplayerContext world) {
+        // The first hotbar slot, which is slot 29 of the workbench menu.
+        final int hotbar = 29;
+        int containerId = world.getServer().computeOnServer(server -> {
+            ServerPlayer player = player(server);
+            ServerLevel level = player.level();
+            BlockPos at = player.blockPosition().offset(2, 0, -4);
+            level.setBlockAndUpdate(at, LocksBlocks.LOCKSMITH_WORKBENCH.get().defaultBlockState());
+            player.getInventory().setItem(0, new ItemStack(LocksItems.LOCKSMITH_KEY.get()));
+            Services.PLATFORM.openMenu(player, level.getBlockState(at).getMenuProvider(level, at));
+            return player.containerMenu.containerId;
+        });
+        context.waitFor(client -> client.player.containerMenu.containerId == containerId
+                && client.gui.screen() != null
+                && client.player.containerMenu.getSlot(hotbar).getItem().is(LocksItems.LOCKSMITH_KEY.get()));
+
+        context.runOnClient(client -> {
+            client.gameMode.handleContainerInput(containerId, hotbar, 0, ContainerInput.PICKUP, client.player);
+            client.gameMode.handleContainerInput(containerId, 0, 0, ContainerInput.PICKUP, client.player);
+        });
+        context.waitTicks(5);
+        context.runOnClient(client -> {
+            EditBox field = client.gui.screen().children().stream().filter(EditBox.class::isInstance).map(EditBox.class::cast).findFirst()
+                    .orElseThrow(() -> new AssertionError("the workbench screen has no code field"));
+            field.setValue("1234");
+        });
+        context.waitTicks(5);
+        context.runOnClient(client -> {
+            check("1234".equals(StorageUtil.getCode(client.player.containerMenu.getSlot(1).getItem())), "typing a code did not put a coded key in the result slot");
+            client.gameMode.handleContainerInput(containerId, 1, 0, ContainerInput.PICKUP, client.player);
+        });
+        context.waitTicks(10);
+
+        String onServer = world.getServer().computeOnServer(server -> describe(player(server).containerMenu.getCarried()));
+        String onClient = context.computeOnClient(client -> describe(client.player.containerMenu.getCarried()));
+        check(onServer.equals("locksmith_key 1234"), "taking the coded key left the server's player holding " + onServer);
+        check(onClient.equals("locksmith_key 1234"), "taking the coded key left the client's player holding " + onClient);
+
+        world.getServer().runOnServer(server -> {
+            ServerPlayer player = player(server);
+            player.containerMenu.setCarried(ItemStack.EMPTY);
+            player.closeContainer();
+        });
+        context.waitFor(client -> client.player.containerMenu == client.player.inventoryMenu);
+    }
+
+    private static String describe(ItemStack stack) {
+        return stack.isEmpty() ? "nothing" : BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath() + " " + StorageUtil.getCode(stack);
     }
 
     /**

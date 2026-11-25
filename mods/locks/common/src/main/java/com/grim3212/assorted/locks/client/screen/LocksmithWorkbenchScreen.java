@@ -22,6 +22,8 @@ public class LocksmithWorkbenchScreen extends AbstractContainerScreen<LocksmithW
 
     private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/locksmith_workbench.png");
     private EditBox lockField;
+    /** Set while the field is filled in from the slot, so only a typed code is sent to the server. */
+    private boolean showingSlot;
 
     public LocksmithWorkbenchScreen(LocksmithWorkbenchContainer container, Inventory playerInventory, Component title) {
         super(container, playerInventory, title);
@@ -54,6 +56,12 @@ public class LocksmithWorkbenchScreen extends AbstractContainerScreen<LocksmithW
     }
 
     private void onNameChanged(String lock) {
+        // The server already works from the item's own code when the slot changes. Sent from here, an emptied
+        // field would reach it ahead of the click that took the coded item, and clear that item first.
+        if (this.showingSlot) {
+            return;
+        }
+
         this.menu.updateLock(lock);
         Services.NETWORK.sendToServer(new SetLockPacket(lock));
     }
@@ -67,7 +75,9 @@ public class LocksmithWorkbenchScreen extends AbstractContainerScreen<LocksmithW
         if (slotInd == 0) {
             // Stacks have no free-form tag any more; the lock code lives in the CUSTOM_DATA component,
             // which StorageUtil already reads.
+            this.showingSlot = true;
             this.lockField.setValue(stack.isEmpty() ? "" : StorageUtil.getCode(stack));
+            this.showingSlot = false;
             this.lockField.setEditable(!stack.isEmpty());
             this.setFocused(this.lockField);
         }
