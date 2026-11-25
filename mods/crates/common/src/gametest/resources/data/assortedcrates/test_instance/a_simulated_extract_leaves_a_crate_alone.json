@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "assortedcrates:a_simulated_extract_leaves_a_crate_alone",
+  "structure": "assortedcrates:test_box",
+  "max_ticks": 1,
+  "setup_ticks": 0,
+  "required": true
+}

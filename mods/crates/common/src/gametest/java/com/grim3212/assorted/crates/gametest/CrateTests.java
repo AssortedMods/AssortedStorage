@@ -48,6 +48,7 @@ final class CrateTests {
         out.accept("creative_click_takes_from_a_crate_instead_of_breaking_it", CrateTests::creativeClickTakesFromACrateInsteadOfBreakingIt);
         out.accept("crate_reports_everything_it_holds", CrateTests::crateReportsEverythingItHolds);
         out.accept("an_aborted_transfer_leaves_a_crate_alone", CrateTests::anAbortedTransferLeavesACrateAlone);
+        out.accept("a_simulated_extract_leaves_a_crate_alone", CrateTests::aSimulatedExtractLeavesACrateAlone);
         out.accept("controller_lists_every_crate_on_the_network", CrateTests::controllerListsEveryCrateOnTheNetwork);
         out.accept("a_locked_controller_sends_its_lock_to_clients", CrateTests::aLockedControllerSendsItsLockToClients);
     }
@@ -126,6 +127,37 @@ final class CrateTests {
         helper.assertTrue(empty.insertItem(0, new ItemStack(Items.DIAMOND, 5), false).isEmpty(), "an empty crate would not take five diamonds");
         emptyRollback.run();
         helper.assertTrue(empty.getStackInSlot(0).isEmpty(), "a rolled back insert left something in an empty slot");
+        helper.succeed();
+    }
+
+    /**
+     * A simulated extract only says what an extract would hand out. It must hand back its own stack,
+     * since the slot's stack is the one the crate keeps, and resizing it would change what the slot
+     * holds without an extract ever happening.
+     */
+    private static void aSimulatedExtractLeavesACrateAlone(GameTestHelper helper) {
+        helper.setBlock(BLOCK, oakCrate());
+        CrateSidedInv crate = helper.getBlockEntity(BLOCK, CrateBlockEntity.class).getItemStackStorageHandler();
+
+        crate.setItem(0, new LargeItemStack(new ItemStack(Items.COBBLESTONE), 2000));
+        ItemStack slotStack = crate.getLargeItemStack(0).getStack();
+        int slotStackCount = slotStack.getCount();
+
+        ItemStack simulated = crate.extractItem(0, 64, true);
+        helper.assertTrue(simulated.is(Items.COBBLESTONE), "a simulated extract offered " + simulated + " rather than cobblestone");
+        helper.assertValueEqual(simulated.getCount(), 64, "what the simulated extract would take");
+        helper.assertTrue(simulated != crate.getLargeItemStack(0).getStack(), "a simulated extract handed out the slot's own stack");
+        helper.assertValueEqual(crate.getLargeItemStack(0).getStack().getCount(), slotStackCount, "the slot's stack count after a simulated extract");
+        helper.assertValueEqual(crate.getLargeItemStack(0).getAmount(), 2000, "the amount left after a simulated extract");
+
+        // Whoever asked may do what they like with the answer without reaching the slot.
+        simulated.setCount(3);
+        helper.assertValueEqual(slotStack.getCount(), slotStackCount, "the slot's stack count after the simulated stack was changed");
+        helper.assertValueEqual(crate.getStackInSlot(0).getCount(), 2000, "what the crate reports after a simulated extract");
+
+        // The real extract that follows still takes a full stack.
+        helper.assertValueEqual(crate.extractItem(0, 64, false).getCount(), 64, "what the real extract took out");
+        helper.assertValueEqual(crate.getLargeItemStack(0).getAmount(), 1936, "the amount left after the real extract");
         helper.succeed();
     }
 

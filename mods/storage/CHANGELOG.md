@@ -1,5 +1,11 @@
 # Changelog
 
+## 13.0.2
+
+- Includes Assorted Crates 2.0.2 and Assorted Locks 2.0.2. Asking a crate what an extract would take no
+  longer changes the item in the slot. Keys and the key ring can now be worn in a Curios belt slot, and
+  the locksmith workbench shows a key's code and only takes a code once a key or lock is in
+
 ## 13.0.1
 
 - Includes Assorted Bags 2.0.1, Assorted Crates 2.0.1 and Assorted Locks 2.0.1, so sorting mods such as

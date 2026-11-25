@@ -71,5 +71,6 @@
   "manual.assortedstorage.chapter.locking.workbench.title": "Locksmith Workbench",
   "manual.assortedstorage.description": "Bigger containers, crates, portable storage, and locks for all of it.",
   "manual.assortedstorage.title": "Assorted Storage",
-  "tag.item.c.hoppers": "Hoppers"
+  "tag.item.c.hoppers": "Hoppers",
+  "tag.item.curios.belt": "Belt"
 }

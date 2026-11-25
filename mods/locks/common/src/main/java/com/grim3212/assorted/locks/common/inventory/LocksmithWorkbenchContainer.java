@@ -26,7 +26,6 @@ public class LocksmithWorkbenchContainer extends AbstractContainerMenu {
     };
     private final ResultContainer craftResult = new ResultContainer();
     private final ContainerLevelAccess worldPosCallable;
-    private String lock = "";
     private final Slot resultSlot;
 
     public LocksmithWorkbenchContainer(int id, Inventory playerInventory) {
@@ -86,7 +85,10 @@ public class LocksmithWorkbenchContainer extends AbstractContainerMenu {
         super.slotsChanged(inventoryIn);
 
         if (inventoryIn == this.craftMatrix) {
-            this.updateLock(this.lock);
+            // Whatever goes in starts from its own code, or none, rather than one typed for the last
+            // item or with the slot empty. The screen's field shows the same code.
+            ItemStack stack = this.craftMatrix.getItem(0);
+            this.updateLock(stack.isEmpty() ? "" : StorageUtil.getCode(stack));
         }
     }
 
@@ -168,7 +170,6 @@ public class LocksmithWorkbenchContainer extends AbstractContainerMenu {
     }
 
     public void updateLock(String lock) {
-        this.lock = lock;
         ItemStack itemstack = this.craftMatrix.getItem(0);
 
         if (!itemstack.isEmpty() && itemstack.getItem() instanceof CombinationItem) {

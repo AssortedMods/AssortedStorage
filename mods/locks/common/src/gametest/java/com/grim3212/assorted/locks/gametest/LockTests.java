@@ -61,6 +61,7 @@ final class LockTests {
         out.accept("key_ring_holds_keys_and_opens_a_lock", LockTests::keyRingHoldsKeysAndOpensALock);
         out.accept("locked_doors_open_only_with_the_right_key", LockTests::lockedDoorsOpenOnlyWithTheRightKey);
         out.accept("locksmith_workbench_codes_a_key_and_a_lock", LockTests::locksmithWorkbenchCodesAKeyAndALock);
+        out.accept("workbench_starts_each_key_from_its_own_code", LockTests::workbenchStartsEachKeyFromItsOwnCode);
         out.accept("every_vanilla_door_can_be_locked", LockTests::everyVanillaDoorCanBeLocked);
         out.accept("locked_doors_drop_the_door_they_stand_in_for", LockTests::lockedDoorsDropTheDoorTheyStandInFor);
         out.accept("locked_doors_are_picked_as_the_door_they_stand_in_for", LockTests::lockedDoorsArePickedAsTheDoorTheyStandInFor);
@@ -415,6 +416,45 @@ final class LockTests {
         player.getInventory().clearContent();
         player.getInventory().setItem(0, codedKey);
         helper.assertTrue(StorageAccessUtil.canAccess(level, helper.absolutePos(door), player), "the key the workbench made did not open the lock it made");
+        helper.succeed();
+    }
+
+    /**
+     * A key put in the workbench starts from the code it already has, or none, never from one typed
+     * earlier with the slot empty or for another key. The screen's field shows the same code once a
+     * key is in, and cannot be typed in while the slot is empty; that half needs a client.
+     */
+    private static void workbenchStartsEachKeyFromItsOwnCode(GameTestHelper helper) {
+        helper.setBlock(BLOCK, LocksBlocks.LOCKSMITH_WORKBENCH.get());
+        ServerPlayer player = survivalPlayer(helper, ItemStack.EMPTY);
+        Vec3 standing = helper.absoluteVec(Vec3.atBottomCenterOf(BLOCK.above()));
+        player.snapTo(standing.x, standing.y, standing.z, 0.0F, 0.0F);
+
+        ContainerLevelAccess at = ContainerLevelAccess.create(helper.getLevel(), helper.absolutePos(BLOCK));
+        player.containerMenu = LocksmithWorkbenchContainer.createContainer(1, player.getInventory(), at);
+        helper.runBeforeTestEnd(() -> player.containerMenu.removed(player));
+        LocksmithWorkbenchContainer menu = (LocksmithWorkbenchContainer) player.containerMenu;
+
+        // A code typed at an empty slot is not carried onto the key put in after it.
+        SetLockPacket.handle(new SetLockPacket("9999"), player);
+        menu.getSlot(0).set(new ItemStack(LocksItems.LOCKSMITH_KEY.get()));
+        helper.assertTrue(menu.getSlot(1).getItem().isEmpty(), "a blank key came out coded " + StorageUtil.getCode(menu.getSlot(1).getItem()) + ", typed before it went in");
+
+        // Nor is one typed for the last key carried onto the next.
+        SetLockPacket.handle(new SetLockPacket("5678"), player);
+        helper.assertValueEqual(StorageUtil.getCode(menu.getSlot(1).getItem()), "5678", "the code typed for the first key");
+        menu.getSlot(0).set(new ItemStack(LocksItems.LOCKSMITH_LOCK.get()));
+        helper.assertTrue(menu.getSlot(1).getItem().isEmpty(), "a blank lock came out coded " + StorageUtil.getCode(menu.getSlot(1).getItem()) + ", typed for the key before it");
+
+        // A key that already has a code starts from it.
+        menu.getSlot(0).set(StorageUtil.setCodeOnStack(CODE, new ItemStack(LocksItems.LOCKSMITH_KEY.get())));
+        helper.assertValueEqual(StorageUtil.getCode(menu.getSlot(1).getItem()), CODE, "the code a coded key starts from");
+
+        // An emptied slot forgets it.
+        menu.getSlot(0).set(ItemStack.EMPTY);
+        menu.getSlot(0).set(new ItemStack(LocksItems.LOCKSMITH_KEY.get()));
+        helper.assertTrue(menu.getSlot(1).getItem().isEmpty(), "a blank key came out coded after a coded one left the slot");
+        menu.getSlot(0).set(ItemStack.EMPTY);
         helper.succeed();
     }
 }
